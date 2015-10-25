@@ -247,17 +247,17 @@
 (defun print-hello-message ()
   (let ((lambda-logo-string
          (apply 'concat
-                (append (list "\n")
-                        (mapcar (lambda (line)
-                                  (concat "         " line "\n"))
-                                *lambda-logo*)
-                        (list "\n"))))
+                (append ;(list "\n")
+                 (mapcar (lambda (line)
+                           (concat "         " line "\n"))
+                         *lambda-logo*)
+                 (list "\n"))))
         (prompt-string "CL-USER> ")
         (quine-string ; \u03BB is a lambda letter
-         "((\u03BB (x) (list x (list 'quote x))) '(\u03BB (x) (list x (list 'quote x))))\n")
+         "((lambda (x) (list x (list 'quote x))) '(lambda (x) (list x (list 'quote x))))\n")
         (comment-string ";; Elegant weapons, for a more... civilized age.\n"))
-    (goto-char 19)
-    (insert "\n\n")
+    (goto-char 1) ; 19
+    ;; (insert "\n\n")
     (put-text-property 0 (length lambda-logo-string)
                        'font-lock-face (list :foreground "forest green" :background "gray6"
                                              :weight 'bold :slant 'italic)
@@ -271,13 +271,21 @@
     (put-text-property 0 (length prompt-string)
                        'font-lock-face 'slime-repl-prompt-face
                        prompt-string)
+    (put-text-property 0 (length prompt-string)
+                       'slime-repl-prompt t
+                       prompt-string)
     (insert prompt-string)
     (put-text-property 0 (length quine-string)
                        'font-lock-face 'slime-repl-input-face
                        quine-string)
     (insert quine-string)
-    (put-text-property 1 2024 'read-only t)
-    (end-of-buffer)))
+    (insert "\n")
+    ;;(right-char 18)
+    ;;(insert "\n")
+    (put-text-property 1 2032 'read-only t)
+    (end-of-buffer)
+    (insert "(format t \"Ok, a new REPL is started, let's hack!\")")
+    (slime-repl-closing-return)))
 
 (defun animate-lambda ()
   (interactive)
@@ -666,13 +674,13 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                     (let ((record (lookup-binary-tree sym rainbow-identifiers-custom-binary-tree)))
                       (if record
                           (setf (cdr record) (mod (+ rainbow-identifiers-tune-delta (cdr record))
-                                             rainbow-identifiers-face-count))
+                                                  rainbow-identifiers-face-count))
                           (setf rainbow-identifiers-custom-binary-tree
-                             (adjoin-binary-tree
-                              (cons sym (mod (+ rainbow-identifiers-tune-delta
-                                              (rainbow-identifiers--hash-function sym))
-                                           rainbow-identifiers-face-count))
-                              rainbow-identifiers-custom-binary-tree))))))))
+                                (adjoin-binary-tree
+                                 (cons sym (mod (+ rainbow-identifiers-tune-delta
+                                                   (rainbow-identifiers--hash-function sym))
+                                                rainbow-identifiers-face-count))
+                                 rainbow-identifiers-custom-binary-tree))))))))
         (font-lock-fontify-buffer))
       (message "Tune is not allowed in this mode.")))
 
@@ -687,8 +695,8 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                     (let ((record (lookup-binary-tree sym rainbow-identifiers-custom-binary-tree)))
                       (if record
                           (setf rainbow-identifiers-custom-binary-tree
-                             (delete-from-binary-tree
-                              (car record) rainbow-identifiers-custom-binary-tree))))))))
+                                (delete-from-binary-tree
+                                 (car record) rainbow-identifiers-custom-binary-tree))))))))
         (font-lock-fontify-buffer))
       (message "Tune is not allowed in this mode.")))
 
@@ -728,16 +736,16 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
     (cond
       ((and (equal prev-char ?\|) (equal next-char ?\|)) t)
       ((or (and (= len 1) (equal first-char ?\.))
-          (and (equal first-char ?\@) (equal prev-char ?\,))
-          (equal prefix2 "#\\") (equal prev-char ?\#)
-          (and (or (equal (upcase prefix11) "#<FUNCTION ")
-                (equal (upcase prefix17) "#<STANDARD-CLASS ")) (equal last-char ?\>))
-          (and (equal first-char ?\{) (equal prev-last-char ?\}) (equal last-char ?\>))
-          (member first-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
-          (and (>= len 2) (member first-char '(?+ ?- ?\.))
-             (member second-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))
-          (and (>= len 3) (member first-char '(?+ ?-)) (equal second-char ?\.)
-             (member third-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))) nil)
+           (and (equal first-char ?\@) (equal prev-char ?\,))
+           (equal prefix2 "#\\") (equal prev-char ?\#)
+           (and (or (equal (upcase prefix11) "#<FUNCTION ")
+                    (equal (upcase prefix17) "#<STANDARD-CLASS ")) (equal last-char ?\>))
+           (and (equal first-char ?\{) (equal prev-last-char ?\}) (equal last-char ?\>))
+           (member first-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
+           (and (>= len 2) (member first-char '(?+ ?- ?\.))
+                (member second-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))
+           (and (>= len 3) (member first-char '(?+ ?-)) (equal second-char ?\.)
+                (member third-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))) nil)
       (t t))))
 
 (add-hook 'rainbow-identifiers-filter-functions 'rainbow-identifiers-filter)
@@ -781,8 +789,8 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
   (interactive)
   (let* ((cb (char-before (point)))
          (matching-text (and cb
-                           (char-equal (char-syntax cb) ?\) )
-                           (blink-matching-open))))
+                             (char-equal (char-syntax cb) ?\) )
+                             (blink-matching-open))))
     (when matching-text (message matching-text))))
 
 ;;;; Highlight symbol
@@ -793,9 +801,9 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
 (setq highlight-symbol-on-navigation-p t)
 (setq highlight-symbol-idle-delay 0.2)
 (let ((hook (lambda () (interactive)
-               (cl-pushnew '(highlight-symbol-face :underline t)
-                           face-remapping-alist :test 'equal)
-               (highlight-symbol-mode))))
+                    (cl-pushnew '(highlight-symbol-face :underline t)
+                                face-remapping-alist :test 'equal)
+                    (highlight-symbol-mode))))
   (add-hook 'lisp-mode-hook hook)
   (add-hook 'emacs-lisp-mode-hook hook))
 
