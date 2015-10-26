@@ -318,7 +318,9 @@
                     ";; Press <Ctrl+Shift+Enter> to evaluate expression and print result at point.\n"
                     ";; Press <F4> to evaluate expression without printing result.\n"
                     "\n"))
-                  (find-file "./ivanp7.org") ; open org-mode file
+                  ;; open org-mode files
+                  (find-file "./ivanp7-thoughts.org")
+                  (find-file "./ivanp7.org")
                   (slime-repl)
                   (print-hello-message)
                   (desktop-read) ;; Load default desktop from file : "~/emacs.d/.emacs.desktop"
