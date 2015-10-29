@@ -218,31 +218,31 @@
     ((kbd "<C-down>") 'end-of-defun)))
 
 (setf *lambda-logo*
-   (list
-    "                         ...                                        "
-    "                      .:kKXXOo.                          ..         "
-    "        ;d;          .kWMWWWMMK;                         ,xo.       "
-    "      .oOl.         .xXkc;;:xXMK;                         ,kO;      "
-    "     'k0:           ;Oc      ;0Wk.                         .kKc     "
-    "    'OK;            :l.       ;KNl                          .kXl.   "
-    "   'OXc                        lNO.                          ,KXc   "
-    "  .xWx.                        .ONl.                          oNK;  "
-    "  cNX:                         .dWOc.                         ,0Wx. "
-    " .OMO.                         ,0MNKc                         .xMX: "
-    " :XMx.                        'OMMMWk.                         oWWd "
-    " oWWd                        'OWMMMMX:                         lNMk."
-    ".xMWo                       .kWMMWNNWx.                        cNMO."
-    ".xMWo                      .xWMMWxlxKK;                        cNMO."
-    ".dWWo                     .xWMMWx..,xWd.                       lWMx."
-    " cNMx.                   .dNMMWO.   :X0,                       dWNl "
-    " '0MO.                  .oNMMM0'    .kNo                      .kM0, "
-    "  oNX:                  lNMMMK;      cN0'                     ;KNo  "
-    "  .kWx.                lXMMMK:       .OWd.       ..          .dWk.  "
-    "   ,0Xc               cXMMMXc         lNXc       cd.         cX0,   "
-    "    ;00;             :KMMMNl          .OMXd'   .:0d.        ;00,    "
-    "     ,O0:           ;KMMMNd.           ;KMWXOxx0NK;        :0k'     "
-    "     .d0l.         ;0MMMWx.             ;ONMMMMWO;       .oOl.      "
-    "       ;d:         ':ccc;.               .'cool;.        ,l,        "))
+      (list
+       "                         ...                                        "
+       "                      .:kKXXOo.                          ..         "
+       "        ;d;          .kWMWWWMMK;                         ,xo.       "
+       "      .oOl.         .xXkc;;:xXMK;                         ,kO;      "
+       "     'k0:           ;Oc      ;0Wk.                         .kKc     "
+       "    'OK;            :l.       ;KNl                          .kXl.   "
+       "   'OXc                        lNO.                          ,KXc   "
+       "  .xWx.                        .ONl.                          oNK;  "
+       "  cNX:                         .dWOc.                         ,0Wx. "
+       " .OMO.                         ,0MNKc                         .xMX: "
+       " :XMx.                        'OMMMWk.                         oWWd "
+       " oWWd                        'OWMMMMX:                         lNMk."
+       ".xMWo                       .kWMMWNNWx.                        cNMO."
+       ".xMWo                      .xWMMWxlxKK;                        cNMO."
+       ".dWWo                     .xWMMWx..,xWd.                       lWMx."
+       " cNMx.                   .dNMMWO.   :X0,                       dWNl "
+       " '0MO.                  .oNMMM0'    .kNo                      .kM0, "
+       "  oNX:                  lNMMMK;      cN0'                     ;KNo  "
+       "  .kWx.                lXMMMK:       .OWd.       ..          .dWk.  "
+       "   ,0Xc               cXMMMXc         lNXc       cd.         cX0,   "
+       "    ;00;             :KMMMNl          .OMXd'   .:0d.        ;00,    "
+       "     ,O0:           ;KMMMNd.           ;KMWXOxx0NK;        :0k'     "
+       "     .d0l.         ;0MMMWx.             ;ONMMMMWO;       .oOl.      "
+       "       ;d:         ':ccc;.               .'cool;.        ,l,        "))
 
 (defun print-hello-message ()
   (let ((lambda-logo-string
@@ -319,6 +319,7 @@
                     ";; Press <F4> to evaluate expression without printing result.\n"
                     "\n"))
                   ;; open org-mode files
+                  (find-file "./info.org")
                   (find-file "./ivanp7-thoughts.org")
                   (find-file "./ivanp7.org")
                   (slime-repl)
