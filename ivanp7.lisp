@@ -100,7 +100,7 @@
            result))
      asdf:*system-definition-search-functions*)))
 
-(defparameter *ivanp7-systems-root-directory* #P"d:/lisp/ivanp7/")
+(defparameter *ivanp7-systems-root-directory* #P"~/lisp/ivanp7/")
 (defparameter *ivanp7-systems-search-max-depth* 2)
 
 (register-asdf-recursive-search-in-directory

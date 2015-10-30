@@ -13,18 +13,24 @@
 (setq user-full-name   "ivanp7")
 (setq user-mail-adress "ivanp7@mail.ru")
 
-;;;; Setting up load-path and default-directory
-(setq-default default-directory "d:/lisp/ivanp7/")
-(setq default-directory "d:/lisp/ivanp7/")
-(add-to-list 'load-path "./init/")
-(add-to-list 'load-path "./init/elisp/")
-
 ;;;; System-type definition functions
 (defun system-is-linux ()
   (string-equal system-type "gnu/linux"))
 
 (defun system-is-windows ()
   (string-equal system-type "windows-nt"))
+
+;;;; Setting up load-path and default-directory
+(cond
+  ((system-is-windows)
+   (setq-default default-directory "d:/lisp/ivanp7/")
+   (setq default-directory "d:/lisp/ivanp7/"))
+  ((system-is-linux)
+   (setq-default default-directory "~/lisp/ivanp7/")
+   (setq default-directory "~/lisp/ivanp7/")))
+
+(add-to-list 'load-path "./init/")
+(add-to-list 'load-path "./init/elisp/")
 
 ;;;; Basic Emacs tuning
 (setq cua-rectangle-mark-key (kbd "C-x j")) ; needed to be able to rebind <C-return>
@@ -64,8 +70,8 @@
 (defvar *required-packages*
   '(ac-slime auto-complete auto-indent-mode buffer-move expand-region
     highlight-stages highlight-symbol hl-sexp imenu+ magit magic-latex-buffer
-    nlinum paren-face pos-tip pretty-mode pretty-symbols slime
-    tabbar undo-tree)
+    nlinum paren-face pos-tip pretty-mode pretty-symbols rainbow-identifiers 
+    slime tabbar undo-tree)
   "a list of packages to ensure are installed at launch.")
 
 (load "init-emacs.el")

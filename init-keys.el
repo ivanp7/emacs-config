@@ -89,9 +89,16 @@
 (define-key my-keys-minor-mode-map (kbd "C-l") 'goto-line)
 
 ;;; Buffers and windows configuration control keys
-(define-key my-keys-minor-mode-map (kbd "<C-apps>") 'kill-this-buffer)
-(define-key my-keys-minor-mode-map (kbd "<S-C-apps>")
-  (lambda () (interactive) (other-window 1) (kill-this-buffer) (other-window 1)))
+(cond
+  ((system-is-windows)
+   (define-key my-keys-minor-mode-map (kbd "<C-apps>") 'kill-this-buffer)
+   (define-key my-keys-minor-mode-map (kbd "<S-C-apps>")
+     (lambda () (interactive) (other-window 1) (kill-this-buffer) (other-window 1))))
+  ((system-is-linux)
+   (define-key my-keys-minor-mode-map (kbd "<C-menu>") 'kill-this-buffer)
+   (define-key my-keys-minor-mode-map (kbd "<S-C-menu>")
+     (lambda () (interactive) (other-window 1) (kill-this-buffer) (other-window 1)))))
+
 (define-key my-keys-minor-mode-map (kbd "C-'") 'other-window)
 (define-key my-keys-minor-mode-map (kbd "C-,") 'previous-buffer)
 (define-key my-keys-minor-mode-map (kbd "C-.") 'next-buffer)
@@ -101,29 +108,48 @@
   (lambda () (interactive) (other-window 1) (next-buffer) (other-window 1)))
 (define-key my-keys-minor-mode-map (kbd "<f2>") 'slime-selector)
 
-(define-key my-keys-minor-mode-map (kbd "<apps> <left>") 'buf-move-left)
-(define-key my-keys-minor-mode-map (kbd "<apps> <S-left>")
+(defvar menu/apps-key-name
+  (cond
+    ((system-is-windows) "<apps>")
+    ((system-is-linux) "<menu>")))
+
+(define-key my-keys-minor-mode-map (kbd (concat menu/apps-key-name
+                                                " <left>")) 'buf-move-left)
+(define-key my-keys-minor-mode-map (kbd (concat menu/apps-key-name
+                                                " <S-left>"))
   (lambda () (interactive)
      (setq buffer-move-behavior 'swap) (buf-move-left) (setq buffer-move-behavior 'move)))
-(define-key my-keys-minor-mode-map (kbd "<apps> <up>") 'buf-move-up)
-(define-key my-keys-minor-mode-map (kbd "<apps> <S-up>")
+(define-key my-keys-minor-mode-map (kbd (concat menu/apps-key-name
+                                                " <up>")) 'buf-move-up)
+(define-key my-keys-minor-mode-map (kbd (concat menu/apps-key-name
+                                                " <S-up>"))
   (lambda () (interactive)
      (setq buffer-move-behavior 'swap) (buf-move-up) (setq buffer-move-behavior 'move)))
-(define-key my-keys-minor-mode-map (kbd "<apps> <right>") 'buf-move-right)
-(define-key my-keys-minor-mode-map (kbd "<apps> <S-right>")
+(define-key my-keys-minor-mode-map (kbd (concat menu/apps-key-name
+                                                " <right>")) 'buf-move-right)
+(define-key my-keys-minor-mode-map (kbd (concat menu/apps-key-name
+                                                " <S-right>"))
   (lambda () (interactive)
      (setq buffer-move-behavior 'swap) (buf-move-right) (setq buffer-move-behavior 'move)))
-(define-key my-keys-minor-mode-map (kbd "<apps> <down>") 'buf-move-down)
-(define-key my-keys-minor-mode-map (kbd "<apps> <S-down>")
+(define-key my-keys-minor-mode-map (kbd (concat menu/apps-key-name
+                                                " <down>")) 'buf-move-down)
+(define-key my-keys-minor-mode-map (kbd (concat menu/apps-key-name
+                                                " <S-down>"))
   (lambda () (interactive)
      (setq buffer-move-behavior 'swap) (buf-move-down) (setq buffer-move-behavior 'move)))
 
-(define-key my-keys-minor-mode-map (kbd "<apps> C-<left>") 'split-window-horizontally)
-(define-key my-keys-minor-mode-map (kbd "<apps> C-<up>") 'split-window-vertically)
-(define-key my-keys-minor-mode-map (kbd "<apps> C-<right>") 'split-window-right)
-(define-key my-keys-minor-mode-map (kbd "<apps> C-<down>") 'split-window-below)
-(define-key my-keys-minor-mode-map (kbd "<apps> <backspace>") 'delete-window)
-(define-key my-keys-minor-mode-map (kbd "<apps> <delete>") 'delete-window)
+(define-key my-keys-minor-mode-map (kbd (concat menu/apps-key-name
+                                                " C-<left>")) 'split-window-horizontally)
+(define-key my-keys-minor-mode-map (kbd (concat menu/apps-key-name
+                                                " C-<up>")) 'split-window-vertically)
+(define-key my-keys-minor-mode-map (kbd (concat menu/apps-key-name
+                                                " C-<right>")) 'split-window-right)
+(define-key my-keys-minor-mode-map (kbd (concat menu/apps-key-name
+                                                " C-<down>")) 'split-window-below)
+(define-key my-keys-minor-mode-map (kbd (concat menu/apps-key-name
+                                                " <backspace>")) 'delete-window)
+(define-key my-keys-minor-mode-map (kbd (concat menu/apps-key-name
+                                                " <delete>")) 'delete-window)
 
 ;;; Commands execution
 (define-key my-keys-minor-mode-map (kbd "C-M-x") 'shell-command)

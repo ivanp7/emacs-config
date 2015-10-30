@@ -154,11 +154,20 @@
 (global-set-key (kbd "<C-triple-wheel-left>") 'ignore)
 
 ;;;; Coding systems
-(prefer-coding-system 'windows-1251)
-(set-terminal-coding-system 'windows-1251)
-(set-keyboard-coding-system 'windows-1251-unix)
-(set-selection-coding-system 'windows-1251)
-(setq locale-coding-system 'windows-1251)
-(set-default-coding-systems 'windows-1251)
+(cond
+  ((system-is-windows)
+   (prefer-coding-system 'windows-1251)
+   (set-terminal-coding-system 'windows-1251)
+   (set-keyboard-coding-system 'windows-1251-unix)
+   (set-selection-coding-system 'windows-1251)
+   (setq locale-coding-system 'windows-1251)
+   (set-default-coding-systems 'windows-1251))
+  ((system-is-linux)
+   (prefer-coding-system 'utf-8)
+   (set-terminal-coding-system 'utf-8)
+   (set-keyboard-coding-system 'utf-8)
+   (set-selection-coding-system 'utf-8)
+   (setq locale-coding-system 'utf-8)
+   (set-default-coding-systems 'utf-8)))
 
 (setq utf-translate-cjk-mode nil) ; disable CJK coding/encoding (Chinese/Japanese/Korean characters)

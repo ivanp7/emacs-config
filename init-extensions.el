@@ -324,9 +324,9 @@
                   (find-file "./ivanp7.org")
                   (slime-repl)
                   (print-hello-message)
-                  (desktop-read) ;; Load default desktop from file : "~/emacs.d/.emacs.desktop"
+                  ;;(desktop-read) ;; Load default desktop from file : "~/emacs.d/.emacs.desktop"
                   (anarcat/display-timing)
-                  (play-sound-file (concat default-directory "/init/ready.wav"))
+                  ;;(play-sound-file (concat default-directory "/init/ready.wav"))
                   (setq slime-first-startup nil)))))
 
 ;;;; Imenu
@@ -597,16 +597,16 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                              (adjoin-binary-tree x (tree-right-branch tree))))))
 
 (defun tree->list (tree &optional exclude-p)
-  (labels ((copy-to-list (tree result-list)
-             (if (null tree)
-                 result-list
-                 (copy-to-list (tree-left-branch tree)
-                               (if (or (null exclude-p) (not (funcall exclude-p (tree-entry tree))))
-                                   (cons (tree-entry tree)
-                                         (copy-to-list (tree-right-branch tree)
-                                                       result-list))
-                                   (copy-to-list (tree-right-branch tree)
-                                                 result-list))))))
+  (cl-labels ((copy-to-list (tree result-list)
+                            (if (null tree)
+                                result-list
+                                (copy-to-list (tree-left-branch tree)
+                                              (if (or (null exclude-p) (not (funcall exclude-p (tree-entry tree))))
+                                                  (cons (tree-entry tree)
+                                                        (copy-to-list (tree-right-branch tree)
+                                                                      result-list))
+                                                  (copy-to-list (tree-right-branch tree)
+                                                                result-list))))))
     (copy-to-list tree nil)))
 
 (defun partial-tree (elts n)
