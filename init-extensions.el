@@ -202,7 +202,7 @@
   (slime-define-keys lisp-mode-map
     ((kbd "C-<return>") 'slime-eval-last-expression-in-repl)
     ((kbd "M-<return>") 'slime-eval-print-last-expression)
-    ((kbd "<C-lwindow>") 'indent-current-sexp-or-selection)
+    ((kbd "C-\\") 'indent-current-sexp-or-selection)
     ((kbd "<M-left>") 'backward-up-list)
     ((kbd "<M-right>") 'up-list)
     ((kbd "<M-down>") 'down-list)
@@ -210,7 +210,7 @@
     ((kbd "<C-down>") 'end-of-defun))
   ;; ****** keys that work in all Emacs Lisp buffers ******
   (slime-define-keys emacs-lisp-mode-map
-    ((kbd "<C-lwindow>") 'indent-current-sexp-or-selection)
+    ((kbd "C-\\") 'indent-current-sexp-or-selection)
     ((kbd "<M-left>") 'backward-up-list)
     ((kbd "<M-right>") 'up-list)
     ((kbd "<M-down>") 'down-list)
@@ -318,12 +318,8 @@
                     ";; Press <Ctrl+Shift+Enter> to evaluate expression and print result at point.\n"
                     ";; Press <F4> to evaluate expression without printing result.\n"
                     "\n"))
-                  ;; open org-mode files
-                  (find-file (concat (default-value 'default-directory) "info.org"))
-                  (find-file (concat (default-value 'default-directory) "ivanp7.org"))
                   (slime-repl)
                   (print-hello-message)
-                  (desktop-read) ;; Load default desktop from file : "~/emacs.d/.emacs.desktop"
                   (anarcat/display-timing)
                   ;;(play-sound-file (concat default-directory "init/ready.wav"))
                   (setq slime-first-startup nil)))))

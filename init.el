@@ -82,8 +82,16 @@
 ;;;; Setting up a minor mode for useful key shortcuts
 (load "init-keys.el")
 
-;;;; Finally, splitting screen and starting SLIME
+;;;; Setting up windows configuration
 (split-window-horizontally)
 (slime)
-(split-window-vertically)
+(split-window-vertically 23)
+(other-window 1)
 (eshell)
+(other-window 1)
+
+;; open org-mode files
+(find-file (concat (default-value 'default-directory) "info.org"))
+(find-file (concat (default-value 'default-directory) "ivanp7.org"))
+
+;; (desktop-read) ;; Load default desktop from file : "~/emacs.d/.emacs.desktop"
