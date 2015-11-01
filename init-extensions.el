@@ -1,5 +1,5 @@
 ;;;; Org-mode
-(setq org-directory "./")
+(setq org-directory (default-value 'default-directory))
 (setq org-default-notes-file (concat org-directory "ivanp7.org"))
 (setq org-agenda-files (list (concat org-directory "ivanp7.org")))
 (global-set-key "\C-cc" 'org-capture)
@@ -302,7 +302,7 @@
 (defvar slime-first-startup t)
 (add-hook 'slime-connected-hook
           (lambda ()
-            (slime-load-file "./init/ivanp7.lisp")
+            (slime-load-file (concat (default-value 'default-directory) "init/ivanp7.lisp"))
             (if slime-first-startup
                 (progn
                   (slime-startup-time-init)
@@ -310,7 +310,7 @@
                   (rainbow-identifiers-load-tune)
                   (tabbar-mode 1)
                   (define-my-slime-keys)
-                  ;; (slime-load-file "./init/ivanp7-welcome.lisp")
+                  ;; (slime-load-file (concat default-directory "init/ivanp7-welcome.lisp"))
                   (slime-scratch) ; autocreate *slime-scratch* buffer
                   (insert
                    (concat
@@ -319,13 +319,13 @@
                     ";; Press <F4> to evaluate expression without printing result.\n"
                     "\n"))
                   ;; open org-mode files
-                  (find-file "./info.org")
-                  (find-file "./ivanp7.org")
+                  (find-file (concat (default-value 'default-directory) "info.org"))
+                  (find-file (concat (default-value 'default-directory) "ivanp7.org"))
                   (slime-repl)
                   (print-hello-message)
                   (desktop-read) ;; Load default desktop from file : "~/emacs.d/.emacs.desktop"
                   (anarcat/display-timing)
-                  ;;(play-sound-file (concat default-directory "/init/ready.wav"))
+                  ;;(play-sound-file (concat default-directory "init/ready.wav"))
                   (setq slime-first-startup nil)))))
 
 ;;;; Imenu
@@ -465,9 +465,9 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
 ;; Better fonts for special symbols
 (defun custom-fonts-for-pretty-symbols ()
   (let ((symbols-fonts
-         '(("DejaVu Sans Mono"
+         '(("Hasklig Medium" ;"DejaVu Sans Mono" ; for Windows
             (#x2205 #x2260 #x2208 #x2200 (#x2203 . #x2204) #x221E #x2261))
-           ("Consolas"
+           ("Hasklig Medium" ;"Consolas" ; for Windows
             (#x2248 (#x2264 . #x2265) #x221A #x2116 #x2192 #x2190 #x21D2 #x21D4)))))
     (dolist (font-set symbols-fonts)
       (dolist (sym (cadr font-set))
@@ -600,7 +600,9 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                             (if (null tree)
                                 result-list
                                 (copy-to-list (tree-left-branch tree)
-                                              (if (or (null exclude-p) (not (funcall exclude-p (tree-entry tree))))
+                                              (if (or (null exclude-p) (not (funcall
+                                                                             exclude-p
+                                                                             (tree-entry tree))))
                                                   (cons (tree-entry tree)
                                                         (copy-to-list (tree-right-branch tree)
                                                                       result-list))

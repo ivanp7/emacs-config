@@ -29,8 +29,8 @@
    (setq-default default-directory "~/lisp/ivanp7/")
    (setq default-directory "~/lisp/ivanp7/")))
 
-(add-to-list 'load-path "./init/")
-(add-to-list 'load-path "./init/elisp/")
+(add-to-list 'load-path (concat default-directory "init/"))
+(add-to-list 'load-path (concat default-directory "init/elisp/"))
 
 ;;;; Basic Emacs tuning
 (setq cua-rectangle-mark-key (kbd "C-x j")) ; needed to be able to rebind <C-return>
