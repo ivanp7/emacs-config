@@ -70,7 +70,7 @@
 (defvar *required-packages*
   '(ac-slime auto-complete auto-indent-mode buffer-move expand-region
     highlight-stages highlight-symbol hl-sexp imenu+ magit magic-latex-buffer
-    nlinum paren-face pos-tip pretty-mode pretty-symbols rainbow-identifiers 
+    nlinum paren-face pos-tip pretty-mode pretty-symbols rainbow-identifiers
     slime tabbar undo-tree)
   "a list of packages to ensure are installed at launch.")
 
@@ -85,3 +85,5 @@
 ;;;; Finally, splitting screen and starting SLIME
 (split-window-horizontally)
 (slime)
+(split-window-vertically)
+(eshell)

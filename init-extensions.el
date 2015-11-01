@@ -320,11 +320,10 @@
                     "\n"))
                   ;; open org-mode files
                   (find-file "./info.org")
-                  (find-file "./ivanp7-thoughts.org")
                   (find-file "./ivanp7.org")
                   (slime-repl)
                   (print-hello-message)
-                  ;;(desktop-read) ;; Load default desktop from file : "~/emacs.d/.emacs.desktop"
+                  (desktop-read) ;; Load default desktop from file : "~/emacs.d/.emacs.desktop"
                   (anarcat/display-timing)
                   ;;(play-sound-file (concat default-directory "/init/ready.wav"))
                   (setq slime-first-startup nil)))))
