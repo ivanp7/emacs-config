@@ -406,8 +406,8 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
        (?\u0025 :mod-up (:arithmetic) (:mod-up "MOD" ,@lispy))
        (?\u00D7 :mult (:arithmetic) (:mult "*" ,@lispy))
        ;;(?\u00F7 :div (:arithmetic) (:div "/" ,@lispy)) ; conflicts with /=
-       (?\u2116 :nth (:sets) (:nth "nth" ,@lispy))
-       (?\u2116 :nth-up (:sets) (:nth-up "NTH" ,@lispy))
+       ;;(?\u2116 :nth (:sets) (:nth "nth" ,@lispy))
+       ;;(?\u2116 :nth-up (:sets) (:nth-up "NTH" ,@lispy))
        (?\u2208 :member (:sets) (:member "member" ,@lispy))
        (?\u2208 :member-up (:sets) (:member-up "MEMBER" ,@lispy))
        (?\u2200 :every (:sets) (:every "every" ,@lispy))
@@ -416,7 +416,6 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
        (?\u2203 :some-up (:sets) (:some-up "SOME" ,@lispy))
        (?\u2204 :notany (:sets) (:notany "notany" ,@lispy))
        (?\u2204 :notany-up (:sets) (:notany-up "NOTANY" ,@lispy))
-       ;; u2261
        (?\u2190 :setf (:equality) (:setf "setf" ,@lispy))
        (?\u2190 :setf-up (:equality) (:setf-up "SETF" ,@lispy))
        ))))
@@ -461,10 +460,14 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
 ;; Better fonts for special symbols
 (defun custom-fonts-for-pretty-symbols ()
   (let ((symbols-fonts
-         '(("Hasklig Medium" ;"DejaVu Sans Mono" ; for Windows
-            (#x2205 #x2260 #x2208 #x2200 (#x2203 . #x2204) #x221E #x2261))
+         '(("Monospace" ; for Ubuntu
+            (#x2208 #x2200 (#x2203 . #x2204) #x2227 #x2228 #x2213))
+           ("Hasklig Medium" ;"DejaVu Sans Mono" ; for Windows
+            (#x2205 #x2260 #x221E ; #x2208 #x2200 (#x2203 . #x2204)
+             ))
            ("Hasklig Medium" ;"Consolas" ; for Windows
-            (#x2248 (#x2264 . #x2265) #x221A #x2116 #x2192 #x2190 #x21D2 #x21D4)))))
+            (#x2248 (#x2264 . #x2265) #x221A #x2192 #x2190 ; #x2116
+             )))))
     (dolist (font-set symbols-fonts)
       (dolist (sym (cadr font-set))
         (set-fontset-font "fontset-default" sym (car font-set) nil nil) ;; -set) nil 'prepend)
