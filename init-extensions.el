@@ -218,31 +218,31 @@
     ((kbd "<C-down>") 'end-of-defun)))
 
 (setf *lambda-logo*
-      (list
-       "                         ...                                        "
-       "                      .:kKXXOo.                          ..         "
-       "        ;d;          .kWMWWWMMK;                         ,xo.       "
-       "      .oOl.         .xXkc;;:xXMK;                         ,kO;      "
-       "     'k0:           ;Oc      ;0Wk.                         .kKc     "
-       "    'OK;            :l.       ;KNl                          .kXl.   "
-       "   'OXc                        lNO.                          ,KXc   "
-       "  .xWx.                        .ONl.                          oNK;  "
-       "  cNX:                         .dWOc.                         ,0Wx. "
-       " .OMO.                         ,0MNKc                         .xMX: "
-       " :XMx.                        'OMMMWk.                         oWWd "
-       " oWWd                        'OWMMMMX:                         lNMk."
-       ".xMWo                       .kWMMWNNWx.                        cNMO."
-       ".xMWo                      .xWMMWxlxKK;                        cNMO."
-       ".dWWo                     .xWMMWx..,xWd.                       lWMx."
-       " cNMx.                   .dNMMWO.   :X0,                       dWNl "
-       " '0MO.                  .oNMMM0'    .kNo                      .kM0, "
-       "  oNX:                  lNMMMK;      cN0'                     ;KNo  "
-       "  .kWx.                lXMMMK:       .OWd.       ..          .dWk.  "
-       "   ,0Xc               cXMMMXc         lNXc       cd.         cX0,   "
-       "    ;00;             :KMMMNl          .OMXd'   .:0d.        ;00,    "
-       "     ,O0:           ;KMMMNd.           ;KMWXOxx0NK;        :0k'     "
-       "     .d0l.         ;0MMMWx.             ;ONMMMMWO;       .oOl.      "
-       "       ;d:         ':ccc;.               .'cool;.        ,l,        "))
+   (list
+    "                         ...                                        "
+    "                      .:kKXXOo.                          ..         "
+    "        ;d;          .kWMWWWMMK;                         ,xo.       "
+    "      .oOl.         .xXkc;;:xXMK;                         ,kO;      "
+    "     'k0:           ;Oc      ;0Wk.                         .kKc     "
+    "    'OK;            :l.       ;KNl                          .kXl.   "
+    "   'OXc                        lNO.                          ,KXc   "
+    "  .xWx.                        .ONl.                          oNK;  "
+    "  cNX:                         .dWOc.                         ,0Wx. "
+    " .OMO.                         ,0MNKc                         .xMX: "
+    " :XMx.                        'OMMMWk.                         oWWd "
+    " oWWd                        'OWMMMMX:                         lNMk."
+    ".xMWo                       .kWMMWNNWx.                        cNMO."
+    ".xMWo                      .xWMMWxlxKK;                        cNMO."
+    ".dWWo                     .xWMMWx..,xWd.                       lWMx."
+    " cNMx.                   .dNMMWO.   :X0,                       dWNl "
+    " '0MO.                  .oNMMM0'    .kNo                      .kM0, "
+    "  oNX:                  lNMMMK;      cN0'                     ;KNo  "
+    "  .kWx.                lXMMMK:       .OWd.       ..          .dWk.  "
+    "   ,0Xc               cXMMMXc         lNXc       cd.         cX0,   "
+    "    ;00;             :KMMMNl          .OMXd'   .:0d.        ;00,    "
+    "     ,O0:           ;KMMMNd.           ;KMWXOxx0NK;        :0k'     "
+    "     .d0l.         ;0MMMWx.             ;ONMMMMWO;       .oOl.      "
+    "       ;d:         ':ccc;.               .'cool;.        ,l,        "))
 
 (defun print-hello-message ()
   (let ((lambda-logo-string
@@ -315,7 +315,7 @@
                   (insert
                    (concat
                     ";; This is a scratch buffer for Common Lisp evaluation.\n"
-                    ";; Press <Ctrl+Shift+Enter> to evaluate expression and print result at point.\n"
+                    ";; Press <Alt+Enter> to evaluate expression and print result at point.\n"
                     ";; Press <F4> to evaluate expression without printing result.\n"
                     "\n"))
                   (slime-repl)
@@ -600,8 +600,8 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                                 result-list
                                 (copy-to-list (tree-left-branch tree)
                                               (if (or (null exclude-p) (not (funcall
-                                                                             exclude-p
-                                                                             (tree-entry tree))))
+                                                                          exclude-p
+                                                                          (tree-entry tree))))
                                                   (cons (tree-entry tree)
                                                         (copy-to-list (tree-right-branch tree)
                                                                       result-list))
@@ -677,13 +677,13 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                     (let ((record (lookup-binary-tree sym rainbow-identifiers-custom-binary-tree)))
                       (if record
                           (setf (cdr record) (mod (+ rainbow-identifiers-tune-delta (cdr record))
-                                                  rainbow-identifiers-face-count))
+                                             rainbow-identifiers-face-count))
                           (setf rainbow-identifiers-custom-binary-tree
-                                (adjoin-binary-tree
-                                 (cons sym (mod (+ rainbow-identifiers-tune-delta
-                                                   (rainbow-identifiers--hash-function sym))
-                                                rainbow-identifiers-face-count))
-                                 rainbow-identifiers-custom-binary-tree))))))))
+                             (adjoin-binary-tree
+                              (cons sym (mod (+ rainbow-identifiers-tune-delta
+                                              (rainbow-identifiers--hash-function sym))
+                                           rainbow-identifiers-face-count))
+                              rainbow-identifiers-custom-binary-tree))))))))
         (font-lock-fontify-buffer))
       (message "Tune is not allowed in this mode.")))
 
@@ -698,8 +698,8 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                     (let ((record (lookup-binary-tree sym rainbow-identifiers-custom-binary-tree)))
                       (if record
                           (setf rainbow-identifiers-custom-binary-tree
-                                (delete-from-binary-tree
-                                 (car record) rainbow-identifiers-custom-binary-tree))))))))
+                             (delete-from-binary-tree
+                              (car record) rainbow-identifiers-custom-binary-tree))))))))
         (font-lock-fontify-buffer))
       (message "Tune is not allowed in this mode.")))
 
@@ -739,16 +739,16 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
     (cond
       ((and (equal prev-char ?\|) (equal next-char ?\|)) t)
       ((or (and (= len 1) (equal first-char ?\.))
-           (and (equal first-char ?\@) (equal prev-char ?\,))
-           (equal prefix2 "#\\") (equal prev-char ?\#)
-           (and (or (equal (upcase prefix11) "#<FUNCTION ")
-                    (equal (upcase prefix17) "#<STANDARD-CLASS ")) (equal last-char ?\>))
-           (and (equal first-char ?\{) (equal prev-last-char ?\}) (equal last-char ?\>))
-           (member first-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
-           (and (>= len 2) (member first-char '(?+ ?- ?\.))
-                (member second-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))
-           (and (>= len 3) (member first-char '(?+ ?-)) (equal second-char ?\.)
-                (member third-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))) nil)
+          (and (equal first-char ?\@) (equal prev-char ?\,))
+          (equal prefix2 "#\\") (equal prev-char ?\#)
+          (and (or (equal (upcase prefix11) "#<FUNCTION ")
+                (equal (upcase prefix17) "#<STANDARD-CLASS ")) (equal last-char ?\>))
+          (and (equal first-char ?\{) (equal prev-last-char ?\}) (equal last-char ?\>))
+          (member first-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
+          (and (>= len 2) (member first-char '(?+ ?- ?\.))
+             (member second-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))
+          (and (>= len 3) (member first-char '(?+ ?-)) (equal second-char ?\.)
+             (member third-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))) nil)
       (t t))))
 
 (add-hook 'rainbow-identifiers-filter-functions 'rainbow-identifiers-filter)
