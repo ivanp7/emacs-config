@@ -340,6 +340,8 @@
 ;;;; Auto-complete
 (require 'auto-complete)
 
+(setq ac-quick-help-prefer-pos-tip nil) ; pos-tip works not so well on Ubuntu
+
 (setq ac-auto-start nil)
 (setq ac-quick-help-delay 1.5)
 (setq ac-auto-show-menu 0.3)
@@ -792,8 +794,8 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
   (interactive)
   (let* ((cb (char-before (point)))
          (matching-text (and cb
-                             (char-equal (char-syntax cb) ?\) )
-                             (blink-matching-open))))
+                           (char-equal (char-syntax cb) ?\) )
+                           (blink-matching-open))))
     (when matching-text (message matching-text))))
 
 ;;;; Highlight symbol
@@ -804,9 +806,9 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
 (setq highlight-symbol-on-navigation-p t)
 (setq highlight-symbol-idle-delay 0.2)
 (let ((hook (lambda () (interactive)
-                    (cl-pushnew '(highlight-symbol-face :underline t)
-                                face-remapping-alist :test 'equal)
-                    (highlight-symbol-mode))))
+               (cl-pushnew '(highlight-symbol-face :underline t)
+                           face-remapping-alist :test 'equal)
+               (highlight-symbol-mode))))
   (add-hook 'lisp-mode-hook hook)
   (add-hook 'emacs-lisp-mode-hook hook))
 
