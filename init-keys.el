@@ -289,6 +289,7 @@
 (define-expansion "M-a b o" "(let* (())\n" ")" 8 t)
 (define-expansion "M-a b f" "(flet (())\n" ")" 8 t) ; (f)unction
 (define-expansion "M-a b r" "(labels (())\n" ")" 10 t) ; (r)ecursion allowed
+(define-expansion "M-a b m" "(macrolet (())\n" ")" 12 t) ; (m)acro
 
 ;;; Movement, selection, editing and other useful keybindings
 (define-key my-keys-minor-mode-map (kbd "<C-left>") 'backward-sexp)
