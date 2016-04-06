@@ -177,7 +177,7 @@
               (lisp-indent-line))))))
 
 (defun define-my-slime-keys ()
-  (slime-define-keys slime-edit-value-mode-map
+  (slime-define-keys slime-edit-value-mode-map ; bug workaround
     ((kbd "q") 'self-insert-command)
     ((kbd "S-q") 'self-insert-command))
   ;; ****** keys that work in REPL only (can override keys from generic lisp keymap) ******
@@ -202,14 +202,15 @@
   (slime-define-keys lisp-mode-map
     ((kbd "C-<return>") 'slime-eval-last-expression-in-repl)
     ((kbd "M-<return>") 'slime-eval-print-last-expression)
-    ((kbd "C-\\") 'indent-current-sexp-or-selection)
-    ((kbd "<M-left>") 'backward-up-list)
-    ((kbd "<M-right>") 'up-list)
-    ((kbd "<M-down>") 'down-list)
-    ((kbd "<C-up>") 'beginning-of-defun)
-    ((kbd "<C-down>") 'end-of-defun))
-  ;; ****** keys that work in all Emacs Lisp buffers ******
-  (slime-define-keys emacs-lisp-mode-map
+    ;; ((kbd "C-\\") 'indent-current-sexp-or-selection)
+    ;; ((kbd "<M-left>") 'backward-up-list)
+    ;; ((kbd "<M-right>") 'up-list)
+    ;; ((kbd "<M-down>") 'down-list)
+    ;; ((kbd "<C-up>") 'beginning-of-defun)
+    ;; ((kbd "<C-down>") 'end-of-defun)
+    )
+  ;; ****** keys that work in all Lisp buffers ******
+  (slime-define-keys lisp-mode-shared-map
     ((kbd "C-\\") 'indent-current-sexp-or-selection)
     ((kbd "<M-left>") 'backward-up-list)
     ((kbd "<M-right>") 'up-list)
@@ -437,7 +438,7 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                 `((?\u2205 custom "nil" (,@lisps))
                   (?\u2205 custom "NIL" (,@lisps)) ; uppercase duplication to get around of a bug
                   (?\u2260 custom "/=" (,@lisps))
-                  (?\u2248 custom "~=" (,@lisps))
+                  ;;(?\u2248 custom "~=" (,@lisps))
                   (?\u2265 custom ">=" (,@lisps))
                   (?\u2264 custom "<=" (,@lisps))
                   (?\u2192 custom "->" (,@lisps))
@@ -462,15 +463,17 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
 ;; Better fonts for special symbols
 (defun custom-fonts-for-pretty-symbols ()
   (let ((symbols-fonts
-         '(("PragmataPro"
+         '(("PragmataPro" ; monospaced
             (#x2208 #x2200 #x2203 #x2204 #x2227 #x2228 #x2213
              ;; member every some notany and or minus-plus
-             #x2205 #x2260 #x221E
-             ;; nil /= inf
+             #x2205 #x2260
+             ;; nil /=
              #x2248 #x2264 #x2265 #x221A
              ;; ~= <= >= sqrt
              ))
-           ("Hasklig Medium" (#x2192 #x2190) ; leftward & rightward arrows
+           ("Fira Code Medium" ; not monospaced, but good-looking
+            (#x2192 #x2190 #x221E)
+            ;; -> <- inf
             ))))
     (dolist (font-set symbols-fonts)
       (dolist (sym (cadr font-set))

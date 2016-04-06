@@ -231,7 +231,7 @@
 (define-expansion "C-#" "#|" "|#")
 
 (let ((make-parens (lambda () (interactive) (surround-selection "(" ")" 1))))
-  (define-key lisp-mode-shared-map (kbd "TAB") make-parens))
+  (define-key lisp-mode-shared-map (kbd "TAB") make-parens)) ; will work in all Lisp modes
 
 (define-expansion "M-a '" "'(" ")" 2)
 (define-expansion "M-a `" "`(" ")" 2)
