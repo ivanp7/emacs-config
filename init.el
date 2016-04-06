@@ -87,7 +87,8 @@
 (slime)
 (split-window-vertically 23)
 (other-window 1)
-(eshell)
+;; (eshell)
+(ansi-term "/bin/bash")
 (other-window 1)
 
 ;; open org-mode files
