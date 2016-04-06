@@ -404,8 +404,8 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
        (?\u221A :sqrt-up (:arithmetic) (:sqrt-up "SQRT" ,@lispy))
        (?\u005E :expt (:arithmetic) (:expt "expt" ,@lispy))
        (?\u005E :expt-up (:arithmetic) (:expt-up "EXPT" ,@lispy))
-       (?\u0025 :mod (:arithmetic) (:mod "mod" ,@lispy))
-       (?\u0025 :mod-up (:arithmetic) (:mod-up "MOD" ,@lispy))
+       ;;(?\u0025 :mod (:arithmetic) (:mod "mod" ,@lispy))
+       ;;(?\u0025 :mod-up (:arithmetic) (:mod-up "MOD" ,@lispy))
        (?\u00D7 :mult (:arithmetic) (:mult "*" ,@lispy))
        ;;(?\u00F7 :div (:arithmetic) (:div "/" ,@lispy)) ; conflicts with /=
        ;;(?\u2116 :nth (:sets) (:nth "nth" ,@lispy))
@@ -462,18 +462,35 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
 ;; Better fonts for special symbols
 (defun custom-fonts-for-pretty-symbols ()
   (let ((symbols-fonts
-         '(("Monospace" ; for Ubuntu
-            (#x2208 #x2200 (#x2203 . #x2204) #x2227 #x2228 #x2213))
-           ("Hasklig Medium" ;"DejaVu Sans Mono" ; for Windows
-            (#x2205 #x2260 #x221E ; #x2208 #x2200 (#x2203 . #x2204)
+         '(("PragmataPro"
+            (#x2208 #x2200 #x2203 #x2204 #x2227 #x2228 #x2213
+             ;; member every some notany and or minus-plus
+             #x2205 #x2260 #x221E
+             ;; nil /= inf
+             #x2248 #x2264 #x2265 #x221A
+             ;; ~= <= >= sqrt
              ))
-           ("Hasklig Medium" ;"Consolas" ; for Windows
-            (#x2248 (#x2264 . #x2265) #x221A #x2192 #x2190 ; #x2116
-             )))))
+           ("Hasklig Medium" (#x2192 #x2190) ; leftward & rightward arrows
+            ))))
     (dolist (font-set symbols-fonts)
       (dolist (sym (cadr font-set))
         (set-fontset-font "fontset-default" sym (car font-set) nil nil) ;; -set) nil 'prepend)
         ))))
+
+;; (defun custom-fonts-for-pretty-symbols ()
+;;   (let ((symbols-fonts
+;;          '(("Monospace" ; for Ubuntu
+;;             (#x2208 #x2200 (#x2203 . #x2204) #x2227 #x2228 #x2213))
+;;            ("Hasklig Medium" ;"DejaVu Sans Mono" ; for Windows
+;;             (#x2205 #x2260 #x221E ; #x2208 #x2200 (#x2203 . #x2204)
+;;              ))
+;;            ("Hasklig Medium" ;"Consolas" ; for Windows
+;;             (#x2248 (#x2264 . #x2265) #x221A #x2192 #x2190 ; #x2116
+;;              )))))
+;;     (dolist (font-set symbols-fonts)
+;;       (dolist (sym (cadr font-set))
+;;         (set-fontset-font "fontset-default" sym (car font-set) nil nil) ;; -set) nil 'prepend)
+;;         ))))
 
 (custom-fonts-for-pretty-symbols)
 
@@ -602,8 +619,8 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                                 result-list
                                 (copy-to-list (tree-left-branch tree)
                                               (if (or (null exclude-p) (not (funcall
-                                                                          exclude-p
-                                                                          (tree-entry tree))))
+                                                                             exclude-p
+                                                                             (tree-entry tree))))
                                                   (cons (tree-entry tree)
                                                         (copy-to-list (tree-right-branch tree)
                                                                       result-list))
@@ -679,13 +696,13 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                     (let ((record (lookup-binary-tree sym rainbow-identifiers-custom-binary-tree)))
                       (if record
                           (setf (cdr record) (mod (+ rainbow-identifiers-tune-delta (cdr record))
-                                             rainbow-identifiers-face-count))
+                                                  rainbow-identifiers-face-count))
                           (setf rainbow-identifiers-custom-binary-tree
-                             (adjoin-binary-tree
-                              (cons sym (mod (+ rainbow-identifiers-tune-delta
-                                              (rainbow-identifiers--hash-function sym))
-                                           rainbow-identifiers-face-count))
-                              rainbow-identifiers-custom-binary-tree))))))))
+                                (adjoin-binary-tree
+                                 (cons sym (mod (+ rainbow-identifiers-tune-delta
+                                                   (rainbow-identifiers--hash-function sym))
+                                                rainbow-identifiers-face-count))
+                                 rainbow-identifiers-custom-binary-tree))))))))
         (font-lock-fontify-buffer))
       (message "Tune is not allowed in this mode.")))
 
@@ -700,8 +717,8 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                     (let ((record (lookup-binary-tree sym rainbow-identifiers-custom-binary-tree)))
                       (if record
                           (setf rainbow-identifiers-custom-binary-tree
-                             (delete-from-binary-tree
-                              (car record) rainbow-identifiers-custom-binary-tree))))))))
+                                (delete-from-binary-tree
+                                 (car record) rainbow-identifiers-custom-binary-tree))))))))
         (font-lock-fontify-buffer))
       (message "Tune is not allowed in this mode.")))
 
@@ -741,16 +758,16 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
     (cond
       ((and (equal prev-char ?\|) (equal next-char ?\|)) t)
       ((or (and (= len 1) (equal first-char ?\.))
-          (and (equal first-char ?\@) (equal prev-char ?\,))
-          (equal prefix2 "#\\") (equal prev-char ?\#)
-          (and (or (equal (upcase prefix11) "#<FUNCTION ")
-                (equal (upcase prefix17) "#<STANDARD-CLASS ")) (equal last-char ?\>))
-          (and (equal first-char ?\{) (equal prev-last-char ?\}) (equal last-char ?\>))
-          (member first-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
-          (and (>= len 2) (member first-char '(?+ ?- ?\.))
-             (member second-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))
-          (and (>= len 3) (member first-char '(?+ ?-)) (equal second-char ?\.)
-             (member third-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))) nil)
+           (and (equal first-char ?\@) (equal prev-char ?\,))
+           (equal prefix2 "#\\") (equal prev-char ?\#)
+           (and (or (equal (upcase prefix11) "#<FUNCTION ")
+                    (equal (upcase prefix17) "#<STANDARD-CLASS ")) (equal last-char ?\>))
+           (and (equal first-char ?\{) (equal prev-last-char ?\}) (equal last-char ?\>))
+           (member first-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
+           (and (>= len 2) (member first-char '(?+ ?- ?\.))
+                (member second-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))
+           (and (>= len 3) (member first-char '(?+ ?-)) (equal second-char ?\.)
+                (member third-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))) nil)
       (t t))))
 
 (add-hook 'rainbow-identifiers-filter-functions 'rainbow-identifiers-filter)
@@ -794,8 +811,8 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
   (interactive)
   (let* ((cb (char-before (point)))
          (matching-text (and cb
-                           (char-equal (char-syntax cb) ?\) )
-                           (blink-matching-open))))
+                             (char-equal (char-syntax cb) ?\) )
+                             (blink-matching-open))))
     (when matching-text (message matching-text))))
 
 ;;;; Highlight symbol
@@ -806,9 +823,9 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
 (setq highlight-symbol-on-navigation-p t)
 (setq highlight-symbol-idle-delay 0.2)
 (let ((hook (lambda () (interactive)
-               (cl-pushnew '(highlight-symbol-face :underline t)
-                           face-remapping-alist :test 'equal)
-               (highlight-symbol-mode))))
+                    (cl-pushnew '(highlight-symbol-face :underline t)
+                                face-remapping-alist :test 'equal)
+                    (highlight-symbol-mode))))
   (add-hook 'lisp-mode-hook hook)
   (add-hook 'emacs-lisp-mode-hook hook))
 
