@@ -412,6 +412,8 @@ Version 2015-04-09"
 ;;(define-key my-keys-minor-mode-map (kbd "<mouse-2>") 'hs-mouse-toggle-hiding)
 
 (define-key my-keys-minor-mode-map (kbd "M-/") 'er/expand-region)
+(define-key my-keys-minor-mode-map (kbd "<M-mouse-4>") 'er/expand-region)
+(define-key my-keys-minor-mode-map (kbd "<M-mouse-5>") 'er/contract-region)
 (define-key my-keys-minor-mode-map (kbd "<mouse-3>")
   (lambda (event) (interactive "e") (mouse-set-point event) (er/mark-symbol)))
 (define-key my-keys-minor-mode-map (kbd "<double-mouse-3>")
