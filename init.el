@@ -82,6 +82,10 @@
 ;;;; Setting up a minor mode for useful key shortcuts
 (load "init-keys.el")
 
+;;;; Starting server
+(or (server-running-p)
+   (server-start))
+
 ;;;; Setting up windows configuration
 (split-window-horizontally)
 (slime)
