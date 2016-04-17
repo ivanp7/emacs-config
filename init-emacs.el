@@ -171,3 +171,6 @@
    (set-default-coding-systems 'utf-8)))
 
 (setq utf-translate-cjk-mode nil) ; disable CJK coding/encoding (Chinese/Japanese/Korean characters)
+
+;;;; Input method
+(setq default-input-method "russian-computer")

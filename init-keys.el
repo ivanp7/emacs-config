@@ -459,3 +459,6 @@ Version 2015-04-09"
         (assq-delete-all 'my-keys-minor-mode minor-mode-map-alist)
         (add-to-list 'minor-mode-map-alist mykeys))))
 (ad-activate 'load)
+
+;;;; Toggle input method
+(define-key my-keys-minor-mode-map (kbd "C-/") 'toggle-input-method)
