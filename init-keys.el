@@ -7,9 +7,9 @@
 (define-key my-keys-minor-mode-map (kbd "C-S-v")
   (lambda () (interactive) (popup-menu 'yank-menu)))
 
-(defvar *cut-mode* nil)
-(defvar *prev-region-beg* nil)
-(defvar *prev-region-end* nil)
+;; (defvar *cut-mode* nil)
+;; (defvar *prev-region-beg* nil)
+;; (defvar *prev-region-end* nil)
 
 ;; (defun fast-copy-paste ()
 ;;   (interactive)

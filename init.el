@@ -88,6 +88,7 @@
 (split-window-vertically 23)
 (other-window 1)
 ;; (eshell)
+(ielm)
 (ansi-term "/bin/bash")
 (other-window 1)
 
