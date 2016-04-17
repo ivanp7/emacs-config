@@ -1,3 +1,46 @@
+
+;;;; Basic Emacs tuning
+(setq cua-rectangle-mark-key (kbd "C-x j")) ; needed to be able to rebind <C-return>
+(custom-set-variables
+ '(cua-mode t nil (cua-base)) ; use CUA keys (Ctrl+C, Ctrl+X, Ctrl+V)
+ '(save-place t nil (saveplace)) ; save places in files between sessions
+ '(show-paren-mode t) ; highlight matching parentheses
+ '(global-hl-line-mode nil) ; highlight current line
+ '(global-linum-mode nil) ; show line numbers
+ '(column-number-mode t) ; show column of the point
+ '(size-indication-mode t) ; show file size
+ '(org-replace-disputed-keys t))
+(custom-set-faces
+ '(default ((t (:family "Anonymous Pro" :foundry "outline" :slant normal
+                        :weight normal :height 80 :width normal)))))
+;;(set-default-font "DejaVu Sans Mono") ; :height 75
+;;(set-default-font "Consolas-8")
+
+(add-hook 'window-setup-hook 'toggle-frame-maximized t) ; always maximize window on startup
+
+;; Window transparency modification function
+(defun djcb-opacity-modify (&optional dec)
+  "modify the transparency of the emacs frame; if DEC is t,
+    decrease the transparency, otherwise increase it in 5%-steps"
+  (let* ((alpha-or-nil (frame-parameter nil 'alpha)) ; nil before setting
+         (oldalpha (if alpha-or-nil alpha-or-nil 100))
+         (newalpha (if dec (- oldalpha 5) (+ oldalpha 5))))
+    (when (and (>= newalpha frame-alpha-lower-limit) (<= newalpha 100))
+      (modify-frame-parameters nil (list (cons 'alpha newalpha))))))
+
+;;;; Setting up color theme
+(add-to-list 'custom-theme-load-path "./init/color-themes/")
+(load-theme 'granger t)
+(set-face-attribute 'font-lock-comment-face nil :slant 'italic)
+
+;;;; Advanced Emacs tuning
+(defvar *required-packages*
+  '(ac-slime auto-complete auto-indent-mode buffer-move cursor-chg expand-region
+    highlight-stages highlight-symbol hl-sexp imenu+ magic-latex-buffer magit
+    nlinum paren-face pos-tip pretty-mode pretty-symbols rainbow-identifiers
+    slime tabbar undo-tree)
+  "a list of packages to ensure are installed at launch.")
+
 ;;;; Initializing package manager and loading useful packages
 (require 'cl)
 
@@ -75,7 +118,7 @@
         (beginning-of-buffer)
         (while (re-search-forward ",@[ \t]+" nil t)
           (if (not (member (plist-get (text-properties-at (point)) 'face)
-                    '(font-lock-string-face font-lock-comment-face)))
+                           '(font-lock-string-face font-lock-comment-face)))
               (replace-match ",@"))))))
 (add-to-list 'write-file-functions 'comma-at-sign-remove-spaces)
 
@@ -90,9 +133,9 @@
         (beginning-of-buffer)
         (while (re-search-forward ",@" nil t)
           (if (and (not (member (plist-get (text-properties-at (point)) 'face)
-                       '(font-lock-string-face font-lock-comment-face)))
-                 (not (member (char-after (point)) '(?\( ?\, ?\` ?\'))))
-              (replace-match ",@ "))))))
+                                '(font-lock-string-face font-lock-comment-face)))
+                   (not (member (char-after (point)) '(?\( ?\, ?\` ?\'))))
+              (replace-match ",@"))))))
 
 ;; End of file newlines
 (setq require-final-newline t) ; add newline to the end of file when saving

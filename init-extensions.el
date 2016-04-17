@@ -219,31 +219,31 @@
     ((kbd "<C-down>") 'end-of-defun)))
 
 (setf *lambda-logo*
-   (list
-    "                         ...                                        "
-    "                      .:kKXXOo.                          ..         "
-    "        ;d;          .kWMWWWMMK;                         ,xo.       "
-    "      .oOl.         .xXkc;;:xXMK;                         ,kO;      "
-    "     'k0:           ;Oc      ;0Wk.                         .kKc     "
-    "    'OK;            :l.       ;KNl                          .kXl.   "
-    "   'OXc                        lNO.                          ,KXc   "
-    "  .xWx.                        .ONl.                          oNK;  "
-    "  cNX:                         .dWOc.                         ,0Wx. "
-    " .OMO.                         ,0MNKc                         .xMX: "
-    " :XMx.                        'OMMMWk.                         oWWd "
-    " oWWd                        'OWMMMMX:                         lNMk."
-    ".xMWo                       .kWMMWNNWx.                        cNMO."
-    ".xMWo                      .xWMMWxlxKK;                        cNMO."
-    ".dWWo                     .xWMMWx..,xWd.                       lWMx."
-    " cNMx.                   .dNMMWO.   :X0,                       dWNl "
-    " '0MO.                  .oNMMM0'    .kNo                      .kM0, "
-    "  oNX:                  lNMMMK;      cN0'                     ;KNo  "
-    "  .kWx.                lXMMMK:       .OWd.       ..          .dWk.  "
-    "   ,0Xc               cXMMMXc         lNXc       cd.         cX0,   "
-    "    ;00;             :KMMMNl          .OMXd'   .:0d.        ;00,    "
-    "     ,O0:           ;KMMMNd.           ;KMWXOxx0NK;        :0k'     "
-    "     .d0l.         ;0MMMWx.             ;ONMMMMWO;       .oOl.      "
-    "       ;d:         ':ccc;.               .'cool;.        ,l,        "))
+      (list
+       "                         ...                                        "
+       "                      .:kKXXOo.                          ..         "
+       "        ;d;          .kWMWWWMMK;                         ,xo.       "
+       "      .oOl.         .xXkc;;:xXMK;                         ,kO;      "
+       "     'k0:           ;Oc      ;0Wk.                         .kKc     "
+       "    'OK;            :l.       ;KNl                          .kXl.   "
+       "   'OXc                        lNO.                          ,KXc   "
+       "  .xWx.                        .ONl.                          oNK;  "
+       "  cNX:                         .dWOc.                         ,0Wx. "
+       " .OMO.                         ,0MNKc                         .xMX: "
+       " :XMx.                        'OMMMWk.                         oWWd "
+       " oWWd                        'OWMMMMX:                         lNMk."
+       ".xMWo                       .kWMMWNNWx.                        cNMO."
+       ".xMWo                      .xWMMWxlxKK;                        cNMO."
+       ".dWWo                     .xWMMWx..,xWd.                       lWMx."
+       " cNMx.                   .dNMMWO.   :X0,                       dWNl "
+       " '0MO.                  .oNMMM0'    .kNo                      .kM0, "
+       "  oNX:                  lNMMMK;      cN0'                     ;KNo  "
+       "  .kWx.                lXMMMK:       .OWd.       ..          .dWk.  "
+       "   ,0Xc               cXMMMXc         lNXc       cd.         cX0,   "
+       "    ;00;             :KMMMNl          .OMXd'   .:0d.        ;00,    "
+       "     ,O0:           ;KMMMNd.           ;KMWXOxx0NK;        :0k'     "
+       "     .d0l.         ;0MMMWx.             ;ONMMMMWO;       .oOl.      "
+       "       ;d:         ':ccc;.               .'cool;.        ,l,        "))
 
 (defun print-hello-message ()
   (let ((lambda-logo-string
@@ -304,26 +304,26 @@
 (add-hook 'slime-connected-hook
           (lambda ()
             (slime-load-file (concat (default-value 'default-directory) "init/ivanp7.lisp"))
-            (if slime-first-startup
-                (progn
-                  (slime-startup-time-init)
-                  (configure-slime-faces)
-                  (rainbow-identifiers-load-tune)
-                  (tabbar-mode 1)
-                  (define-my-slime-keys)
-                  ;; (slime-load-file (concat default-directory "init/ivanp7-welcome.lisp"))
-                  (slime-scratch) ; autocreate *slime-scratch* buffer
-                  (insert
-                   (concat
-                    ";; This is a scratch buffer for Common Lisp evaluation.\n"
-                    ";; Press <Alt+Enter> to evaluate expression and print result at point.\n"
-                    ";; Press <F4> to evaluate expression without printing result.\n"
-                    "\n"))
-                  (slime-repl)
-                  (print-hello-message)
-                  (anarcat/display-timing)
-                  ;;(play-sound-file (concat default-directory "init/ready.wav"))
-                  (setq slime-first-startup nil)))))
+            (when slime-first-startup
+              (slime-startup-time-init)
+              (configure-slime-faces)
+              (rainbow-identifiers-load-tune)
+              (tabbar-mode 1)
+              (define-my-slime-keys)
+              ;; (slime-load-file (concat default-directory "init/ivanp7-welcome.lisp"))
+              (slime-scratch) ; autocreate *slime-scratch* buffer
+              (insert
+               (concat
+                ";; This is a scratch buffer for Common Lisp evaluation.\n"
+                ";; Press <Alt+Enter> to evaluate expression and print result at point.\n"
+                ";; Press <F4> to evaluate expression without printing result.\n"
+                "\n"))
+              (slime-repl)
+              (print-hello-message)
+              ;;(play-sound-file (concat default-directory "init/ready.wav"))
+              (loading-time/stop-timer)
+              (run-at-time "1 sec" nil 'anarcat/display-timing)
+              (setq slime-first-startup nil))))
 
 ;;;; Imenu
 (require 'imenu)
@@ -353,9 +353,19 @@
 (global-auto-complete-mode t)
 (add-to-list 'ac-modes 'lisp-mode)
 
+(setq-default ac-sources '(ac-source-filename ac-source-files-in-current-dir
+                           ac-source-words-in-buffer ac-source-words-in-same-mode-buffers))
+
+(add-hook 'emacs-lisp-mode
+          (lambda ()
+            (add-to-list 'ac-sources 'ac-source-features)
+            (add-to-list 'ac-sources 'ac-source-functions)
+            (add-to-list 'ac-sources 'ac-source-symbols)
+            (add-to-list 'ac-sources 'ac-source-variables)))
+
 (require 'ac-slime)
-(add-hook 'slime-mode-hook 'set-up-slime-ac)
-(add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
+(add-hook 'slime-mode-hook (lambda () (set-up-slime-ac t)))
+(add-hook 'slime-repl-mode-hook (lambda () (set-up-slime-ac t)))
 (eval-after-load "auto-complete"
   '(add-to-list 'ac-modes 'slime-repl-mode))
 
@@ -761,16 +771,16 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
     (cond
       ((and (equal prev-char ?\|) (equal next-char ?\|)) t)
       ((or (and (= len 1) (equal first-char ?\.))
-           (and (equal first-char ?\@) (equal prev-char ?\,))
-           (equal prefix2 "#\\") (equal prev-char ?\#)
-           (and (or (equal (upcase prefix11) "#<FUNCTION ")
-                    (equal (upcase prefix17) "#<STANDARD-CLASS ")) (equal last-char ?\>))
-           (and (equal first-char ?\{) (equal prev-last-char ?\}) (equal last-char ?\>))
-           (member first-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
-           (and (>= len 2) (member first-char '(?+ ?- ?\.))
-              (member second-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))
-           (and (>= len 3) (member first-char '(?+ ?-)) (equal second-char ?\.)
-              (member third-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))) nil)
+          (and (equal first-char ?\@) (equal prev-char ?\,))
+          (equal prefix2 "#\\") (equal prev-char ?\#)
+          (and (or (equal (upcase prefix11) "#<FUNCTION ")
+                (equal (upcase prefix17) "#<STANDARD-CLASS ")) (equal last-char ?\>))
+          (and (equal first-char ?\{) (equal prev-last-char ?\}) (equal last-char ?\>))
+          (member first-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
+          (and (>= len 2) (member first-char '(?+ ?- ?\.))
+             (member second-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))
+          (and (>= len 3) (member first-char '(?+ ?-)) (equal second-char ?\.)
+             (member third-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))) nil)
       (t t))))
 
 (add-hook 'rainbow-identifiers-filter-functions 'rainbow-identifiers-filter)
@@ -799,10 +809,11 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
 (add-hook 'slime-repl-mode-hook 'hl-sexp-mode)
 
 ;;;; Highlight matching parens
-(set-face-background 'show-paren-match "steelblue4")
+(set-face-background 'show-paren-match "red") ;; "steelblue4"
 (set-face-foreground 'show-paren-match "white")
 (set-face-attribute 'show-paren-match nil :weight 'extra-bold)
 
+(set-face-background 'show-paren-mismatch "yellow")
 (set-face-foreground 'show-paren-mismatch "white")
 (set-face-attribute 'show-paren-mismatch nil :weight 'extra-bold)
 
@@ -818,6 +829,10 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                            (blink-matching-open))))
     (when matching-text (message matching-text))))
 
+;;;; Paren face
+(require 'paren-face)
+(global-paren-face-mode)
+
 ;;;; Highlight symbol
 (require 'highlight-symbol)
 (require 'cl-lib)
@@ -831,10 +846,6 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                (highlight-symbol-mode))))
   (add-hook 'lisp-mode-hook hook)
   (add-hook 'emacs-lisp-mode-hook hook))
-
-;;;; Paren face
-(require 'paren-face)
-(global-paren-face-mode)
 
 ;;;; Hide/Show feature
 (add-hook 'lisp-mode-hook 'hs-minor-mode)
@@ -855,13 +866,18 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
 
 ;;;; Undo tree
 (require 'undo-tree)
+
+(define-global-minor-mode global-undo-tree-mode
+    undo-tree-mode
+  (lambda () (undo-tree-mode t)))
+
 (global-undo-tree-mode)
 
 ;;;; Magit
 (require 'magit)
-(global-magit-file-buffer-mode)
+(global-magit-file-mode)
 
-;;; Change cursor
+;;;; Change cursor
 (require 'cursor-chg)  ; Load the library
 (toggle-cursor-type-when-idle 1) ; Turn on cursor change when Emacs is idle
 (change-cursor-mode 1) ; Turn on change for overwrite, read-only, and input mode
@@ -874,3 +890,8 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
 
 (setq cursor-in-non-selected-windows 'hollow)
 (setq-default cursor-in-non-selected-windows 'hollow)
+
+(curchg-change-cursor-when-idle-interval 10)
+
+;;;; Eldoc mode
+(add-hook 'emacs-lisp-mode-hook 'eldoc-mode)

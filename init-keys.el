@@ -165,7 +165,8 @@
 (define-key my-keys-minor-mode-map (kbd "M-f") 'slime-inspect)
 (define-key my-keys-minor-mode-map (kbd "C-M-f") 'slime-inspect-definition)
 
-(define-key my-keys-minor-mode-map (kbd "<backtab>") 'slime-close-all-parens-in-sexp)
+(define-key my-keys-minor-mode-map (kbd "<C-tab>") 'slime-close-all-parens-in-sexp)
+(define-key my-keys-minor-mode-map (kbd "<S-return>") 'indent-new-comment-line)
 (define-key my-keys-minor-mode-map (kbd "<f3>") 'slime-insert-balanced-comments)
 (define-key my-keys-minor-mode-map (kbd "S-<f3>") 'slime-remove-balanced-comments)
 (define-key my-keys-minor-mode-map (kbd "<f4>") 'slime-eval-last-expression)
@@ -373,19 +374,25 @@ Version 2015-04-09"
        (downcase-region fp1 fp2)
        (put this-command 'state 0)))))
 
-(define-key my-keys-minor-mode-map (kbd "C-1") 'xah-toggle-letter-case)
+(define-key my-keys-minor-mode-map (kbd "C-=") 'xah-toggle-letter-case)
 
 ;;(define-key my-keys-minor-mode-map (kbd "M-h") 'highlight-symbol-at-point)
 (define-key my-keys-minor-mode-map (kbd "M-r") 'highlight-regexp)
 (define-key my-keys-minor-mode-map (kbd "M-u") 'unhighlight-regexp)
 
+;;;; Search
+;; (define-key my-keys-minor-mode-map (kbd "C-S-G <up>") 'isearch-backward)
+;; (define-key my-keys-minor-mode-map (kbd "M-C-S-G <up>") 'isearch-repeat-backward)
+;; (define-key my-keys-minor-mode-map (kbd "C-S-G <down>") 'isearch-forward)
+;; (define-key my-keys-minor-mode-map (kbd "M-C-S-G <down>") 'isearch-repeat-forward)
 (define-key my-keys-minor-mode-map (kbd "C-S-f") 'occur)
 
 ;;; Bugs workaround keys
 (define-key my-keys-minor-mode-map (kbd "M-b") 'comma-at-sign-add-spaces)
 
 ;;; Extensions and modes keybindings
-(define-key my-keys-minor-mode-map (kbd "<C-tab>") 'auto-complete)
+(define-key my-keys-minor-mode-map (kbd "<backtab>") 'auto-complete)
+(define-key my-keys-minor-mode-map (kbd "M-t") 'ac-isearch)
 
 (define-key my-keys-minor-mode-map (kbd "M-h") 'highlight-symbol)
 (define-key my-keys-minor-mode-map (kbd "M-.") 'highlight-symbol-next)
@@ -411,7 +418,7 @@ Version 2015-04-09"
 ;; it doesn't work as expected this way (*Completions* buffer bug):
 ;;(define-key my-keys-minor-mode-map (kbd "<mouse-2>") 'hs-mouse-toggle-hiding)
 
-(define-key my-keys-minor-mode-map (kbd "M-/") 'er/expand-region)
+;; (define-key my-keys-minor-mode-map (kbd "M-/") 'er/expand-region)
 (define-key my-keys-minor-mode-map (kbd "<M-mouse-4>") 'er/expand-region)
 (define-key my-keys-minor-mode-map (kbd "<M-mouse-5>") 'er/contract-region)
 (define-key my-keys-minor-mode-map (kbd "<mouse-3>")
@@ -430,19 +437,19 @@ Version 2015-04-09"
 (define-key my-keys-minor-mode-map (kbd "M-j s") 'rainbow-identifiers-save-tune)
 
 ;;; Font size control keybindings
-(define-key my-keys-minor-mode-map (kbd "C--") 'text-scale-decrease)
-(define-key my-keys-minor-mode-map (kbd "C-=") 'text-scale-increase)
+(define-key my-keys-minor-mode-map (kbd "<C-M-next>") 'text-scale-decrease)
+(define-key my-keys-minor-mode-map (kbd "<C-M-prior>") 'text-scale-increase)
 
 ;;; Transparency control keybindings
 
-;; C-8 will decrease opacity (== increase transparency
-;; C-9 will increase opacity (== decrease transparency)
-;; C-0 will returns the state to normal
-(define-key my-keys-minor-mode-map (kbd "C-8")
+;; C-M-i will decrease opacity (== increase transparency
+;; C-M-o will increase opacity (== decrease transparency)
+;; C-M-p will returns the state to normal
+(define-key my-keys-minor-mode-map (kbd "C-M-i")
   (lambda () (interactive) (djcb-opacity-modify t)))
-(define-key my-keys-minor-mode-map (kbd "C-9")
+(define-key my-keys-minor-mode-map (kbd "C-M-o")
   (lambda () (interactive) (djcb-opacity-modify)))
-(define-key my-keys-minor-mode-map (kbd "C-0")
+(define-key my-keys-minor-mode-map (kbd "C-M-p")
   (lambda () (interactive) (modify-frame-parameters nil `((alpha . 100)))))
 
 ;;;; Installing minor mode for keys
