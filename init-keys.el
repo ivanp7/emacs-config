@@ -165,7 +165,7 @@
 (define-key my-keys-minor-mode-map (kbd "M-f") 'slime-inspect)
 (define-key my-keys-minor-mode-map (kbd "C-M-f") 'slime-inspect-definition)
 
-(define-key my-keys-minor-mode-map (kbd "<C-tab>") 'slime-close-all-parens-in-sexp)
+(define-key my-keys-minor-mode-map (kbd "<backtab>") 'slime-close-all-parens-in-sexp)
 (define-key my-keys-minor-mode-map (kbd "<S-return>") 'indent-new-comment-line)
 (define-key my-keys-minor-mode-map (kbd "<f3>") 'slime-insert-balanced-comments)
 (define-key my-keys-minor-mode-map (kbd "S-<f3>") 'slime-remove-balanced-comments)
@@ -391,7 +391,7 @@ Version 2015-04-09"
 (define-key my-keys-minor-mode-map (kbd "M-b") 'comma-at-sign-add-spaces)
 
 ;;; Extensions and modes keybindings
-(define-key my-keys-minor-mode-map (kbd "<backtab>") 'auto-complete)
+(define-key my-keys-minor-mode-map (kbd "C-`") 'auto-complete)
 (define-key my-keys-minor-mode-map (kbd "M-t") 'ac-isearch)
 
 (define-key my-keys-minor-mode-map (kbd "M-h") 'highlight-symbol)
