@@ -156,26 +156,6 @@
                       :foreground "forest green" :slant 'italic :weight 'normal))
 
 ;;; SLIME-only keys
-(defun indent-current-sexp-or-selection ()
-  (interactive)
-  (if (use-region-p)
-      (indent-region (region-beginning) (region-end))
-      (let ((left (condition-case nil
-                      (save-excursion
-                        (backward-up-list)
-                        (point))
-                    (error nil)))
-            (right (condition-case nil
-                       (save-excursion
-                         (up-list)
-                         (point))
-                     (error nil)))
-            (pos (point)))
-        (if (and left right)
-            (indent-region left right)
-            (unless (get-text-property (line-beginning-position) 'slime-repl-prompt)
-              (lisp-indent-line))))))
-
 (defun define-my-slime-keys ()
   (slime-define-keys slime-edit-value-mode-map ; bug workaround
     ((kbd "q") 'self-insert-command)
@@ -192,78 +172,83 @@
                           (slime-repl-closing-return)))
     ((kbd "<return>") 'slime-repl-newline-and-indent)
     ((kbd "<f12> <backspace>") (lambda () (interactive) (end-of-buffer) (slime-repl-kill-input)))
-    ((kbd "<C-up>") 'slime-repl-previous-input)
-    ((kbd "<C-down>") 'slime-repl-next-input)
-    ((kbd "<C-S-up>") 'slime-repl-previous-prompt)
-    ((kbd "<C-S-down>") 'slime-repl-next-prompt)
+    ((kbd "<M-up>") 'slime-repl-previous-input)
+    ((kbd "<M-down>") 'slime-repl-next-input)
+    ((kbd "<M-S-up>") 'slime-repl-previous-prompt)
+    ((kbd "<M-S-down>") 'slime-repl-next-prompt)
     ((kbd "<f12> <delete>") (lambda () (interactive) (end-of-buffer) (slime-repl-clear-output)))
     ((kbd "<C-f12>") 'slime-repl-clear-buffer))
   ;; ****** keys that work in all Common Lisp buffers ******
   (slime-define-keys lisp-mode-map
     ((kbd "C-<return>") 'slime-eval-last-expression-in-repl)
-    ((kbd "M-<return>") 'slime-eval-print-last-expression)
-    ;; ((kbd "C-\\") 'indent-current-sexp-or-selection)
-    ;; ((kbd "<M-left>") 'backward-up-list)
-    ;; ((kbd "<M-right>") 'up-list)
-    ;; ((kbd "<M-down>") 'down-list)
-    ;; ((kbd "<C-up>") 'beginning-of-defun)
-    ;; ((kbd "<C-down>") 'end-of-defun)
-    )
+    ((kbd "M-<return>") 'slime-eval-print-last-expression))
   ;; ****** keys that work in all Lisp buffers ******
   (slime-define-keys lisp-mode-shared-map
-    ((kbd "C-\\") 'indent-current-sexp-or-selection)
-    ((kbd "<M-left>") 'backward-up-list)
-    ((kbd "<M-right>") 'up-list)
-    ((kbd "<M-down>") 'down-list)
-    ((kbd "<C-up>") 'beginning-of-defun)
-    ((kbd "<C-down>") 'end-of-defun)))
+    ;;((kbd "C-\\") 'indent-current-sexp-or-selection)
+    ;;((kbd "<M-left>") 'backward-up-list)
+    ;;((kbd "<M-right>") 'up-list)
+    ;;((kbd "<M-down>") 'down-list)
+    ((kbd "<M-up>") 'beginning-of-defun)
+    ((kbd "<M-down>") 'end-of-defun)))
 
 (setf *lambda-logo*
-      (list
-       "                         ...                                        "
-       "                      .:kKXXOo.                          ..         "
-       "        ;d;          .kWMWWWMMK;                         ,xo.       "
-       "      .oOl.         .xXkc;;:xXMK;                         ,kO;      "
-       "     'k0:           ;Oc      ;0Wk.                         .kKc     "
-       "    'OK;            :l.       ;KNl                          .kXl.   "
-       "   'OXc                        lNO.                          ,KXc   "
-       "  .xWx.                        .ONl.                          oNK;  "
-       "  cNX:                         .dWOc.                         ,0Wx. "
-       " .OMO.                         ,0MNKc                         .xMX: "
-       " :XMx.                        'OMMMWk.                         oWWd "
-       " oWWd                        'OWMMMMX:                         lNMk."
-       ".xMWo                       .kWMMWNNWx.                        cNMO."
-       ".xMWo                      .xWMMWxlxKK;                        cNMO."
-       ".dWWo                     .xWMMWx..,xWd.                       lWMx."
-       " cNMx.                   .dNMMWO.   :X0,                       dWNl "
-       " '0MO.                  .oNMMM0'    .kNo                      .kM0, "
-       "  oNX:                  lNMMMK;      cN0'                     ;KNo  "
-       "  .kWx.                lXMMMK:       .OWd.       ..          .dWk.  "
-       "   ,0Xc               cXMMMXc         lNXc       cd.         cX0,   "
-       "    ;00;             :KMMMNl          .OMXd'   .:0d.        ;00,    "
-       "     ,O0:           ;KMMMNd.           ;KMWXOxx0NK;        :0k'     "
-       "     .d0l.         ;0MMMWx.             ;ONMMMMWO;       .oOl.      "
-       "       ;d:         ':ccc;.               .'cool;.        ,l,        "))
+   (list
+    "                         ...                                        "
+    "                      .:kKXXOo.                          ..         "
+    "        ;d;          .kWMWWWMMK;                         ,xo.       "
+    "      .oOl.         .xXkc;;:xXMK;                         ,kO;      "
+    "     'k0:           ;Oc      ;0Wk.                         .kKc     "
+    "    'OK;            :l.       ;KNl                          .kXl.   "
+    "   'OXc                        lNO.                          ,KXc   "
+    "  .xWx.                        .ONl.                          oNK;  "
+    "  cNX:                         .dWOc.                         ,0Wx. "
+    " .OMO.                         ,0MNKc                         .xMX: "
+    " :XMx.                        'OMMMWk.                         oWWd "
+    " oWWd                        'OWMMMMX:                         lNMk."
+    ".xMWo                       .kWMMWNNWx.                        cNMO."
+    ".xMWo                      .xWMMWxlxKK;                        cNMO."
+    ".dWWo                     .xWMMWx..,xWd.                       lWMx."
+    " cNMx.                   .dNMMWO.   :X0,                       dWNl "
+    " '0MO.                  .oNMMM0'    .kNo                      .kM0, "
+    "  oNX:                  lNMMMK;      cN0'                     ;KNo  "
+    "  .kWx.                lXMMMK:       .OWd.       ..          .dWk.  "
+    "   ,0Xc               cXMMMXc         lNXc       cd.         cX0,   "
+    "    ;00;             :KMMMNl          .OMXd'   .:0d.        ;00,    "
+    "     ,O0:           ;KMMMNd.           ;KMWXOxx0NK;        :0k'     "
+    "     .d0l.         ;0MMMWx.             ;ONMMMMWO;       .oOl.      "
+    "       ;d:         ':ccc;.               .'cool;.        ,l,        "))
 
 (defun print-hello-message ()
-  (let ((lambda-logo-string
-         (apply 'concat
-                (append ;(list "\n")
-                 (mapcar (lambda (line)
-                           (concat "         " line "\n"))
-                         *lambda-logo*)
-                 (list "\n"))))
-        (prompt-string "CL-USER> ")
-        (quine-string ; \u03BB is a lambda letter
-         "((lambda (x) (list x (list 'quote x))) '(lambda (x) (list x (list 'quote x))))\n")
-        (comment-string ";; Elegant weapons, for a more... civilized age.\n"))
+  (let* ((tab-string "         ")
+         (lambda-logo-string
+          (apply 'concat
+                 (append ;; (list "\n")
+                  (mapcar (lambda (line)
+                            (concat tab-string line "\n"))
+                          *lambda-logo*)
+                  (list "\n"))))
+         (width (+ (length tab-string) (length (first *lambda-logo*))))
+         (height (length *lambda-logo*))
+         (prompt-string "CL-USER> ")
+         (quine-string ; \u03BB is a lambda letter
+          "((lambda (x) (list x (list 'quote x))) '(lambda (x) (list x (list 'quote x))))\n")
+         (comment-string ";; Elegant weapons, for a more... civilized age.\n"))
     (goto-char 1) ; 19
     ;; (insert "\n\n")
     (put-text-property 0 (length lambda-logo-string)
-                       'font-lock-face (list :foreground "forest green" :background "gray6"
+                       'font-lock-face (list :foreground "white" :background "gray6"
                                              :weight 'bold :slant 'italic)
                        lambda-logo-string)
     (insert lambda-logo-string)
+    (let ((pos (point)))
+      (dotimes (line height)
+        (let ((color (cond ((< line (+ 2 (/ height 3))) "dark red")
+                           ((< line (+ 2 (* 2 (/ height 3)))) "gold")
+                           (t "forest green"))))
+          (put-text-property (+ 25 (* line (1+ width))) (+ 64 (* line (1+ width)))
+                             'font-lock-face (list :foreground color :background "gray6"
+                                                   :weight 'bold :slant 'italic))))
+      (goto-char pos))
     (insert "\n")
     (put-text-property 0 (length comment-string)
                        'font-lock-face 'slime-repl-output-face
@@ -407,30 +392,52 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
        (?\u00AC :neg (:logic) (:not "not" ,@lispy))
        ;; duplucation to get around of font-lock bug
        (?\u00AC :neg-up (:logic) (:not-up "NOT" ,@lispy))
+       (?\u00AC :neg-up2 (:logic) (:not-up2 "Not" ,@lispy))
+
        (?\u2227 :wedge (:logic) (:and "and" ,@lispy))
        (?\u2227 :wedge-up (:logic) (:and-up "AND" ,@lispy))
+       (?\u2227 :wedge-up2 (:logic) (:and-up2 "And" ,@lispy))
+
        (?\u2228 :vee (:logic) (:or "or" ,@lispy))
        (?\u2228 :vee-up (:logic) (:or-up "OR" ,@lispy))
+       (?\u2228 :vee-up2 (:logic) (:or-up2 "Or" ,@lispy))
+
        (?\u221A :sqrt (:arithmetic) (:sqrt "sqrt" ,@lispy))
        (?\u221A :sqrt-up (:arithmetic) (:sqrt-up "SQRT" ,@lispy))
+       (?\u221A :sqrt-up2 (:arithmetic) (:sqrt-up2 "Sqrt" ,@lispy))
+
        (?\u005E :expt (:arithmetic) (:expt "expt" ,@lispy))
        (?\u005E :expt-up (:arithmetic) (:expt-up "EXPT" ,@lispy))
+       (?\u005E :expt-up2 (:arithmetic) (:expt-up2 "Expt" ,@lispy))
+
        ;;(?\u0025 :mod (:arithmetic) (:mod "mod" ,@lispy))
        ;;(?\u0025 :mod-up (:arithmetic) (:mod-up "MOD" ,@lispy))
+
        (?\u00D7 :mult (:arithmetic) (:mult "*" ,@lispy))
+
        ;;(?\u00F7 :div (:arithmetic) (:div "/" ,@lispy)) ; conflicts with /=
        ;;(?\u2116 :nth (:sets) (:nth "nth" ,@lispy))
        ;;(?\u2116 :nth-up (:sets) (:nth-up "NTH" ,@lispy))
+
        (?\u2208 :member (:sets) (:member "member" ,@lispy))
        (?\u2208 :member-up (:sets) (:member-up "MEMBER" ,@lispy))
+       (?\u2208 :member-up2 (:sets) (:member-up2 "Member" ,@lispy))
+
        (?\u2200 :every (:sets) (:every "every" ,@lispy))
        (?\u2200 :every-up (:sets) (:every-up "EVERY" ,@lispy))
+       (?\u2200 :every-up2 (:sets) (:every-up2 "Every" ,@lispy))
+
        (?\u2203 :some (:sets) (:some "some" ,@lispy))
        (?\u2203 :some-up (:sets) (:some-up "SOME" ,@lispy))
+       (?\u2203 :some-up2 (:sets) (:some-up2 "Some" ,@lispy))
+
        (?\u2204 :notany (:sets) (:notany "notany" ,@lispy))
        (?\u2204 :notany-up (:sets) (:notany-up "NOTANY" ,@lispy))
+       (?\u2204 :notany-up2 (:sets) (:notany-up2 "Notany" ,@lispy))
+
        (?\u2190 :setf (:equality) (:setf "setf" ,@lispy))
        (?\u2190 :setf-up (:equality) (:setf-up "SETF" ,@lispy))
+       (?\u2190 :setf-up2 (:equality) (:setf-up2 "Setf" ,@lispy))
        ))))
 
 (require 'pretty-symbols)
@@ -632,8 +639,8 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                                 result-list
                                 (copy-to-list (tree-left-branch tree)
                                               (if (or (null exclude-p) (not (funcall
-                                                                          exclude-p
-                                                                          (tree-entry tree))))
+                                                                             exclude-p
+                                                                             (tree-entry tree))))
                                                   (cons (tree-entry tree)
                                                         (copy-to-list (tree-right-branch tree)
                                                                       result-list))
@@ -709,13 +716,13 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                     (let ((record (lookup-binary-tree sym rainbow-identifiers-custom-binary-tree)))
                       (if record
                           (setf (cdr record) (mod (+ rainbow-identifiers-tune-delta (cdr record))
-                                               rainbow-identifiers-face-count))
+                                                  rainbow-identifiers-face-count))
                           (setf rainbow-identifiers-custom-binary-tree
-                             (adjoin-binary-tree
-                              (cons sym (mod (+ rainbow-identifiers-tune-delta
-                                                (rainbow-identifiers--hash-function sym))
-                                             rainbow-identifiers-face-count))
-                              rainbow-identifiers-custom-binary-tree))))))))
+                                (adjoin-binary-tree
+                                 (cons sym (mod (+ rainbow-identifiers-tune-delta
+                                                   (rainbow-identifiers--hash-function sym))
+                                                rainbow-identifiers-face-count))
+                                 rainbow-identifiers-custom-binary-tree))))))))
         (font-lock-fontify-buffer))
       (message "Tune is not allowed in this mode.")))
 
@@ -730,8 +737,8 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                     (let ((record (lookup-binary-tree sym rainbow-identifiers-custom-binary-tree)))
                       (if record
                           (setf rainbow-identifiers-custom-binary-tree
-                             (delete-from-binary-tree
-                              (car record) rainbow-identifiers-custom-binary-tree))))))))
+                                (delete-from-binary-tree
+                                 (car record) rainbow-identifiers-custom-binary-tree))))))))
         (font-lock-fontify-buffer))
       (message "Tune is not allowed in this mode.")))
 
@@ -771,16 +778,16 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
     (cond
       ((and (equal prev-char ?\|) (equal next-char ?\|)) t)
       ((or (and (= len 1) (equal first-char ?\.))
-          (and (equal first-char ?\@) (equal prev-char ?\,))
-          (equal prefix2 "#\\") (equal prev-char ?\#)
-          (and (or (equal (upcase prefix11) "#<FUNCTION ")
-                (equal (upcase prefix17) "#<STANDARD-CLASS ")) (equal last-char ?\>))
-          (and (equal first-char ?\{) (equal prev-last-char ?\}) (equal last-char ?\>))
-          (member first-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
-          (and (>= len 2) (member first-char '(?+ ?- ?\.))
-             (member second-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))
-          (and (>= len 3) (member first-char '(?+ ?-)) (equal second-char ?\.)
-             (member third-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))) nil)
+           (and (equal first-char ?\@) (equal prev-char ?\,))
+           (equal prefix2 "#\\") (equal prev-char ?\#)
+           (and (or (equal (upcase prefix11) "#<FUNCTION ")
+                    (equal (upcase prefix17) "#<STANDARD-CLASS ")) (equal last-char ?\>))
+           (and (equal first-char ?\{) (equal prev-last-char ?\}) (equal last-char ?\>))
+           (member first-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
+           (and (>= len 2) (member first-char '(?+ ?- ?\.))
+                (member second-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))
+           (and (>= len 3) (member first-char '(?+ ?-)) (equal second-char ?\.)
+                (member third-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))) nil)
       (t t))))
 
 (add-hook 'rainbow-identifiers-filter-functions 'rainbow-identifiers-filter)
@@ -825,8 +832,8 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
   (interactive)
   (let* ((cb (char-before (point)))
          (matching-text (and cb
-                           (char-equal (char-syntax cb) ?\) )
-                           (blink-matching-open))))
+                             (char-equal (char-syntax cb) ?\) )
+                             (blink-matching-open))))
     (when matching-text (message matching-text))))
 
 ;;;; Paren face
@@ -841,9 +848,9 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
 (setq highlight-symbol-on-navigation-p t)
 (setq highlight-symbol-idle-delay 0.2)
 (let ((hook (lambda () (interactive)
-               (cl-pushnew '(highlight-symbol-face :underline t)
-                           face-remapping-alist :test 'equal)
-               (highlight-symbol-mode))))
+                    (cl-pushnew '(highlight-symbol-face :underline t)
+                                face-remapping-alist :test 'equal)
+                    (highlight-symbol-mode))))
   (add-hook 'lisp-mode-hook hook)
   (add-hook 'emacs-lisp-mode-hook hook))
 

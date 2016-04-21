@@ -55,7 +55,13 @@
 (load "init-extensions.el")
 
 ;;;; Setting up a minor mode for useful key shortcuts
+(defconst menu-key-name
+  (cond
+    ((system-is-windows) "<apps>")
+    ((system-is-linux) "<menu>")))
+
 (load "init-keys.el")
+(load "init-lisp-mode-keys.el")
 
 ;;;; Starting server
 (or (server-running-p)

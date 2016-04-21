@@ -118,7 +118,7 @@
         (beginning-of-buffer)
         (while (re-search-forward ",@[ \t]+" nil t)
           (if (not (member (plist-get (text-properties-at (point)) 'face)
-                           '(font-lock-string-face font-lock-comment-face)))
+                    '(font-lock-string-face font-lock-comment-face)))
               (replace-match ",@"))))))
 (add-to-list 'write-file-functions 'comma-at-sign-remove-spaces)
 
@@ -133,9 +133,9 @@
         (beginning-of-buffer)
         (while (re-search-forward ",@" nil t)
           (if (and (not (member (plist-get (text-properties-at (point)) 'face)
-                                '(font-lock-string-face font-lock-comment-face)))
-                   (not (member (char-after (point)) '(?\( ?\, ?\` ?\'))))
-              (replace-match ",@"))))))
+                       '(font-lock-string-face font-lock-comment-face)))
+                 (not (member (char-after (point)) '(?\( ?\, ?\` ?\'))))
+              (replace-match ",@ "))))))
 
 ;; End of file newlines
 (setq require-final-newline t) ; add newline to the end of file when saving
