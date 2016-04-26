@@ -15,6 +15,7 @@
 (define-key my-lisp-keys-minor-mode-map (kbd "C-;") 'slime-insert-balanced-comments)
 (define-key my-lisp-keys-minor-mode-map (kbd "C-:") 'slime-remove-balanced-comments)
 
+(define-key my-lisp-keys-minor-mode-map (kbd "<f3>") 'slime-autodoc-manually)
 (define-key my-lisp-keys-minor-mode-map (kbd "<f4>") 'slime-eval-last-expression)
 (define-key my-lisp-keys-minor-mode-map (kbd "C-<f4>") 'slime-pprint-eval-last-expression)
 (define-key my-lisp-keys-minor-mode-map (kbd "<f5>")
@@ -75,9 +76,11 @@
 (define-key my-lisp-keys-minor-mode-map (kbd "M-z")
   (lambda () (interactive) (delete-selection) (insert "nil")))
 
-(defmacro define-expansion (key prefix postfix &optional offset-on-selection reindent)
+(defmacro define-expansion (key prefix postfix &optional offset-on-selection reindent final-command)
   `(define-key my-lisp-keys-minor-mode-map (kbd ,key)
-     (lambda () (interactive) (surround-selection ,prefix ,postfix ,offset-on-selection ,reindent))))
+     (lambda () (interactive)
+        (surround-selection ,prefix ,postfix ,offset-on-selection ,reindent)
+        ,final-command)))
 
 (define-expansion "C-*" "*" "*")
 (define-expansion "C-+" "+" "+")
@@ -124,7 +127,7 @@
 (define-expansion "M-a y" "(apply " ")") ; appl(y)
 (define-expansion "M-a e" "(eval " ")")
 
-(define-expansion "M-a p" "(progn\n" ")" nil t)
+(define-expansion "M-a p" "(progn\n" ")" 8 t (left-char))
 
 (define-expansion "M-a u" "(null " ")")
 
@@ -133,14 +136,19 @@
 ;; Templates
 (define-expansion "M-a a" "#'(lambda () " ")" 11 t) ; l(a)mbda
 
-(define-expansion "M-a d f" "(defun ~ ()\n" ")" 8 t)
-(define-expansion "M-a d m" "(defmacro ~ ()\n" ")" 11 t)
+(define-expansion "M-a d f" "(defun ~ ()\n" ")" 8 t
+                  (backward-delete-char-untabify 1))
+(define-expansion "M-a d m" "(defmacro ~ ()\n" ")" 11 t
+                  (backward-delete-char-untabify 1))
 (define-expansion "M-a d p" "(defparameter " ")")
 (define-expansion "M-a d v" "(defvar " ")")
 (define-expansion "M-a d c" "(defconstant " ")")
-(define-expansion "M-a d s" "(defclass ~ ()\n  (" "))" 11 t) ; clas(s)
-(define-expansion "M-a d d" "(defmethod ~ ()\n" ")" 12 t) ; metho(d)
-(define-expansion "M-a d g" "(defgeneric ~ ()\n  (:documentation \"" "\"))" 13 t)
+(define-expansion "M-a d s" "(defclass ~ ()\n  (" "))" 11 t
+                  (backward-delete-char-untabify 1)) ; clas(s)
+(define-expansion "M-a d d" "(defmethod ~ ()\n" ")" 12 t
+                  (backward-delete-char-untabify 1)) ; metho(d)
+(define-expansion "M-a d g" "(defgeneric ~ ()\n  (:documentation \"" "\"))" 13 t
+                  (backward-delete-char-untabify 1))
 
 (define-expansion "M-a b l" "(let (())\n" ")" 7 t) ; (l)et
 (define-expansion "M-a b o" "(let* (())\n" ")" 8 t)
@@ -162,60 +170,65 @@
 
 
 
-(defvar sexp-edition-mode nil)
+(define-key my-lisp-keys-minor-mode-map (kbd "C-<left>") 'backward-sexp)
+(define-key my-lisp-keys-minor-mode-map (kbd "C-<right>") 'forward-sexp)
+(define-key my-lisp-keys-minor-mode-map (kbd "C-<up>") 'backward-up-list)
+(define-key my-lisp-keys-minor-mode-map (kbd "C-<down>") 'down-list)
 
-(setq mark-pos nil)
+(defun delete-sexp-backward (&optional ARG)
+  (interactive "p")
+  (delete-selection)
+  (deactivate-mark) (cua-set-mark) (backward-sexp ARG) (delete-selection))
+
+(defun delete-sexp-forward (&optional ARG)
+  (interactive "p")
+  (delete-selection)
+  (deactivate-mark) (cua-set-mark) (forward-sexp ARG) (delete-selection))
+
+(define-key my-lisp-keys-minor-mode-map (kbd "C-<backspace>") 'delete-sexp-backward)
+(define-key my-lisp-keys-minor-mode-map (kbd "C-<delete>") 'delete-sexp-forward)
+
+(defvar sexp-edition-mode nil)
 
 (define-key my-lisp-keys-minor-mode-map (kbd (concat "C-" menu-key-name))
   (lambda () (interactive)
-          (setq sexp-edition-mode (not sexp-edition-mode))
-          (message "S-exp edition mode is %s" (if sexp-edition-mode "ON" "OFF"))))
-
-(defmacro define-movement-key (key prefix-command conseq-command alter-command)
-  `(define-key my-lisp-keys-minor-mode-map (kbd ,key)
-     (lambda () (interactive)
-             ,prefix-command
-             (if (null sexp-edition-mode)
-                 ,conseq-command
-                 ,alter-command))))
-
-(defmacro define-movement (key prefix-command conseq-command alter-command)
-  `(progn
-     (define-movement-key ,key ,prefix-command ,conseq-command ,alter-command)
-     (define-movement-key (concat "C-" ,key) ,prefix-command ,alter-command ,conseq-command)))
-
-(define-movement "<left>"
-    (deactivate-mark) (left-char) (backward-sexp))
-(define-movement "S-<left>"
-    (unless mark-active (cua-set-mark)) (left-char) (backward-sexp))
-
-(define-movement "<right>"
-    (deactivate-mark) (right-char) (forward-sexp))
-(define-movement "S-<right>"
-    (unless mark-active (cua-set-mark)) (right-char) (forward-sexp))
-
-(define-movement "<up>"
-    (deactivate-mark) (previous-line) (backward-up-list))
-(define-movement "S-<up>"
-    (unless mark-active (cua-set-mark)) (previous-line) (backward-up-list))
-
-(define-movement "<down>"
-    (deactivate-mark) (next-line) (down-list))
-(define-movement "S-<down>"
-    (unless mark-active (cua-set-mark)) (next-line) (down-list))
+     (if (not sexp-edition-mode)
+         (progn
+           (define-key my-lisp-keys-minor-mode-map [remap left-char] 'backward-sexp)
+           (define-key my-lisp-keys-minor-mode-map [remap right-char] 'forward-sexp)
+           (define-key my-lisp-keys-minor-mode-map [remap previous-line] 'backward-up-list)
+           (define-key my-lisp-keys-minor-mode-map [remap next-line] 'down-list)
+           (define-key my-lisp-keys-minor-mode-map [remap backward-sexp] 'left-char)
+           (define-key my-lisp-keys-minor-mode-map [remap forward-sexp] 'right-char)
+           (define-key my-lisp-keys-minor-mode-map [remap backward-up-list] 'previous-line)
+           (define-key my-lisp-keys-minor-mode-map [remap down-list] 'next-line)
+           (define-key my-lisp-keys-minor-mode-map [remap backward-delete-char-untabify]
+             'delete-sexp-backward)
+           (define-key my-lisp-keys-minor-mode-map [remap delete-forward-char]
+             'delete-sexp-forward)
+           (define-key my-lisp-keys-minor-mode-map [remap delete-sexp-backward]
+             'backward-delete-char-untabify)
+           (define-key my-lisp-keys-minor-mode-map [remap delete-sexp-forward]
+             'delete-forward-char))
+         (progn
+           (define-key my-lisp-keys-minor-mode-map [remap left-char] nil)
+           (define-key my-lisp-keys-minor-mode-map [remap right-char] nil)
+           (define-key my-lisp-keys-minor-mode-map [remap previous-line] nil)
+           (define-key my-lisp-keys-minor-mode-map [remap next-line] nil)
+           (define-key my-lisp-keys-minor-mode-map [remap backward-sexp] nil)
+           (define-key my-lisp-keys-minor-mode-map [remap forward-sexp] nil)
+           (define-key my-lisp-keys-minor-mode-map [remap backward-up-list] nil)
+           (define-key my-lisp-keys-minor-mode-map [remap down-list] nil)
+           (define-key my-lisp-keys-minor-mode-map [remap backward-delete-char-untabify] nil)
+           (define-key my-lisp-keys-minor-mode-map [remap delete-forward-char] nil)
+           (define-key my-lisp-keys-minor-mode-map [remap delete-sexp-backward] nil)
+           (define-key my-lisp-keys-minor-mode-map [remap delete-sexp-forward] nil)))
+     (setq sexp-edition-mode (not sexp-edition-mode))
+     (message "S-exp edition mode is %s" (if sexp-edition-mode "ON" "OFF"))))
 
 ;; following is defined in init-extensions.el
 ;; (define-key my-lisp-keys-minor-mode-map (kbd "<M-up>") 'beginning-of-defun)
 ;; (define-key my-lisp-keys-minor-mode-map (kbd "<M-down>") 'end-of-defun)
-
-
-
-(define-movement "<backspace>" nil
-  (if (use-region-p) (delete-selection) (backward-delete-char-untabify 1))
-  (progn (deactivate-mark) (cua-set-mark) (backward-sexp) (delete-selection)))
-(define-movement "<delete>" nil
-  (if (use-region-p) (delete-selection) (delete-forward-char 1))
-  (progn (deactivate-mark) (cua-set-mark) (forward-sexp) (delete-selection)))
 
 (defun delete-line-forward ()
   (interactive)
@@ -235,12 +248,12 @@
 (defun remove-pair-of-parens ()
   (interactive)
   (let ((left (condition-case nil (save-excursion
-                                    (backward-up-list)
-                                    (point))
+                                  (backward-up-list)
+                                  (point))
                 (error nil)))
         (right (condition-case nil (save-excursion
-                                     (up-list)
-                                     (point))
+                                   (up-list)
+                                   (point))
                  (error nil)))
         (pos (point)))
     (if (and left right)
@@ -291,7 +304,7 @@
               (when (<= match-beg pos)
                 (replace-match "" nil nil)
                 (when (not (or (eql (char-after) ?\))
-                               (eql (char-before) ?\()))
+                            (eql (char-before) ?\()))
                   (insert " ")
                   (setq space-inserted t))
                 (setq pos (if (and (< match-beg pos) space-inserted)

@@ -192,31 +192,31 @@
     ((kbd "<M-down>") 'end-of-defun)))
 
 (setf *lambda-logo*
-   (list
-    "                         ...                                        "
-    "                      .:kKXXOo.                          ..         "
-    "        ;d;          .kWMWWWMMK;                         ,xo.       "
-    "      .oOl.         .xXkc;;:xXMK;                         ,kO;      "
-    "     'k0:           ;Oc      ;0Wk.                         .kKc     "
-    "    'OK;            :l.       ;KNl                          .kXl.   "
-    "   'OXc                        lNO.                          ,KXc   "
-    "  .xWx.                        .ONl.                          oNK;  "
-    "  cNX:                         .dWOc.                         ,0Wx. "
-    " .OMO.                         ,0MNKc                         .xMX: "
-    " :XMx.                        'OMMMWk.                         oWWd "
-    " oWWd                        'OWMMMMX:                         lNMk."
-    ".xMWo                       .kWMMWNNWx.                        cNMO."
-    ".xMWo                      .xWMMWxlxKK;                        cNMO."
-    ".dWWo                     .xWMMWx..,xWd.                       lWMx."
-    " cNMx.                   .dNMMWO.   :X0,                       dWNl "
-    " '0MO.                  .oNMMM0'    .kNo                      .kM0, "
-    "  oNX:                  lNMMMK;      cN0'                     ;KNo  "
-    "  .kWx.                lXMMMK:       .OWd.       ..          .dWk.  "
-    "   ,0Xc               cXMMMXc         lNXc       cd.         cX0,   "
-    "    ;00;             :KMMMNl          .OMXd'   .:0d.        ;00,    "
-    "     ,O0:           ;KMMMNd.           ;KMWXOxx0NK;        :0k'     "
-    "     .d0l.         ;0MMMWx.             ;ONMMMMWO;       .oOl.      "
-    "       ;d:         ':ccc;.               .'cool;.        ,l,        "))
+      (list
+       "                         ...                                        "
+       "                      .:kKXXOo.                          ..         "
+       "        ;d;          .kWMWWWMMK;                         ,xo.       "
+       "      .oOl.         .xXkc;;:xXMK;                         ,kO;      "
+       "     'k0:           ;Oc      ;0Wk.                         .kKc     "
+       "    'OK;            :l.       ;KNl                          .kXl.   "
+       "   'OXc                        lNO.                          ,KXc   "
+       "  .xWx.                        .ONl.                          oNK;  "
+       "  cNX:                         .dWOc.                         ,0Wx. "
+       " .OMO.                         ,0MNKc                         .xMX: "
+       " :XMx.                        'OMMMWk.                         oWWd "
+       " oWWd                        'OWMMMMX:                         lNMk."
+       ".xMWo                       .kWMMWNNWx.                        cNMO."
+       ".xMWo                      .xWMMWxlxKK;                        cNMO."
+       ".dWWo                     .xWMMWx..,xWd.                       lWMx."
+       " cNMx.                   .dNMMWO.   :X0,                       dWNl "
+       " '0MO.                  .oNMMM0'    .kNo                      .kM0, "
+       "  oNX:                  lNMMMK;      cN0'                     ;KNo  "
+       "  .kWx.                lXMMMK:       .OWd.       ..          .dWk.  "
+       "   ,0Xc               cXMMMXc         lNXc       cd.         cX0,   "
+       "    ;00;             :KMMMNl          .OMXd'   .:0d.        ;00,    "
+       "     ,O0:           ;KMMMNd.           ;KMWXOxx0NK;        :0k'     "
+       "     .d0l.         ;0MMMWx.             ;ONMMMMWO;       .oOl.      "
+       "       ;d:         ':ccc;.               .'cool;.        ,l,        "))
 
 (defun print-hello-message ()
   (let* ((tab-string "         ")
@@ -639,8 +639,8 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                                 result-list
                                 (copy-to-list (tree-left-branch tree)
                                               (if (or (null exclude-p) (not (funcall
-                                                                             exclude-p
-                                                                             (tree-entry tree))))
+                                                                          exclude-p
+                                                                          (tree-entry tree))))
                                                   (cons (tree-entry tree)
                                                         (copy-to-list (tree-right-branch tree)
                                                                       result-list))
@@ -716,13 +716,13 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                     (let ((record (lookup-binary-tree sym rainbow-identifiers-custom-binary-tree)))
                       (if record
                           (setf (cdr record) (mod (+ rainbow-identifiers-tune-delta (cdr record))
-                                                  rainbow-identifiers-face-count))
+                                               rainbow-identifiers-face-count))
                           (setf rainbow-identifiers-custom-binary-tree
-                                (adjoin-binary-tree
-                                 (cons sym (mod (+ rainbow-identifiers-tune-delta
-                                                   (rainbow-identifiers--hash-function sym))
-                                                rainbow-identifiers-face-count))
-                                 rainbow-identifiers-custom-binary-tree))))))))
+                             (adjoin-binary-tree
+                              (cons sym (mod (+ rainbow-identifiers-tune-delta
+                                                (rainbow-identifiers--hash-function sym))
+                                             rainbow-identifiers-face-count))
+                              rainbow-identifiers-custom-binary-tree))))))))
         (font-lock-fontify-buffer))
       (message "Tune is not allowed in this mode.")))
 
@@ -737,8 +737,8 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                     (let ((record (lookup-binary-tree sym rainbow-identifiers-custom-binary-tree)))
                       (if record
                           (setf rainbow-identifiers-custom-binary-tree
-                                (delete-from-binary-tree
-                                 (car record) rainbow-identifiers-custom-binary-tree))))))))
+                             (delete-from-binary-tree
+                              (car record) rainbow-identifiers-custom-binary-tree))))))))
         (font-lock-fontify-buffer))
       (message "Tune is not allowed in this mode.")))
 
@@ -778,16 +778,16 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
     (cond
       ((and (equal prev-char ?\|) (equal next-char ?\|)) t)
       ((or (and (= len 1) (equal first-char ?\.))
-           (and (equal first-char ?\@) (equal prev-char ?\,))
-           (equal prefix2 "#\\") (equal prev-char ?\#)
-           (and (or (equal (upcase prefix11) "#<FUNCTION ")
-                    (equal (upcase prefix17) "#<STANDARD-CLASS ")) (equal last-char ?\>))
-           (and (equal first-char ?\{) (equal prev-last-char ?\}) (equal last-char ?\>))
-           (member first-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
-           (and (>= len 2) (member first-char '(?+ ?- ?\.))
-                (member second-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))
-           (and (>= len 3) (member first-char '(?+ ?-)) (equal second-char ?\.)
-                (member third-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))) nil)
+          (and (equal first-char ?\@) (equal prev-char ?\,))
+          (equal prefix2 "#\\") (equal prev-char ?\#)
+          (and (or (equal (upcase prefix11) "#<FUNCTION ")
+                (equal (upcase prefix17) "#<STANDARD-CLASS ")) (equal last-char ?\>))
+          (and (equal first-char ?\{) (equal prev-last-char ?\}) (equal last-char ?\>))
+          (member first-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
+          (and (>= len 2) (member first-char '(?+ ?- ?\.))
+             (member second-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))
+          (and (>= len 3) (member first-char '(?+ ?-)) (equal second-char ?\.)
+             (member third-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))) nil)
       (t t))))
 
 (add-hook 'rainbow-identifiers-filter-functions 'rainbow-identifiers-filter)
@@ -811,6 +811,27 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
 ;;;; Highlight current sexp
 (require 'hl-sexp)
 
+;; Modified version
+(defun hl-sexp-highlight ()
+  "Active the Hl-Sexp overlay on the current sexp in the current window.
+\(Unless it's a minibuffer window.)"
+  (when hl-sexp-mode                    ; Could be made buffer-local.
+    (unless (or (use-region-p)
+               (window-minibuffer-p (selected-window))) ; silly in minibuffer
+      (unless hl-sexp-overlay
+        (setq hl-sexp-overlay (make-overlay 1 1)) ; to be moved
+        (overlay-put hl-sexp-overlay 'face 'hl-sexp-face))
+      (overlay-put hl-sexp-overlay 'window (selected-window))
+      (save-excursion
+        (condition-case nil
+            (backward-up-list 1)
+          (error nil))
+        (let ((bounds (bounds-of-thing-at-point 'sexp)))
+          (when bounds
+            (move-overlay hl-sexp-overlay
+                          (car bounds) (cdr bounds)
+                          (current-buffer))))))))
+
 (add-hook 'lisp-mode-hook 'hl-sexp-mode)
 (add-hook 'emacs-lisp-mode-hook 'hl-sexp-mode)
 (add-hook 'slime-repl-mode-hook 'hl-sexp-mode)
@@ -832,8 +853,8 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
   (interactive)
   (let* ((cb (char-before (point)))
          (matching-text (and cb
-                             (char-equal (char-syntax cb) ?\) )
-                             (blink-matching-open))))
+                           (char-equal (char-syntax cb) ?\) )
+                           (blink-matching-open))))
     (when matching-text (message matching-text))))
 
 ;;;; Paren face
