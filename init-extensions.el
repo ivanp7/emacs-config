@@ -192,31 +192,31 @@
     ((kbd "<M-down>") 'end-of-defun)))
 
 (setf *lambda-logo*
-      (list
-       "                         ...                                        "
-       "                      .:kKXXOo.                          ..         "
-       "        ;d;          .kWMWWWMMK;                         ,xo.       "
-       "      .oOl.         .xXkc;;:xXMK;                         ,kO;      "
-       "     'k0:           ;Oc      ;0Wk.                         .kKc     "
-       "    'OK;            :l.       ;KNl                          .kXl.   "
-       "   'OXc                        lNO.                          ,KXc   "
-       "  .xWx.                        .ONl.                          oNK;  "
-       "  cNX:                         .dWOc.                         ,0Wx. "
-       " .OMO.                         ,0MNKc                         .xMX: "
-       " :XMx.                        'OMMMWk.                         oWWd "
-       " oWWd                        'OWMMMMX:                         lNMk."
-       ".xMWo                       .kWMMWNNWx.                        cNMO."
-       ".xMWo                      .xWMMWxlxKK;                        cNMO."
-       ".dWWo                     .xWMMWx..,xWd.                       lWMx."
-       " cNMx.                   .dNMMWO.   :X0,                       dWNl "
-       " '0MO.                  .oNMMM0'    .kNo                      .kM0, "
-       "  oNX:                  lNMMMK;      cN0'                     ;KNo  "
-       "  .kWx.                lXMMMK:       .OWd.       ..          .dWk.  "
-       "   ,0Xc               cXMMMXc         lNXc       cd.         cX0,   "
-       "    ;00;             :KMMMNl          .OMXd'   .:0d.        ;00,    "
-       "     ,O0:           ;KMMMNd.           ;KMWXOxx0NK;        :0k'     "
-       "     .d0l.         ;0MMMWx.             ;ONMMMMWO;       .oOl.      "
-       "       ;d:         ':ccc;.               .'cool;.        ,l,        "))
+   (list
+    "                         ...                                        "
+    "                      .:kKXXOo.                          ..         "
+    "        ;d;          .kWMWWWMMK;                         ,xo.       "
+    "      .oOl.         .xXkc;;:xXMK;                         ,kO;      "
+    "     'k0:           ;Oc      ;0Wk.                         .kKc     "
+    "    'OK;            :l.       ;KNl                          .kXl.   "
+    "   'OXc                        lNO.                          ,KXc   "
+    "  .xWx.                        .ONl.                          oNK;  "
+    "  cNX:                         .dWOc.                         ,0Wx. "
+    " .OMO.                         ,0MNKc                         .xMX: "
+    " :XMx.                        'OMMMWk.                         oWWd "
+    " oWWd                        'OWMMMMX:                         lNMk."
+    ".xMWo                       .kWMMWNNWx.                        cNMO."
+    ".xMWo                      .xWMMWxlxKK;                        cNMO."
+    ".dWWo                     .xWMMWx..,xWd.                       lWMx."
+    " cNMx.                   .dNMMWO.   :X0,                       dWNl "
+    " '0MO.                  .oNMMM0'    .kNo                      .kM0, "
+    "  oNX:                  lNMMMK;      cN0'                     ;KNo  "
+    "  .kWx.                lXMMMK:       .OWd.       ..          .dWk.  "
+    "   ,0Xc               cXMMMXc         lNXc       cd.         cX0,   "
+    "    ;00;             :KMMMNl          .OMXd'   .:0d.        ;00,    "
+    "     ,O0:           ;KMMMNd.           ;KMWXOxx0NK;        :0k'     "
+    "     .d0l.         ;0MMMWx.             ;ONMMMMWO;       .oOl.      "
+    "       ;d:         ':ccc;.               .'cool;.        ,l,        "))
 
 (defun print-hello-message ()
   (let* ((tab-string "         ")
@@ -869,9 +869,9 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
 (setq highlight-symbol-on-navigation-p t)
 (setq highlight-symbol-idle-delay 0.2)
 (let ((hook (lambda () (interactive)
-                    (cl-pushnew '(highlight-symbol-face :underline t)
-                                face-remapping-alist :test 'equal)
-                    (highlight-symbol-mode))))
+               (cl-pushnew '(highlight-symbol-face :underline t)
+                           face-remapping-alist :test 'equal)
+               (highlight-symbol-mode))))
   (add-hook 'lisp-mode-hook hook)
   (add-hook 'emacs-lisp-mode-hook hook))
 
@@ -887,6 +887,8 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
 ;;(setq auto-indent-on-visit-file t)
 (require 'auto-indent-mode)
 (auto-indent-global-mode)
+
+(setq auto-indent-backward-delete-char-behavior 'untabify)
 
 ;;;; Buffer move
 (require 'buffer-move)
