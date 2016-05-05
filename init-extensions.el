@@ -192,31 +192,31 @@
     ((kbd "<M-down>") 'end-of-defun)))
 
 (setf *lambda-logo*
-   (list
-    "                         ...                                        "
-    "                      .:kKXXOo.                          ..         "
-    "        ;d;          .kWMWWWMMK;                         ,xo.       "
-    "      .oOl.         .xXkc;;:xXMK;                         ,kO;      "
-    "     'k0:           ;Oc      ;0Wk.                         .kKc     "
-    "    'OK;            :l.       ;KNl                          .kXl.   "
-    "   'OXc                        lNO.                          ,KXc   "
-    "  .xWx.                        .ONl.                          oNK;  "
-    "  cNX:                         .dWOc.                         ,0Wx. "
-    " .OMO.                         ,0MNKc                         .xMX: "
-    " :XMx.                        'OMMMWk.                         oWWd "
-    " oWWd                        'OWMMMMX:                         lNMk."
-    ".xMWo                       .kWMMWNNWx.                        cNMO."
-    ".xMWo                      .xWMMWxlxKK;                        cNMO."
-    ".dWWo                     .xWMMWx..,xWd.                       lWMx."
-    " cNMx.                   .dNMMWO.   :X0,                       dWNl "
-    " '0MO.                  .oNMMM0'    .kNo                      .kM0, "
-    "  oNX:                  lNMMMK;      cN0'                     ;KNo  "
-    "  .kWx.                lXMMMK:       .OWd.       ..          .dWk.  "
-    "   ,0Xc               cXMMMXc         lNXc       cd.         cX0,   "
-    "    ;00;             :KMMMNl          .OMXd'   .:0d.        ;00,    "
-    "     ,O0:           ;KMMMNd.           ;KMWXOxx0NK;        :0k'     "
-    "     .d0l.         ;0MMMWx.             ;ONMMMMWO;       .oOl.      "
-    "       ;d:         ':ccc;.               .'cool;.        ,l,        "))
+      (list
+       "                         ...                                        "
+       "                      .:kKXXOo.                          ..         "
+       "        ;d;          .kWMWWWMMK;                         ,xo.       "
+       "      .oOl.         .xXkc;;:xXMK;                         ,kO;      "
+       "     'k0:           ;Oc      ;0Wk.                         .kKc     "
+       "    'OK;            :l.       ;KNl                          .kXl.   "
+       "   'OXc                        lNO.                          ,KXc   "
+       "  .xWx.                        .ONl.                          oNK;  "
+       "  cNX:                         .dWOc.                         ,0Wx. "
+       " .OMO.                         ,0MNKc                         .xMX: "
+       " :XMx.                        'OMMMWk.                         oWWd "
+       " oWWd                        'OWMMMMX:                         lNMk."
+       ".xMWo                       .kWMMWNNWx.                        cNMO."
+       ".xMWo                      .xWMMWxlxKK;                        cNMO."
+       ".dWWo                     .xWMMWx..,xWd.                       lWMx."
+       " cNMx.                   .dNMMWO.   :X0,                       dWNl "
+       " '0MO.                  .oNMMM0'    .kNo                      .kM0, "
+       "  oNX:                  lNMMMK;      cN0'                     ;KNo  "
+       "  .kWx.                lXMMMK:       .OWd.       ..          .dWk.  "
+       "   ,0Xc               cXMMMXc         lNXc       cd.         cX0,   "
+       "    ;00;             :KMMMNl          .OMXd'   .:0d.        ;00,    "
+       "     ,O0:           ;KMMMNd.           ;KMWXOxx0NK;        :0k'     "
+       "     .d0l.         ;0MMMWx.             ;ONMMMMWO;       .oOl.      "
+       "       ;d:         ':ccc;.               .'cool;.        ,l,        "))
 
 (defun print-hello-message ()
   (let* ((tab-string "         ")
@@ -778,7 +778,7 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
     (cond
       ((and (equal prev-char ?\|) (equal next-char ?\|)) t)
       ((or (and (= len 1) (equal first-char ?\.))
-          (and (equal first-char ?\@) (equal prev-char ?\,))
+          ;; (and (equal first-char ?\@) (equal prev-char ?\,))
           (equal prefix2 "#\\") (equal prev-char ?\#)
           (and (or (equal (upcase prefix11) "#<FUNCTION ")
                 (equal (upcase prefix17) "#<STANDARD-CLASS ")) (equal last-char ?\>))
@@ -874,6 +874,36 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                (highlight-symbol-mode))))
   (add-hook 'lisp-mode-hook hook)
   (add-hook 'emacs-lisp-mode-hook hook))
+
+
+
+(modify-syntax-entry ?@ "'" lisp-mode-syntax-table)
+
+;; (defun thing-at-point-advice (oldfun &rest args)
+;;   (let* ((result (apply oldfun args))
+;;          (comma+at-sign-detected)
+;;          (new-result (if (and (eql (first args) 'sexp)
+;;                             (setf at-sign-detected (eql (elt result 0) ?@)))
+;;                          (substring result 1)
+;;                          result)))
+;;     (if (and at-sign-detected (eql (char-after (point)) ?@))
+;;         nil
+;;         new-result)))
+
+;; (advice-add 'thing-at-point :around 'thing-at-point-advice)
+
+;; (defun bounds-of-thing-at-point-advice (oldfun &rest args)
+;;   (let ((result (apply oldfun args)))
+;;     (if result
+;;         (let ((prefix-shift (if (eql (first args) 'sexp)
+;;                                 (if (eql (char-before (car result)) ?@)
+;;                                     (if (eql (char-before (1- (car result))) ?,)
+;;                                         -2 -1)
+;;                                     0)
+;;                                 0)))
+;;           (cons (+ prefix-shift (car result)) (cdr result))))))
+
+;; (advice-add 'bounds-of-thing-at-point :around 'bounds-of-thing-at-point-advice)
 
 ;;;; Hide/Show feature
 (add-hook 'lisp-mode-hook 'hs-minor-mode)
