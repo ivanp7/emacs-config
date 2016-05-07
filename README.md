@@ -1,5 +1,7 @@
 # emacs-init
-My Emacs initialization code
+My Emacs initialization code (and dirty hacks)
+
+------------------------------------------
 
 Files:
 * init.el                        - main script that loads everything, should be loaded from .emacs
@@ -12,3 +14,6 @@ Files:
 * color-themes/granger-theme.el  - Emacs color theme
 
 * ivanp7.lisp                    - Common Lisp on-startup setup
+
+* screenshot.png                 - example view: what all this magic creates
+
