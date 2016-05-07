@@ -1,6 +1,9 @@
 # emacs-init
 My Emacs initialization code (and dirty hacks)
 
+Custom fonts "Anonymous Pro", "PragmataPro" and "Fira Code Medium" are used, 
+they must be installed in the system in order to use this code.
+
 ------------------------------------------
 
 Files:
