@@ -192,31 +192,31 @@
     ((kbd "<M-down>") 'end-of-defun)))
 
 (setf *lambda-logo*
-      (list
-       "                         ...                                        "
-       "                      .:kKXXOo.                          ..         "
-       "        ;d;          .kWMWWWMMK;                         ,xo.       "
-       "      .oOl.         .xXkc;;:xXMK;                         ,kO;      "
-       "     'k0:           ;Oc      ;0Wk.                         .kKc     "
-       "    'OK;            :l.       ;KNl                          .kXl.   "
-       "   'OXc                        lNO.                          ,KXc   "
-       "  .xWx.                        .ONl.                          oNK;  "
-       "  cNX:                         .dWOc.                         ,0Wx. "
-       " .OMO.                         ,0MNKc                         .xMX: "
-       " :XMx.                        'OMMMWk.                         oWWd "
-       " oWWd                        'OWMMMMX:                         lNMk."
-       ".xMWo                       .kWMMWNNWx.                        cNMO."
-       ".xMWo                      .xWMMWxlxKK;                        cNMO."
-       ".dWWo                     .xWMMWx..,xWd.                       lWMx."
-       " cNMx.                   .dNMMWO.   :X0,                       dWNl "
-       " '0MO.                  .oNMMM0'    .kNo                      .kM0, "
-       "  oNX:                  lNMMMK;      cN0'                     ;KNo  "
-       "  .kWx.                lXMMMK:       .OWd.       ..          .dWk.  "
-       "   ,0Xc               cXMMMXc         lNXc       cd.         cX0,   "
-       "    ;00;             :KMMMNl          .OMXd'   .:0d.        ;00,    "
-       "     ,O0:           ;KMMMNd.           ;KMWXOxx0NK;        :0k'     "
-       "     .d0l.         ;0MMMWx.             ;ONMMMMWO;       .oOl.      "
-       "       ;d:         ':ccc;.               .'cool;.        ,l,        "))
+   (list
+    "                         ...                                        "
+    "                      .:kKXXOo.                          ..         "
+    "        ;d;          .kWMWWWMMK;                         ,xo.       "
+    "      .oOl.         .xXkc;;:xXMK;                         ,kO;      "
+    "     'k0:           ;Oc      ;0Wk.                         .kKc     "
+    "    'OK;            :l.       ;KNl                          .kXl.   "
+    "   'OXc                        lNO.                          ,KXc   "
+    "  .xWx.                        .ONl.                          oNK;  "
+    "  cNX:                         .dWOc.                         ,0Wx. "
+    " .OMO.                         ,0MNKc                         .xMX: "
+    " :XMx.                        'OMMMWk.                         oWWd "
+    " oWWd                        'OWMMMMX:                         lNMk."
+    ".xMWo                       .kWMMWNNWx.                        cNMO."
+    ".xMWo                      .xWMMWxlxKK;                        cNMO."
+    ".dWWo                     .xWMMWx..,xWd.                       lWMx."
+    " cNMx.                   .dNMMWO.   :X0,                       dWNl "
+    " '0MO.                  .oNMMM0'    .kNo                      .kM0, "
+    "  oNX:                  lNMMMK;      cN0'                     ;KNo  "
+    "  .kWx.                lXMMMK:       .OWd.       ..          .dWk.  "
+    "   ,0Xc               cXMMMXc         lNXc       cd.         cX0,   "
+    "    ;00;             :KMMMNl          .OMXd'   .:0d.        ;00,    "
+    "     ,O0:           ;KMMMNd.           ;KMWXOxx0NK;        :0k'     "
+    "     .d0l.         ;0MMMWx.             ;ONMMMMWO;       .oOl.      "
+    "       ;d:         ':ccc;.               .'cool;.        ,l,        "))
 
 (defun print-hello-message ()
   (let* ((tab-string "         ")
@@ -517,30 +517,57 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
 ;;;; Pretty suscripts support
 (require 'magic-latex-buffer)
 
-(define-minor-mode magic-latex-buffer
+(defun suscript-jit-prettifier (beg end) ; redefined ml/jit-prettifier
+  (let (magic-latex-ignored-properties)
+    (goto-char beg)
+    (ml/remove-pretty-overlays beg end)
+    ;; prettify suscripts
+    (save-excursion
+      (while (ignore-errors (ml/search-suscript t end))
+        (let* ((body-beg (match-beginning 1))
+               (body-end (match-end 1))
+               (delim-beg (match-beginning 0))
+               (delim-end (match-end 0))
+               ;; the point can be already prettified in a recursive
+               ;; suscript like "a_{b_c}".
+               (oldov (ml/overlay-at body-beg 'category 'ml/ov-pretty))
+               (oldprop (and oldov (overlay-get oldov 'display)))
+               (priority-base (and oldov (or (overlay-get oldov 'priority) 0)))
+               (raise-base (or (cadr (assoc 'raise oldprop)) 0.0))
+               (height-base (or (cadr (assoc 'height oldprop)) 1.0))
+               (ov1 (ml/make-pretty-overlay delim-beg delim-end 'invisible t))
+               ;; new overlay must have higher priority than the old
+               ;; one.
+               (ov2 (ml/make-pretty-overlay
+                     body-beg body-end 'priority (when oldov (1+ priority-base)))))
+          (cl-case (string-to-char (match-string 0))
+            ((?_) (overlay-put
+                  ov2 'display
+                  `((raise ,(- raise-base 0.2)) (height ,(* height-base 0.8)))))
+            ((?^) (overlay-put
+                  ov2 'display
+                  `((raise ,(+ raise-base 0.2)) (height ,(* height-base 0.8)))))))))))
+
+(define-minor-mode magic-suscript-buffer
     "Redefinition of the magic-latex-buffer mode, that doesn't conflict with lisp-mode."
   :init-value nil
   :global nil
   :lighter " suscript"
-  (if magic-latex-buffer
+  (if magic-suscript-buffer
       (progn
         (jit-lock-mode 1)
         (setq-local font-lock-multiline t)
-        (jit-lock-register 'ml/jit-prettifier)
+        (jit-lock-register 'suscript-jit-prettifier)
         (jit-lock-register 'font-lock-fontify-region))
-      (jit-lock-unregister 'ml/jit-prettifier)
+      (jit-lock-unregister 'suscript-jit-prettifier)
       (jit-lock-unregister 'font-lock-fontify-region)
       (ml/remove-pretty-overlays (point-min) (point-max))
       (font-lock-refresh-defaults)))
 
-(add-hook 'lisp-mode-hook 'magic-latex-buffer)
-(add-hook 'emacs-lisp-mode-hook 'magic-latex-buffer)
+(add-hook 'lisp-mode-hook 'magic-suscript-buffer)
+(add-hook 'emacs-lisp-mode-hook 'magic-suscript-buffer)
 
-(setq magic-latex-ignored-properties nil
-      magic-latex-enable-suscript        t
-      magic-latex-enable-pretty-symbols  nil
-      magic-latex-enable-block-align     nil
-      magic-latex-enable-inline-image    nil)
+(add-hook 'latex-mode-hook 'magic-latex-buffer)
 
 ;;;; Rainbow identifiers
 (require 'rainbow-identifiers)
