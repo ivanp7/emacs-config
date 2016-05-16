@@ -989,3 +989,8 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
 
 ;;;; Eldoc mode
 (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
+
+;;;; Random idle quote
+(require 'random-idle-quote)
+(random-idle-quote)
+
