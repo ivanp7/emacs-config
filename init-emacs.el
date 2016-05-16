@@ -37,7 +37,7 @@
 (defvar *required-packages*
   '(ac-slime auto-complete auto-indent-mode buffer-move cursor-chg expand-region
     highlight-stages highlight-symbol hl-sexp imenu+ magic-latex-buffer magit
-    nlinum paren-face pos-tip pretty-mode pretty-symbols rainbow-identifiers
+    nlinum org paren-face pos-tip pretty-mode pretty-symbols rainbow-identifiers
     slime tabbar undo-tree)
   "a list of packages to ensure are installed at launch.")
 

@@ -44,6 +44,7 @@
 ;; LaTeX
 
 (add-to-list 'org-latex-packages-alist '("russian" "babel"))
+(add-to-list 'org-latex-packages-alist '("unicode" "hyperref"))
 
 ;;;; NLinum mode
 
@@ -198,31 +199,31 @@
     ((kbd "<M-down>") 'end-of-defun)))
 
 (setf *lambda-logo*
-   (list
-    "                         ...                                        "
-    "                      .:kKXXOo.                          ..         "
-    "        ;d;          .kWMWWWMMK;                         ,xo.       "
-    "      .oOl.         .xXkc;;:xXMK;                         ,kO;      "
-    "     'k0:           ;Oc      ;0Wk.                         .kKc     "
-    "    'OK;            :l.       ;KNl                          .kXl.   "
-    "   'OXc                        lNO.                          ,KXc   "
-    "  .xWx.                        .ONl.                          oNK;  "
-    "  cNX:                         .dWOc.                         ,0Wx. "
-    " .OMO.                         ,0MNKc                         .xMX: "
-    " :XMx.                        'OMMMWk.                         oWWd "
-    " oWWd                        'OWMMMMX:                         lNMk."
-    ".xMWo                       .kWMMWNNWx.                        cNMO."
-    ".xMWo                      .xWMMWxlxKK;                        cNMO."
-    ".dWWo                     .xWMMWx..,xWd.                       lWMx."
-    " cNMx.                   .dNMMWO.   :X0,                       dWNl "
-    " '0MO.                  .oNMMM0'    .kNo                      .kM0, "
-    "  oNX:                  lNMMMK;      cN0'                     ;KNo  "
-    "  .kWx.                lXMMMK:       .OWd.       ..          .dWk.  "
-    "   ,0Xc               cXMMMXc         lNXc       cd.         cX0,   "
-    "    ;00;             :KMMMNl          .OMXd'   .:0d.        ;00,    "
-    "     ,O0:           ;KMMMNd.           ;KMWXOxx0NK;        :0k'     "
-    "     .d0l.         ;0MMMWx.             ;ONMMMMWO;       .oOl.      "
-    "       ;d:         ':ccc;.               .'cool;.        ,l,        "))
+      (list
+       "                         ...                                        "
+       "                      .:kKXXOo.                          ..         "
+       "        ;d;          .kWMWWWMMK;                         ,xo.       "
+       "      .oOl.         .xXkc;;:xXMK;                         ,kO;      "
+       "     'k0:           ;Oc      ;0Wk.                         .kKc     "
+       "    'OK;            :l.       ;KNl                          .kXl.   "
+       "   'OXc                        lNO.                          ,KXc   "
+       "  .xWx.                        .ONl.                          oNK;  "
+       "  cNX:                         .dWOc.                         ,0Wx. "
+       " .OMO.                         ,0MNKc                         .xMX: "
+       " :XMx.                        'OMMMWk.                         oWWd "
+       " oWWd                        'OWMMMMX:                         lNMk."
+       ".xMWo                       .kWMMWNNWx.                        cNMO."
+       ".xMWo                      .xWMMWxlxKK;                        cNMO."
+       ".dWWo                     .xWMMWx..,xWd.                       lWMx."
+       " cNMx.                   .dNMMWO.   :X0,                       dWNl "
+       " '0MO.                  .oNMMM0'    .kNo                      .kM0, "
+       "  oNX:                  lNMMMK;      cN0'                     ;KNo  "
+       "  .kWx.                lXMMMK:       .OWd.       ..          .dWk.  "
+       "   ,0Xc               cXMMMXc         lNXc       cd.         cX0,   "
+       "    ;00;             :KMMMNl          .OMXd'   .:0d.        ;00,    "
+       "     ,O0:           ;KMMMNd.           ;KMWXOxx0NK;        :0k'     "
+       "     .d0l.         ;0MMMWx.             ;ONMMMMWO;       .oOl.      "
+       "       ;d:         ':ccc;.               .'cool;.        ,l,        "))
 
 (defun print-hello-message ()
   (let* ((tab-string "         ")
@@ -548,11 +549,11 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                      body-beg body-end 'priority (when oldov (1+ priority-base)))))
           (cl-case (string-to-char (match-string 0))
             ((?_) (overlay-put
-                  ov2 'display
-                  `((raise ,(- raise-base 0.2)) (height ,(* height-base 0.8)))))
+                   ov2 'display
+                   `((raise ,(- raise-base 0.2)) (height ,(* height-base 0.8)))))
             ((?^) (overlay-put
-                  ov2 'display
-                  `((raise ,(+ raise-base 0.2)) (height ,(* height-base 0.8)))))))))))
+                   ov2 'display
+                   `((raise ,(+ raise-base 0.2)) (height ,(* height-base 0.8)))))))))))
 
 (define-minor-mode magic-suscript-buffer
     "Redefinition of the magic-latex-buffer mode, that doesn't conflict with lisp-mode."
