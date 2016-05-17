@@ -54,54 +54,6 @@
 
 (define-key my-common-keys-minor-mode-map (kbd "<f2>") 'slime-selector)
 
-;;; Buffers and windows configuration control keys
-(define-key my-common-keys-minor-mode-map (kbd (concat menu-key-name " <backspace>"))
-  'kill-this-buffer)
-(define-key my-common-keys-minor-mode-map (kbd (concat menu-key-name " <S-backspace>"))
-  (lambda () (interactive) (other-window 1) (kill-this-buffer) (other-window 1)))
-
-(define-key my-common-keys-minor-mode-map (kbd (concat menu-key-name " '")) 'other-window)
-(define-key my-common-keys-minor-mode-map (kbd (concat menu-key-name " ,")) 'previous-buffer)
-(define-key my-common-keys-minor-mode-map (kbd (concat menu-key-name " .")) 'next-buffer)
-(define-key my-common-keys-minor-mode-map (kbd "C-,") 'previous-buffer)
-(define-key my-common-keys-minor-mode-map (kbd "C-.") 'next-buffer)
-(define-key my-common-keys-minor-mode-map (kbd (concat menu-key-name " <"))
-  (lambda () (interactive) (other-window 1) (previous-buffer) (other-window 1)))
-(define-key my-common-keys-minor-mode-map (kbd (concat menu-key-name " >"))
-  (lambda () (interactive) (other-window 1) (next-buffer) (other-window 1)))
-
-(define-key my-common-keys-minor-mode-map (kbd (concat menu-key-name " <left>"))
-  'buf-move-left)
-(define-key my-common-keys-minor-mode-map (kbd (concat menu-key-name " <S-left>"))
-  (lambda () (interactive)
-     (setq buffer-move-behavior 'swap) (buf-move-left) (setq buffer-move-behavior 'move)))
-(define-key my-common-keys-minor-mode-map (kbd (concat menu-key-name " <up>"))
-  'buf-move-up)
-(define-key my-common-keys-minor-mode-map (kbd (concat menu-key-name " <S-up>"))
-  (lambda () (interactive)
-     (setq buffer-move-behavior 'swap) (buf-move-up) (setq buffer-move-behavior 'move)))
-(define-key my-common-keys-minor-mode-map (kbd (concat menu-key-name " <right>"))
-  'buf-move-right)
-(define-key my-common-keys-minor-mode-map (kbd (concat menu-key-name " <S-right>"))
-  (lambda () (interactive)
-     (setq buffer-move-behavior 'swap) (buf-move-right) (setq buffer-move-behavior 'move)))
-(define-key my-common-keys-minor-mode-map (kbd (concat menu-key-name " <down>"))
-  'buf-move-down)
-(define-key my-common-keys-minor-mode-map (kbd (concat menu-key-name " <S-down>"))
-  (lambda () (interactive)
-     (setq buffer-move-behavior 'swap) (buf-move-down) (setq buffer-move-behavior 'move)))
-
-(define-key my-common-keys-minor-mode-map (kbd (concat menu-key-name " C-<left>"))
-  'split-window-horizontally)
-(define-key my-common-keys-minor-mode-map (kbd (concat menu-key-name " C-<up>"))
-  'split-window-vertically)
-(define-key my-common-keys-minor-mode-map (kbd (concat menu-key-name " C-<right>"))
-  'split-window-right)
-(define-key my-common-keys-minor-mode-map (kbd (concat menu-key-name " C-<down>"))
-  'split-window-below)
-(define-key my-common-keys-minor-mode-map (kbd (concat menu-key-name " <delete>"))
-  'delete-window)
-
 ;;; Commands execution
 (define-key my-common-keys-minor-mode-map (kbd "C-M-x") 'shell-command)
 (define-key my-common-keys-minor-mode-map (kbd "S-C-M-x") 'repeat-complex-command)
@@ -140,7 +92,7 @@
 ;;;; Installing minor mode for keys
 (define-minor-mode my-common-keys-minor-mode
     "A minor mode so that my key settings override annoying major modes."
-  nil " my-common-keys" 'my-common-keys-minor-mode-map)
+  t " myk1" 'my-common-keys-minor-mode-map)
 
 (define-global-minor-mode my-common-keys-minor-global-mode
     my-common-keys-minor-mode

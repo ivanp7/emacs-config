@@ -61,6 +61,7 @@
     ((system-is-linux) "<menu>")))
 
 (load "init-keys.el")
+(load "init-buffer-keys.el")
 (load "init-lisp-mode-keys.el")
 
 ;;;; Starting server
