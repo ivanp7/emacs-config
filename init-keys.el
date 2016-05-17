@@ -140,9 +140,16 @@
 ;;;; Installing minor mode for keys
 (define-minor-mode my-common-keys-minor-mode
     "A minor mode so that my key settings override annoying major modes."
-  t " my-common-keys" 'my-common-keys-minor-mode-map)
+  nil " my-common-keys" 'my-common-keys-minor-mode-map)
 
-(my-common-keys-minor-mode 1)
+(define-global-minor-mode my-common-keys-minor-global-mode
+    my-common-keys-minor-mode
+  (lambda ()
+    (when (not (memq major-mode
+                   (list 'term-mode)))
+      (my-common-keys-minor-mode))))
+
+(my-common-keys-minor-global-mode 1)
 
 (defadvice load (after give-my-keybindings-priority)
   "Try to ensure that my keybindings always have priority."
