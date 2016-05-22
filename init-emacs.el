@@ -100,14 +100,16 @@
 (defalias 'yes-or-no-p 'y-or-n-p) ; short messages
 
 ;; Delete trailing whitespaces, format buffer and untabify when save buffer
+(setq indent-buffer-exception-modes '(bibtex-mode))
 (setq-default indent-tabs-mode nil)
-(defun format-current-buffer ()
-  (indent-region (point-min) (point-max)))
+(defun indent-current-buffer ()
+  (unless (member major-mode indent-buffer-exception-modes)
+    (indent-region (point-min) (point-max))))
 (defun untabify-current-buffer ()
   (if (not indent-tabs-mode)
       (untabify (point-min) (point-max)))
   nil)
-(add-to-list 'write-file-functions 'format-current-buffer)
+(add-to-list 'write-file-functions 'indent-current-buffer)
 (add-to-list 'write-file-functions 'untabify-current-buffer)
 (add-to-list 'write-file-functions 'delete-trailing-whitespace)
 
