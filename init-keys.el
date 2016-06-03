@@ -52,7 +52,7 @@
 (define-key my-common-keys-minor-mode-map (kbd "C-a") 'mark-whole-buffer)
 (define-key my-common-keys-minor-mode-map (kbd "C-l") 'goto-line)
 
-(define-key my-common-keys-minor-mode-map (kbd "<f2>") 'slime-selector)
+(define-key my-common-keys-minor-mode-map (kbd "<f12>") 'slime-selector)
 
 ;;; Commands execution
 (define-key my-common-keys-minor-mode-map (kbd "C-M-x") 'shell-command)
