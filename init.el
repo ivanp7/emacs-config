@@ -78,8 +78,8 @@
 (ansi-term "/bin/bash")
 (other-window 1)
 
-;; open org-mode files
-(find-file (concat (default-value 'default-directory) "info.org"))
+;;;; Open org-mode files
+;;(find-file (concat (default-value 'default-directory) "info.org"))
 (find-file (concat (default-value 'default-directory) "ivanp7.org"))
 
 ;; (desktop-read) ;; Load default desktop from file : "~/emacs.d/.emacs.desktop"
