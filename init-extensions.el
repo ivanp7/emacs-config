@@ -88,6 +88,25 @@
                   (length (number-to-string
                            (count-lines (point-min) (point-max)))))))
 
+;; Fix 'nlinum--face-width: Invalid face: linum' error
+(defvar frame-ready nil)
+(add-hook 'after-make-frame-functions (lambda (frame) (set-frame-parameter frame 'frame-ready t)))
+(add-hook 'after-init-hook (lambda () (set-frame-parameter nil 'frame-ready t)))
+
+(defun nlinum--setup-window ()
+  (let ((width (if (and frame-ready (display-graphic-p)) ;; <-- Here
+                   (ceiling
+                    (let ((width (nlinum--face-width 'linum)))
+                      (if width
+                          (/ (* nlinum--width 1.0 width)
+                             (frame-char-width))
+                          (/ (* nlinum--width 1.0
+                                (nlinum--face-height 'linum))
+                             (frame-char-height)))))
+                   nlinum--width)))
+    (set-window-margins nil (if nlinum-mode width)
+                        (cdr (window-margins)))))
+
 ;;;; SLIME
 (require 'slime-autoloads)
 (add-hook 'lisp-mode-hook (lambda () (slime-mode t)))
@@ -549,11 +568,11 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                      body-beg body-end 'priority (when oldov (1+ priority-base)))))
           (cl-case (string-to-char (match-string 0))
             ((?_) (overlay-put
-                   ov2 'display
-                   `((raise ,(- raise-base 0.2)) (height ,(* height-base 0.8)))))
+                  ov2 'display
+                  `((raise ,(- raise-base 0.2)) (height ,(* height-base 0.8)))))
             ((?^) (overlay-put
-                   ov2 'display
-                   `((raise ,(+ raise-base 0.2)) (height ,(* height-base 0.8)))))))))))
+                  ov2 'display
+                  `((raise ,(+ raise-base 0.2)) (height ,(* height-base 0.8)))))))))))
 
 (define-minor-mode magic-suscript-buffer
     "Redefinition of the magic-latex-buffer mode, that doesn't conflict with lisp-mode."
@@ -673,8 +692,8 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                                 result-list
                                 (copy-to-list (tree-left-branch tree)
                                               (if (or (null exclude-p) (not (funcall
-                                                                             exclude-p
-                                                                             (tree-entry tree))))
+                                                                          exclude-p
+                                                                          (tree-entry tree))))
                                                   (cons (tree-entry tree)
                                                         (copy-to-list (tree-right-branch tree)
                                                                       result-list))

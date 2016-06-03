@@ -48,6 +48,14 @@
 (define-key my-buffer-keys-minor-mode-map (kbd (concat menu-key-name " <delete>"))
   'delete-window)
 
+(define-key my-buffer-keys-minor-mode-map (kbd (concat menu-key-name " " menu-key-name))
+  '(lambda ()
+    (interactive)
+    (let ((buffer (current-buffer)))
+      ;;(unless (one-window-p)
+      ;;  (delete-window))
+      (display-buffer-pop-up-frame buffer nil))))
+
 ;;;; Installing minor mode for keys
 (define-minor-mode my-buffer-keys-minor-mode
     "A minor mode so that my key settings override annoying major modes."
