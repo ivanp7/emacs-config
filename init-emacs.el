@@ -12,7 +12,7 @@
  '(org-replace-disputed-keys t))
 (custom-set-faces
  '(default ((t (:family "Anonymous Pro" :foundry "outline" :slant normal
-                        :weight normal :height 80 :width normal)))))
+                        :weight normal :height 100 :width normal)))))
 ;;(set-default-font "DejaVu Sans Mono") ; :height 75
 ;;(set-default-font "Consolas-8")
 
@@ -75,6 +75,8 @@
 
 ;;;; Generic settings
 (tool-bar-mode -1)
+;; (scroll-bar-mode -1)
+;; (menu-bar-mode -1)
 
 (setq initial-scratch-message
       ";; This buffer is for notes you don't want to save, and for Emacs Lisp evaluation.
@@ -120,7 +122,7 @@
         (beginning-of-buffer)
         (while (re-search-forward ",@[ \t]+" nil t)
           (if (not (member (plist-get (text-properties-at (point)) 'face)
-                    '(font-lock-string-face font-lock-comment-face)))
+                           '(font-lock-string-face font-lock-comment-face)))
               (replace-match ",@"))))))
 (add-to-list 'write-file-functions 'comma-at-sign-remove-spaces)
 
@@ -135,9 +137,9 @@
         (beginning-of-buffer)
         (while (re-search-forward ",@" nil t)
           (if (and (not (member (plist-get (text-properties-at (point)) 'face)
-                       '(font-lock-string-face font-lock-comment-face)))
-                 (not (member (char-after (point)) '(?\( ?\, ?\` ?\'))))
-              (replace-match ",@ "))))))
+                                '(font-lock-string-face font-lock-comment-face)))
+                   (not (member (char-after (point)) '(?\( ?\, ?\` ?\'))))
+              (replace-match ",@"))))))
 
 ;; End of file newlines
 (setq require-final-newline t) ; add newline to the end of file when saving
