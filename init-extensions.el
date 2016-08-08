@@ -198,7 +198,7 @@
                           (slime-repl-closing-return)))
     ((kbd "<return>") 'slime-repl-newline-and-indent)
     ((kbd "<pause> <backspace>") (lambda () (interactive)
-                                    (end-of-buffer) (slime-repl-delete-current-input)))
+                                         (end-of-buffer) (slime-repl-delete-current-input)))
     ((kbd "<M-up>") 'slime-repl-previous-input)
     ((kbd "<M-down>") 'slime-repl-next-input)
     ((kbd "<M-S-up>") 'slime-repl-previous-prompt)
@@ -219,31 +219,31 @@
     ((kbd "<M-down>") 'end-of-defun)))
 
 (setf *lambda-logo*
-   (list
-    "                         ...                                        "
-    "                      .:kKXXOo.                          ..         "
-    "        ;d;          .kWMWWWMMK;                         ,xo.       "
-    "      .oOl.         .xXkc;;:xXMK;                         ,kO;      "
-    "     'k0:           ;Oc      ;0Wk.                         .kKc     "
-    "    'OK;            :l.       ;KNl                          .kXl.   "
-    "   'OXc                        lNO.                          ,KXc   "
-    "  .xWx.                        .ONl.                          oNK;  "
-    "  cNX:                         .dWOc.                         ,0Wx. "
-    " .OMO.                         ,0MNKc                         .xMX: "
-    " :XMx.                        'OMMMWk.                         oWWd "
-    " oWWd                        'OWMMMMX:                         lNMk."
-    ".xMWo                       .kWMMWNNWx.                        cNMO."
-    ".xMWo                      .xWMMWxlxKK;                        cNMO."
-    ".dWWo                     .xWMMWx..,xWd.                       lWMx."
-    " cNMx.                   .dNMMWO.   :X0,                       dWNl "
-    " '0MO.                  .oNMMM0'    .kNo                      .kM0, "
-    "  oNX:                  lNMMMK;      cN0'                     ;KNo  "
-    "  .kWx.                lXMMMK:       .OWd.       ..          .dWk.  "
-    "   ,0Xc               cXMMMXc         lNXc       cd.         cX0,   "
-    "    ;00;             :KMMMNl          .OMXd'   .:0d.        ;00,    "
-    "     ,O0:           ;KMMMNd.           ;KMWXOxx0NK;        :0k'     "
-    "     .d0l.         ;0MMMWx.             ;ONMMMMWO;       .oOl.      "
-    "       ;d:         ':ccc;.               .'cool;.        ,l,        "))
+      (list
+       "                         ...                                        "
+       "                      .:kKXXOo.                          ..         "
+       "        ;d;          .kWMWWWMMK;                         ,xo.       "
+       "      .oOl.         .xXkc;;:xXMK;                         ,kO;      "
+       "     'k0:           ;Oc      ;0Wk.                         .kKc     "
+       "    'OK;            :l.       ;KNl                          .kXl.   "
+       "   'OXc                        lNO.                          ,KXc   "
+       "  .xWx.                        .ONl.                          oNK;  "
+       "  cNX:                         .dWOc.                         ,0Wx. "
+       " .OMO.                         ,0MNKc                         .xMX: "
+       " :XMx.                        'OMMMWk.                         oWWd "
+       " oWWd                        'OWMMMMX:                         lNMk."
+       ".xMWo                       .kWMMWNNWx.                        cNMO."
+       ".xMWo                      .xWMMWxlxKK;                        cNMO."
+       ".dWWo                     .xWMMWx..,xWd.                       lWMx."
+       " cNMx.                   .dNMMWO.   :X0,                       dWNl "
+       " '0MO.                  .oNMMM0'    .kNo                      .kM0, "
+       "  oNX:                  lNMMMK;      cN0'                     ;KNo  "
+       "  .kWx.                lXMMMK:       .OWd.       ..          .dWk.  "
+       "   ,0Xc               cXMMMXc         lNXc       cd.         cX0,   "
+       "    ;00;             :KMMMNl          .OMXd'   .:0d.        ;00,    "
+       "     ,O0:           ;KMMMNd.           ;KMWXOxx0NK;        :0k'     "
+       "     .d0l.         ;0MMMWx.             ;ONMMMMWO;       .oOl.      "
+       "       ;d:         ':ccc;.               .'cool;.        ,l,        "))
 
 (defun print-hello-message ()
   (let* ((tab-string "         ")
@@ -295,7 +295,7 @@
     (insert "\n")
     ;;(right-char 18)
     ;;(insert "\n")
-    (put-text-property 1 2032 'read-only t)
+    (put-text-property 1 (- (point-max) 9) 'read-only t)
     (end-of-buffer)
     (insert "(format t \"Ok, a new REPL is started, let's hack!\")")
     (slime-repl-closing-return)))
