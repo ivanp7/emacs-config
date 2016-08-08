@@ -12,7 +12,7 @@
  '(org-replace-disputed-keys t))
 (custom-set-faces
  '(default ((t (:family "Anonymous Pro" :foundry "outline" :slant normal
-                        :weight normal :height 100 :width normal)))))
+                        :weight normal :height 80 :width normal)))))
 ;;(set-default-font "DejaVu Sans Mono") ; :height 75
 ;;(set-default-font "Consolas-8")
 
