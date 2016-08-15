@@ -52,7 +52,7 @@
 (define-key my-common-keys-minor-mode-map (kbd "C-a") 'mark-whole-buffer)
 (define-key my-common-keys-minor-mode-map (kbd "C-l") 'goto-line)
 
-(define-key my-common-keys-minor-mode-map (kbd "<f12>") 'slime-selector)
+(define-key my-common-keys-minor-mode-map (kbd "C-<f1>") 'slime-selector)
 
 ;;; Commands execution
 (define-key my-common-keys-minor-mode-map (kbd "C-M-x") 'shell-command)
@@ -98,7 +98,7 @@
     my-common-keys-minor-mode
   (lambda ()
     (when (not (memq major-mode
-                   (list 'term-mode)))
+                     (list 'term-mode)))
       (my-common-keys-minor-mode))))
 
 (my-common-keys-minor-global-mode 1)
