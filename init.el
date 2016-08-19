@@ -71,7 +71,7 @@
         (apply 'concat (cons (first implementations)
                              (mapcar (lambda (impl) (concat ", " impl))
                                      (cdr implementations)))))
-       (prompt (concat "Lisp implementation to start (" impl-enum-string "): "))
+       (prompt (concat "Common Lisp implementation to start (" impl-enum-string "): "))
        (result (read-from-minibuffer prompt)))
   (setq slime-default-lisp
         (if (member result implementations)
