@@ -112,9 +112,17 @@
 (add-hook 'lisp-mode-hook (lambda () (slime-mode t)))
 (add-hook 'inferior-lisp-mode-hook (lambda () (inferior-slime-mode t)))
 (setq slime-contribs '(slime-fancy slime-repl-ansi-color))
+(setq slime-repl-ansi-color t)
+
+(setq slime-net-coding-system 'utf-8-unix)
+
+(setq slime-lisp-implementations
+      '((sbcl ("sbcl"))
+        (ecl ("ecl"))))
 ;; Optionally, specify the lisp program you are using. Default is "lisp"
 (setq inferior-lisp-program "sbcl")
-(setq slime-repl-ansi-color t)
+(setq slime-default-lisp 'sbcl)
+
 ;; Common Lisp HyperSpec
 (setq common-lisp-hyperspec-root (expand-file-name "../info/HyperSpec/HyperSpec/"))
 
@@ -299,7 +307,8 @@
     ;;(insert "\n")
     (put-text-property 1 (- (point-max) 9) 'read-only t)
     (end-of-buffer)
-    (insert "(format t \"Ok, a new REPL is started, let's hack!\")")
+    ;;(insert "(format t \"Ok, a new REPL is started, let's hack!\")")
+    (insert "(lisp-implementation-type)")
     (slime-repl-closing-return)))
 
 (defun animate-lambda ()
@@ -335,9 +344,10 @@
               (slime-repl)
               (print-hello-message)
               ;;(play-sound-file (concat default-directory "init/ready.wav"))
+              (setq slime-first-startup nil)
+              ;; Display load time
               (loading-time/stop-timer)
-              (run-at-time "1 sec" nil 'anarcat/display-timing)
-              (setq slime-first-startup nil))))
+              (run-at-time "1 sec" nil 'anarcat/display-timing))))
 
 ;;;; Imenu
 (require 'imenu)

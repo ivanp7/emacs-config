@@ -1,6 +1,9 @@
 ;;;; Initialization of ASDF and other tools for
 ;;;; ivanp7's Common Lisp projects
 
+(require 'asdf)
+(find-package "asdf")
+
 (defpackage :ivanp7.init
   (:use :cl :asdf))
 (in-package :ivanp7.init)
@@ -69,12 +72,12 @@
                   ((funcall test name) (funcall action name)))))
            (walk (pathname-as-directory dirname) -1)))
        ;; functions from lisper.ru
-       (+. (arg-0 &rest args)
+       (conc-strings (arg-0 &rest args)
          (cond
            ((stringp arg-0) (with-output-to-string (result)
                               (princ arg-0 result)
                               (dolist (arg args) (princ arg result))))
-           ((symbolp arg-0) (values (intern (apply #'+. "" arg-0 args))))
+           ((symbolp arg-0) (values (intern (apply #'conc-strings "" arg-0 args))))
            ((pathnamep arg-0) (merge-pathnames
                                arg-0
                                (with-output-to-string (str)
@@ -95,7 +98,7 @@
             :test
             #'(lambda (f)
                 (let ((name (car (last (split-string (write-to-string f) #\/)))))
-                  (if (string= name (+. system ".asd\"")) (print t) nil)))
+                  (if (string= name (conc-strings system ".asd\"")) (print t) nil)))
             :action #'(lambda (f) (setf result f)))
            result))
      asdf:*system-definition-search-functions*)))

@@ -122,7 +122,7 @@
         (beginning-of-buffer)
         (while (re-search-forward ",@[ \t]+" nil t)
           (if (not (member (plist-get (text-properties-at (point)) 'face)
-                           '(font-lock-string-face font-lock-comment-face)))
+                    '(font-lock-string-face font-lock-comment-face)))
               (replace-match ",@"))))))
 (add-to-list 'write-file-functions 'comma-at-sign-remove-spaces)
 
@@ -137,8 +137,8 @@
         (beginning-of-buffer)
         (while (re-search-forward ",@" nil t)
           (if (and (not (member (plist-get (text-properties-at (point)) 'face)
-                                '(font-lock-string-face font-lock-comment-face)))
-                   (not (member (char-after (point)) '(?\( ?\, ?\` ?\'))))
+                       '(font-lock-string-face font-lock-comment-face)))
+                 (not (member (char-after (point)) '(?\( ?\, ?\` ?\'))))
               (replace-match ",@"))))))
 
 ;; End of file newlines
@@ -210,6 +210,7 @@
    (setq locale-coding-system 'windows-1251)
    (set-default-coding-systems 'windows-1251))
   ((system-is-linux)
+   (set-language-environment "UTF-8")
    (prefer-coding-system 'utf-8)
    (set-terminal-coding-system 'utf-8)
    (set-keyboard-coding-system 'utf-8)

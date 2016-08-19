@@ -20,8 +20,8 @@
   (message "------------------------------------------")
   (let ((result (loading-time/get-seconds)))
     (if result
-        (message "Emacs loaded in %.2f seconds" result)
-        (message "Emacs loading time is unknown"))))
+        (message "Emacs IDE loaded in %.2f seconds" result)
+        (message "Emacs IDE loading time is unknown"))))
 
 (loading-time/start-timer)
 
@@ -64,13 +64,26 @@
 (load "init-buffer-keys.el")
 (load "init-lisp-mode-keys.el")
 
-;;;; Starting server
+;;;; Starting IDE, setting up windows configuration
+(let* ((implementations (mapcar (lambda (impl) (prin1-to-string (car impl)))
+                                slime-lisp-implementations))
+       (impl-enum-string
+        (apply 'concat (cons (first implementations)
+                             (mapcar (lambda (impl) (concat ", " impl))
+                                     (cdr implementations)))))
+       (prompt (concat "Lisp implementation to start (" impl-enum-string "): "))
+       (result (read-from-minibuffer prompt)))
+  (setq slime-default-lisp
+        (if (member result implementations)
+            (intern result)
+            (intern (first implementations)))))
+
+;; Starting server
 (or (server-running-p)
    (server-start))
 
-;;;; Setting up windows configuration
 (split-window-horizontally)
-(slime)
+(slime) ;;(let ((current-prefix-arg -1)) (slime))
 (split-window-vertically 23)
 (other-window 1)
 ;; (eshell)
