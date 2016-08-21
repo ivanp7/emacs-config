@@ -38,7 +38,7 @@
   '(ac-slime auto-complete auto-indent-mode buffer-move cursor-chg expand-region
     highlight-stages highlight-symbol hl-sexp imenu+ magic-latex-buffer magit
     nlinum org paren-face pos-tip pretty-mode pretty-symbols rainbow-identifiers
-    slime tabbar undo-tree)
+    slime switch-window tabbar undo-tree)
   "a list of packages to ensure are installed at launch.")
 
 ;;;; Initializing package manager and loading useful packages
@@ -122,7 +122,7 @@
         (beginning-of-buffer)
         (while (re-search-forward ",@[ \t]+" nil t)
           (if (not (member (plist-get (text-properties-at (point)) 'face)
-                    '(font-lock-string-face font-lock-comment-face)))
+                           '(font-lock-string-face font-lock-comment-face)))
               (replace-match ",@"))))))
 (add-to-list 'write-file-functions 'comma-at-sign-remove-spaces)
 
@@ -137,8 +137,8 @@
         (beginning-of-buffer)
         (while (re-search-forward ",@" nil t)
           (if (and (not (member (plist-get (text-properties-at (point)) 'face)
-                       '(font-lock-string-face font-lock-comment-face)))
-                 (not (member (char-after (point)) '(?\( ?\, ?\` ?\'))))
+                                '(font-lock-string-face font-lock-comment-face)))
+                   (not (member (char-after (point)) '(?\( ?\, ?\` ?\'))))
               (replace-match ",@"))))))
 
 ;; End of file newlines

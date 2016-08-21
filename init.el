@@ -85,11 +85,11 @@
 (split-window-horizontally)
 (slime) ;;(let ((current-prefix-arg -1)) (slime))
 (split-window-vertically 23)
-(other-window 1)
+(switch-window--jump-to-window 3) ;;(other-window 1)
 ;; (eshell)
 (ielm)
 (ansi-term "/bin/bash")
-(other-window 1)
+(switch-window--jump-to-window 1) ;;(other-window 1)
 
 ;;;; Open org-mode files
 ;;(find-file (concat (default-value 'default-directory) "info.org"))

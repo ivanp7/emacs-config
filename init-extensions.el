@@ -581,11 +581,11 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                      body-beg body-end 'priority (when oldov (1+ priority-base)))))
           (cl-case (string-to-char (match-string 0))
             ((?_) (overlay-put
-                   ov2 'display
-                   `((raise ,(- raise-base 0.2)) (height ,(* height-base 0.8)))))
+                  ov2 'display
+                  `((raise ,(- raise-base 0.2)) (height ,(* height-base 0.8)))))
             ((?^) (overlay-put
-                   ov2 'display
-                   `((raise ,(+ raise-base 0.2)) (height ,(* height-base 0.8)))))))))))
+                  ov2 'display
+                  `((raise ,(+ raise-base 0.2)) (height ,(* height-base 0.8)))))))))))
 
 (define-minor-mode magic-suscript-buffer
     "Redefinition of the magic-latex-buffer mode, that doesn't conflict with lisp-mode."
@@ -705,8 +705,8 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                                 result-list
                                 (copy-to-list (tree-left-branch tree)
                                               (if (or (null exclude-p) (not (funcall
-                                                                             exclude-p
-                                                                             (tree-entry tree))))
+                                                                          exclude-p
+                                                                          (tree-entry tree))))
                                                   (cons (tree-entry tree)
                                                         (copy-to-list (tree-right-branch tree)
                                                                       result-list))
@@ -1028,3 +1028,6 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
 (setq random-idle-quote-delay 30)
 
 (random-idle-quote)
+
+;;;; Switch window
+(require 'switch-window)
