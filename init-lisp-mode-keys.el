@@ -2,6 +2,13 @@
 
 ;;; SLIME commands
 (define-key my-lisp-keys-minor-mode-map (kbd "<f1> <f1>") 'slime-hyperspec-lookup)
+(define-key my-lisp-keys-minor-mode-map (kbd "<f1> <f2> a") 'slime-apropos)
+(define-key my-lisp-keys-minor-mode-map (kbd "<f1> <f2> z") 'slime-apropos-all)
+(define-key my-lisp-keys-minor-mode-map (kbd "<f1> <f2> p") 'slime-apropos-package)
+(define-key my-lisp-keys-minor-mode-map (kbd "<f1> <f2> ~") 'common-lisp-hyperspec-format)
+(define-key my-lisp-keys-minor-mode-map (kbd "<f1> <f2> #") 'common-lisp-hyperspec-lookup-reader-macro)
+(define-key my-lisp-keys-minor-mode-map (kbd "<f1> <f2> d") 'slime-describe-symbol)
+(define-key my-lisp-keys-minor-mode-map (kbd "<f1> <f2> f") 'slime-describe-function)
 
 (define-key my-lisp-keys-minor-mode-map (kbd "<S-escape>") 'slime-interrupt)
 (define-key my-lisp-keys-minor-mode-map (kbd "M-e") 'slime-interactive-eval)
@@ -79,8 +86,8 @@
 (defmacro define-expansion (key prefix postfix &optional offset-on-selection reindent final-command)
   `(define-key my-lisp-keys-minor-mode-map (kbd ,key)
      (lambda () (interactive)
-             (surround-selection ,prefix ,postfix ,offset-on-selection ,reindent)
-             ,final-command)))
+        (surround-selection ,prefix ,postfix ,offset-on-selection ,reindent)
+        ,final-command)))
 
 (define-expansion "C-*" "*" "*")
 (define-expansion "C-+" "+" "+")
