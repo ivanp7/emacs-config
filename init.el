@@ -39,11 +39,11 @@
 ;;;; Setting up load-path and default-directory
 (cond
   ((system-is-windows)
-   (setq-default default-directory "d:/lisp/ivanp7/")
-   (setq default-directory "d:/lisp/ivanp7/"))
+   (setq-default default-directory "d:/common-lisp/ivanp7/")
+   (setq default-directory "d:/common-lisp/ivanp7/"))
   ((system-is-linux)
-   (setq-default default-directory "~/lisp/ivanp7/")
-   (setq default-directory "~/lisp/ivanp7/")))
+   (setq-default default-directory "~/common-lisp/ivanp7/")
+   (setq default-directory "~/common-lisp/ivanp7/")))
 
 (add-to-list 'load-path (concat default-directory "init/"))
 (add-to-list 'load-path (concat default-directory "init/elisp/"))

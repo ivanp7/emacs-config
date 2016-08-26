@@ -95,6 +95,7 @@
 
 ;;; ******************************************
 
+#|
 (defun register-asdf-recursive-search-in-directory (directory max-depth)
   (pushnew
    #'(lambda (system)
@@ -115,3 +116,5 @@
 
 (register-asdf-recursive-search-in-directory
  *ivanp7-systems-root-directory* *ivanp7-systems-search-max-depth*)
+|#
+
