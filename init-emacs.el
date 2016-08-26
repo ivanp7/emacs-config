@@ -16,8 +16,6 @@
 ;;(set-default-font "DejaVu Sans Mono") ; :height 75
 ;;(set-default-font "Consolas-8")
 
-(add-hook 'window-setup-hook 'toggle-frame-maximized t) ; always maximize window on startup
-
 ;; Window transparency modification function
 (defun djcb-opacity-modify (&optional dec)
   "modify the transparency of the emacs frame; if DEC is t,
@@ -122,7 +120,7 @@
         (beginning-of-buffer)
         (while (re-search-forward ",@[ \t]+" nil t)
           (if (not (member (plist-get (text-properties-at (point)) 'face)
-                           '(font-lock-string-face font-lock-comment-face)))
+                    '(font-lock-string-face font-lock-comment-face)))
               (replace-match ",@"))))))
 (add-to-list 'write-file-functions 'comma-at-sign-remove-spaces)
 
@@ -137,8 +135,8 @@
         (beginning-of-buffer)
         (while (re-search-forward ",@" nil t)
           (if (and (not (member (plist-get (text-properties-at (point)) 'face)
-                                '(font-lock-string-face font-lock-comment-face)))
-                   (not (member (char-after (point)) '(?\( ?\, ?\` ?\'))))
+                       '(font-lock-string-face font-lock-comment-face)))
+                 (not (member (char-after (point)) '(?\( ?\, ?\` ?\'))))
               (replace-match ",@"))))))
 
 ;; End of file newlines
