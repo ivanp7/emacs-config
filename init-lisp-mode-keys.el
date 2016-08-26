@@ -22,7 +22,6 @@
 (define-key my-lisp-keys-minor-mode-map (kbd "C-;") 'slime-insert-balanced-comments)
 (define-key my-lisp-keys-minor-mode-map (kbd "C-:") 'slime-remove-balanced-comments)
 
-(define-key my-lisp-keys-minor-mode-map (kbd "<f3>") 'slime-autodoc-manually)
 (define-key my-lisp-keys-minor-mode-map (kbd "<f4>") 'slime-eval-last-expression)
 (define-key my-lisp-keys-minor-mode-map (kbd "C-<f4>") 'slime-pprint-eval-last-expression)
 (define-key my-lisp-keys-minor-mode-map (kbd "<f5>")
@@ -39,6 +38,7 @@
 (define-key my-lisp-keys-minor-mode-map (kbd "<f8>") 'slime-macroexpand-1)
 (define-key my-lisp-keys-minor-mode-map (kbd "S-<f8>") 'slime-macroexpand-all)
 (define-key my-lisp-keys-minor-mode-map (kbd "<f9>") 'slime-complete-form)
+(define-key my-lisp-keys-minor-mode-map (kbd "C-<f9>") 'slime-autodoc-manually)
 
 ;;; Quick editing
 (defun delete-selection ()
@@ -199,39 +199,39 @@
 
 (define-key my-lisp-keys-minor-mode-map (kbd (concat "C-" menu-key-name))
   (lambda () (interactive)
-          (if (not sexp-edition-mode)
-              (progn
-                (define-key my-lisp-keys-minor-mode-map [remap left-char] 'backward-sexp)
-                (define-key my-lisp-keys-minor-mode-map [remap right-char] 'forward-sexp)
-                (define-key my-lisp-keys-minor-mode-map [remap previous-line] 'backward-up-list)
-                (define-key my-lisp-keys-minor-mode-map [remap next-line] 'down-list)
-                (define-key my-lisp-keys-minor-mode-map [remap backward-sexp] 'left-char)
-                (define-key my-lisp-keys-minor-mode-map [remap forward-sexp] 'right-char)
-                (define-key my-lisp-keys-minor-mode-map [remap backward-up-list] 'previous-line)
-                (define-key my-lisp-keys-minor-mode-map [remap down-list] 'next-line)
-                (define-key my-lisp-keys-minor-mode-map [remap backward-delete-char-untabify]
-                  'delete-sexp-backward)
-                (define-key my-lisp-keys-minor-mode-map [remap delete-forward-char]
-                  'delete-sexp-forward)
-                (define-key my-lisp-keys-minor-mode-map [remap delete-sexp-backward]
-                  'backward-delete-char-untabify)
-                (define-key my-lisp-keys-minor-mode-map [remap delete-sexp-forward]
-                  'delete-forward-char))
-              (progn
-                (define-key my-lisp-keys-minor-mode-map [remap left-char] nil)
-                (define-key my-lisp-keys-minor-mode-map [remap right-char] nil)
-                (define-key my-lisp-keys-minor-mode-map [remap previous-line] nil)
-                (define-key my-lisp-keys-minor-mode-map [remap next-line] nil)
-                (define-key my-lisp-keys-minor-mode-map [remap backward-sexp] nil)
-                (define-key my-lisp-keys-minor-mode-map [remap forward-sexp] nil)
-                (define-key my-lisp-keys-minor-mode-map [remap backward-up-list] nil)
-                (define-key my-lisp-keys-minor-mode-map [remap down-list] nil)
-                (define-key my-lisp-keys-minor-mode-map [remap backward-delete-char-untabify] nil)
-                (define-key my-lisp-keys-minor-mode-map [remap delete-forward-char] nil)
-                (define-key my-lisp-keys-minor-mode-map [remap delete-sexp-backward] nil)
-                (define-key my-lisp-keys-minor-mode-map [remap delete-sexp-forward] nil)))
-          (setq sexp-edition-mode (not sexp-edition-mode))
-          (message "S-exp edition mode is %s" (if sexp-edition-mode "ON" "OFF"))))
+     (if (not sexp-edition-mode)
+         (progn
+           (define-key my-lisp-keys-minor-mode-map [remap left-char] 'backward-sexp)
+           (define-key my-lisp-keys-minor-mode-map [remap right-char] 'forward-sexp)
+           (define-key my-lisp-keys-minor-mode-map [remap previous-line] 'backward-up-list)
+           (define-key my-lisp-keys-minor-mode-map [remap next-line] 'down-list)
+           (define-key my-lisp-keys-minor-mode-map [remap backward-sexp] 'left-char)
+           (define-key my-lisp-keys-minor-mode-map [remap forward-sexp] 'right-char)
+           (define-key my-lisp-keys-minor-mode-map [remap backward-up-list] 'previous-line)
+           (define-key my-lisp-keys-minor-mode-map [remap down-list] 'next-line)
+           (define-key my-lisp-keys-minor-mode-map [remap backward-delete-char-untabify]
+             'delete-sexp-backward)
+           (define-key my-lisp-keys-minor-mode-map [remap delete-forward-char]
+             'delete-sexp-forward)
+           (define-key my-lisp-keys-minor-mode-map [remap delete-sexp-backward]
+             'backward-delete-char-untabify)
+           (define-key my-lisp-keys-minor-mode-map [remap delete-sexp-forward]
+             'delete-forward-char))
+         (progn
+           (define-key my-lisp-keys-minor-mode-map [remap left-char] nil)
+           (define-key my-lisp-keys-minor-mode-map [remap right-char] nil)
+           (define-key my-lisp-keys-minor-mode-map [remap previous-line] nil)
+           (define-key my-lisp-keys-minor-mode-map [remap next-line] nil)
+           (define-key my-lisp-keys-minor-mode-map [remap backward-sexp] nil)
+           (define-key my-lisp-keys-minor-mode-map [remap forward-sexp] nil)
+           (define-key my-lisp-keys-minor-mode-map [remap backward-up-list] nil)
+           (define-key my-lisp-keys-minor-mode-map [remap down-list] nil)
+           (define-key my-lisp-keys-minor-mode-map [remap backward-delete-char-untabify] nil)
+           (define-key my-lisp-keys-minor-mode-map [remap delete-forward-char] nil)
+           (define-key my-lisp-keys-minor-mode-map [remap delete-sexp-backward] nil)
+           (define-key my-lisp-keys-minor-mode-map [remap delete-sexp-forward] nil)))
+     (setq sexp-edition-mode (not sexp-edition-mode))
+     (message "S-exp edition mode is %s" (if sexp-edition-mode "ON" "OFF"))))
 
 ;; following is defined in init-extensions.el
 ;; (define-key my-lisp-keys-minor-mode-map (kbd "<M-up>") 'beginning-of-defun)
@@ -255,12 +255,12 @@
 (defun remove-pair-of-parens ()
   (interactive)
   (let ((left (condition-case nil (save-excursion
-                                    (backward-up-list)
-                                    (point))
+                                  (backward-up-list)
+                                  (point))
                 (error nil)))
         (right (condition-case nil (save-excursion
-                                     (up-list)
-                                     (point))
+                                   (up-list)
+                                   (point))
                  (error nil)))
         (pos (point)))
     (if (and left right)
@@ -311,7 +311,7 @@
               (when (<= match-beg pos)
                 (replace-match "" nil nil)
                 (when (not (or (eql (char-after) ?\))
-                               (eql (char-before) ?\()))
+                            (eql (char-before) ?\()))
                   (insert " ")
                   (setq space-inserted t))
                 (setq pos (if (and (< match-beg pos) space-inserted)
