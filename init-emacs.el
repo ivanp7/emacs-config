@@ -26,8 +26,24 @@
     (when (and (>= newalpha frame-alpha-lower-limit) (<= newalpha 100))
       (modify-frame-parameters nil (list (cons 'alpha newalpha))))))
 
+;;;; Frame title
+(setq-default frame-title-format
+              '(:eval
+                (format "%s@%s: %s %s"
+                 (or (file-remote-p default-directory 'user)
+                  user-real-login-name)
+                 (or (file-remote-p default-directory 'host)
+                  system-name)
+                 (buffer-name)
+                 (cond
+                   (buffer-file-truename
+                    (concat "(" buffer-file-truename ")"))
+                   (dired-directory
+                    (concat "{" dired-directory "}"))
+                   (t
+                    "[no file]")))))
+
 ;;;; Setting up color theme
-(add-to-list 'custom-theme-load-path "./init/color-themes/")
 (load-theme 'granger t)
 (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
 
@@ -120,7 +136,7 @@
         (beginning-of-buffer)
         (while (re-search-forward ",@[ \t]+" nil t)
           (if (not (member (plist-get (text-properties-at (point)) 'face)
-                    '(font-lock-string-face font-lock-comment-face)))
+                           '(font-lock-string-face font-lock-comment-face)))
               (replace-match ",@"))))))
 (add-to-list 'write-file-functions 'comma-at-sign-remove-spaces)
 
@@ -135,8 +151,8 @@
         (beginning-of-buffer)
         (while (re-search-forward ",@" nil t)
           (if (and (not (member (plist-get (text-properties-at (point)) 'face)
-                       '(font-lock-string-face font-lock-comment-face)))
-                 (not (member (char-after (point)) '(?\( ?\, ?\` ?\'))))
+                                '(font-lock-string-face font-lock-comment-face)))
+                   (not (member (char-after (point)) '(?\( ?\, ?\` ?\'))))
               (replace-match ",@"))))))
 
 ;; End of file newlines

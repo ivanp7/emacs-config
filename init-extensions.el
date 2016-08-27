@@ -1,9 +1,11 @@
 ;;;; Org-mode
 (require 'org)
 
-(setq org-directory (default-value 'default-directory))
+(setq org-directory "~/org/")
 (setq org-default-notes-file (concat org-directory "ivanp7.org"))
 (setq org-agenda-files (list (concat org-directory "ivanp7.org")))
+(setq org-archive-location (concat org-directory "ivanp7-archive.org" "::"))
+
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-cl" 'org-store-link)
 (global-set-key "\C-ca" 'org-agenda)
@@ -11,7 +13,7 @@
 (setq org-startup-indented t)
 (setq org-M-RET-may-split-line nil)
 (setq org-startup-truncated nil)
-(setq org-blank-before-new-entry '((heading . nil) (plain-list-item . nil)))
+(setq org-blank-before-new-entry '((heading . auto) (plain-list-item . nil)))
 ;;(setq org-startup-folded nil)
 (setq org-footnote-auto-adjust t)
 
@@ -124,7 +126,7 @@
 (setq slime-default-lisp 'sbcl)
 
 ;; Common Lisp HyperSpec
-(setq common-lisp-hyperspec-root (expand-file-name "../info/HyperSpec/HyperSpec/"))
+(setq common-lisp-hyperspec-root (expand-file-name "../books/HyperSpec/"))
 
 (setq lisp-indent-function 'common-lisp-indent-function)
 
@@ -326,7 +328,7 @@
 (defvar slime-first-startup t)
 (add-hook 'slime-connected-hook
           (lambda ()
-            (slime-load-file (concat (default-value 'default-directory) "init/ivanp7.lisp"))
+            (slime-load-file (concat cl-ide-init-path "ivanp7.lisp"))
             (when slime-first-startup
               (slime-startup-time-init)
               (configure-slime-faces)

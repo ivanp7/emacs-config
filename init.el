@@ -39,16 +39,23 @@
   (string-equal system-type "windows-nt"))
 
 ;;;; Setting up load-path and default-directory
+(defvar cl-ide-path)
+(defvar cl-ide-code-path)
+(defvar cl-ide-init-path)
+
 (cond
   ((system-is-windows)
-   (setq-default default-directory "d:/common-lisp/ivanp7/")
-   (setq default-directory "d:/common-lisp/ivanp7/"))
+   (setq cl-ide-path "d:/common-lisp/"))
   ((system-is-linux)
-   (setq-default default-directory "~/common-lisp/ivanp7/")
-   (setq default-directory "~/common-lisp/ivanp7/")))
+   (setq cl-ide-path "~/common-lisp/")))
 
-(add-to-list 'load-path (concat default-directory "init/"))
-(add-to-list 'load-path (concat default-directory "init/elisp/"))
+(setq cl-ide-code-path (concat cl-ide-path "code/"))
+(setq cl-ide-init-path (concat cl-ide-path "init/"))
+
+(setq default-directory (setq-default default-directory cl-ide-code-path))
+(add-to-list 'load-path cl-ide-init-path)
+(add-to-list 'load-path (concat cl-ide-init-path "elisp/"))
+(add-to-list 'custom-theme-load-path (concat cl-ide-init-path "color-themes/"))
 
 ;;;; Configuring Emacs
 (load "init-emacs.el")
@@ -70,6 +77,7 @@
 (or (server-running-p)
    (server-start))
 
+;;;; Starting IDE, setting up windows configuration
 (add-hook 'window-setup-hook
           (lambda ()
             (interactive)
@@ -79,7 +87,6 @@
                 (modify-frame-parameters nil `((maximized . maximized)))
                 (modify-frame-parameters nil `((fullscreen . maximized))))
 
-            ;;;; Starting IDE, setting up windows configuration
             (progn
               (timer/stop)
 
@@ -108,8 +115,8 @@
             (switch-window--jump-to-window 1) ;;(other-window 1)
 
             ;;;; Open org-mode files
-            ;;(find-file (concat (default-value 'default-directory) "info.org"))
-            (find-file (concat (default-value 'default-directory) "ivanp7.org"))
+            ;;(find-file (concat (default-value 'default-directory) "../info.org"))
+            (find-file "~/org/ivanp7.org")
 
             ;; (desktop-read) ;; Load default desktop from file : "~/emacs.d/.emacs.desktop"
             )
