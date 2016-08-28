@@ -164,10 +164,6 @@
   (when (get-buffer "*slime-apropos*")
     (with-current-buffer "*slime-apropos*" (slime-apropos-minor-mode 1))))
 
-;;; SLIME starup time initialization
-(defun slime-startup-time-init ()
-  nil)
-
 ;;; SLIME faces
 (defun configure-slime-faces ()
   (set-face-attribute 'slime-repl-input-face nil
@@ -208,7 +204,7 @@
                           (slime-repl-closing-return)))
     ((kbd "<return>") 'slime-repl-newline-and-indent)
     ((kbd "<pause> <backspace>") (lambda () (interactive)
-                                    (end-of-buffer) (slime-repl-delete-current-input)))
+                                         (end-of-buffer) (slime-repl-delete-current-input)))
     ((kbd "<M-up>") 'slime-repl-previous-input)
     ((kbd "<M-down>") 'slime-repl-next-input)
     ((kbd "<C-up>") 'backward-up-list)
@@ -231,31 +227,31 @@
     ((kbd "<M-down>") 'end-of-defun)))
 
 (setf *lambda-logo*
-   (list
-    "                         ...                                        "
-    "                      .:kKXXOo.                          ..         "
-    "        ;d;          .kWMWWWMMK;                         ,xo.       "
-    "      .oOl.         .xXkc;;:xXMK;                         ,kO;      "
-    "     'k0:           ;Oc      ;0Wk.                         .kKc     "
-    "    'OK;            :l.       ;KNl                          .kXl.   "
-    "   'OXc                        lNO.                          ,KXc   "
-    "  .xWx.                        .ONl.                          oNK;  "
-    "  cNX:                         .dWOc.                         ,0Wx. "
-    " .OMO.                         ,0MNKc                         .xMX: "
-    " :XMx.                        'OMMMWk.                         oWWd "
-    " oWWd                        'OWMMMMX:                         lNMk."
-    ".xMWo                       .kWMMWNNWx.                        cNMO."
-    ".xMWo                      .xWMMWxlxKK;                        cNMO."
-    ".dWWo                     .xWMMWx..,xWd.                       lWMx."
-    " cNMx.                   .dNMMWO.   :X0,                       dWNl "
-    " '0MO.                  .oNMMM0'    .kNo                      .kM0, "
-    "  oNX:                  lNMMMK;      cN0'                     ;KNo  "
-    "  .kWx.                lXMMMK:       .OWd.       ..          .dWk.  "
-    "   ,0Xc               cXMMMXc         lNXc       cd.         cX0,   "
-    "    ;00;             :KMMMNl          .OMXd'   .:0d.        ;00,    "
-    "     ,O0:           ;KMMMNd.           ;KMWXOxx0NK;        :0k'     "
-    "     .d0l.         ;0MMMWx.             ;ONMMMMWO;       .oOl.      "
-    "       ;d:         ':ccc;.               .'cool;.        ,l,        "))
+      (list
+       "                         ...                                        "
+       "                      .:kKXXOo.                          ..         "
+       "        ;d;          .kWMWWWMMK;                         ,xo.       "
+       "      .oOl.         .xXkc;;:xXMK;                         ,kO;      "
+       "     'k0:           ;Oc      ;0Wk.                         .kKc     "
+       "    'OK;            :l.       ;KNl                          .kXl.   "
+       "   'OXc                        lNO.                          ,KXc   "
+       "  .xWx.                        .ONl.                          oNK;  "
+       "  cNX:                         .dWOc.                         ,0Wx. "
+       " .OMO.                         ,0MNKc                         .xMX: "
+       " :XMx.                        'OMMMWk.                         oWWd "
+       " oWWd                        'OWMMMMX:                         lNMk."
+       ".xMWo                       .kWMMWNNWx.                        cNMO."
+       ".xMWo                      .xWMMWxlxKK;                        cNMO."
+       ".dWWo                     .xWMMWx..,xWd.                       lWMx."
+       " cNMx.                   .dNMMWO.   :X0,                       dWNl "
+       " '0MO.                  .oNMMM0'    .kNo                      .kM0, "
+       "  oNX:                  lNMMMK;      cN0'                     ;KNo  "
+       "  .kWx.                lXMMMK:       .OWd.       ..          .dWk.  "
+       "   ,0Xc               cXMMMXc         lNXc       cd.         cX0,   "
+       "    ;00;             :KMMMNl          .OMXd'   .:0d.        ;00,    "
+       "     ,O0:           ;KMMMNd.           ;KMWXOxx0NK;        :0k'     "
+       "     .d0l.         ;0MMMWx.             ;ONMMMMWO;       .oOl.      "
+       "       ;d:         ':ccc;.               .'cool;.        ,l,        "))
 
 (defun print-hello-message ()
   (let* ((tab-string "         ")
@@ -330,10 +326,7 @@
           (lambda ()
             (slime-load-file (concat cl-ide-init-path "ivanp7.lisp"))
             (when slime-first-startup
-              (slime-startup-time-init)
               (configure-slime-faces)
-              (rainbow-identifiers-load-tune)
-              (tabbar-mode 1)
               (define-my-slime-keys)
               ;; (slime-load-file (concat default-directory "init/ivanp7-welcome.lisp"))
               (slime-scratch) ; autocreate *slime-scratch* buffer
@@ -349,7 +342,12 @@
               (setq slime-first-startup nil)
               ;; Display load time
               (timer/stop)
-              (run-at-time "1 sec" nil 'anarcat/display-timing))))
+              (run-at-time "1 sec" nil (lambda ()
+                                       (anarcat/display-timing)
+                                       (timer/reset))))))
+
+;;;; TabBar
+(tabbar-mode 1)
 
 ;;;; Imenu
 (require 'imenu)
@@ -873,6 +871,8 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
 (add-hook 'lisp-mode-hook 'rainbow-identifiers-mode)
 (add-hook 'emacs-lisp-mode-hook 'rainbow-identifiers-mode)
 
+(add-hook 'window-setup-hook 'rainbow-identifiers-load-tune)
+
 ;;;; Highlight backquoted sexps mode support
 (require 'highlight-stages)
 
@@ -1029,7 +1029,7 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
 
 (setq random-idle-quote-delay 30)
 
-(random-idle-quote)
+;; (random-idle-quote)
 
 ;;;; Switch window
 (require 'switch-window)

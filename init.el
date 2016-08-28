@@ -78,46 +78,56 @@
    (server-start))
 
 ;;;; Starting IDE, setting up windows configuration
-(add-hook 'window-setup-hook
-          (lambda ()
-            (interactive)
+(setq ide-started nil)
 
-            ;;; Maximize frame
-            (if (memq (frame-parameter nil 'fullscreen) '(fullscreen fullboth))
-                (modify-frame-parameters nil `((maximized . maximized)))
-                (modify-frame-parameters nil `((fullscreen . maximized))))
+(defun start-cl-ide (&optional cl-implementation prompt-prefix-text)
+  (interactive)
 
-            (progn
-              (timer/stop)
+  (when ide-started
+    (return-from start-cl-ide))
 
-              (let* ((implementations (mapcar (lambda (impl) (prin1-to-string (car impl)))
-                                              slime-lisp-implementations))
-                     (impl-enum-string
-                      (apply 'concat (cons (first implementations)
-                                           (mapcar (lambda (impl) (concat ", " impl))
-                                                   (cdr implementations)))))
-                     (prompt (concat "Common Lisp implementation to start (" impl-enum-string "): "))
-                     (result (read-from-minibuffer prompt)))
-                (setq slime-default-lisp
-                      (if (member result implementations)
-                          (intern result)
-                          (intern (first implementations)))))
+  ;;; Maximize frame
+  (if (memq (frame-parameter nil 'fullscreen) '(fullscreen fullboth))
+      (modify-frame-parameters nil `((maximized . maximized)))
+      (modify-frame-parameters nil `((fullscreen . maximized))))
 
-              (timer/start))
+  (if cl-implementation
+      (setq slime-default-lisp cl-implementation)
+      (flet ((make-enumeration-string (lst)
+               (apply 'concat (cons (first lst)
+                                    (mapcar (lambda (str) (concat ", " str))
+                                            (cdr lst))))))
+        (let* ((implementations (mapcar (lambda (impl) (prin1-to-string (car impl)))
+                                        slime-lisp-implementations))
+               (prompt (concat (if (plusp (length prompt-prefix-text))
+                                   (concat "[" prompt-prefix-text "] ")
+                                   "")
+                               "Common Lisp implementation to start (default: "
+                               (car implementations) "; alternatives: "
+                               (make-enumeration-string (cdr implementations)) "): "))
+               (result (read-from-minibuffer prompt)))
+          (setq slime-default-lisp
+                (if (member result implementations)
+                    (intern result)
+                    (intern (first implementations)))))))
+  (timer/start)
 
-            (split-window-horizontally)
-            (slime) ;;(let ((current-prefix-arg -1)) (slime))
-            (split-window-vertically (truncate (* 0.75 (window-body-height))))
-            (switch-window--jump-to-window 3) ;;(other-window 1)
-            ;; (eshell)
-            (ielm)
-            (ansi-term "/bin/bash")
-            (switch-window--jump-to-window 1) ;;(other-window 1)
+  (delete-other-windows)
+  (split-window-horizontally)
+  (slime) ;;(let ((current-prefix-arg -1)) (slime))
+  (split-window-vertically (truncate (* 0.75 (window-body-height))))
+  (switch-window--jump-to-window 3) ;;(other-window 1)
+  ;; (eshell)
+  (ielm)
+  (ansi-term "/bin/bash")
+  (switch-window--jump-to-window 1) ;;(other-window 1)
 
-            ;;;; Open org-mode files
-            ;;(find-file (concat (default-value 'default-directory) "../info.org"))
-            (find-file "~/org/ivanp7.org")
+  ;;;; Open org-mode files
+  ;;(find-file (concat (default-value 'default-directory) "../info.org"))
+  (find-file (concat org-directory "ivanp7.org"))
 
-            ;; (desktop-read) ;; Load default desktop from file : "~/emacs.d/.emacs.desktop"
-            )
-          t) ; always maximize window on startup
+  ;; (desktop-read) ;; Load default desktop from file : "~/emacs.d/.emacs.desktop"
+  (setq ide-started t))
+
+(add-hook 'window-setup-hook 'timer/stop t)
+(add-hook 'window-setup-hook (lambda () (start-cl-ide nil (concat (format "%.2f" *timer*) " sec"))) t)
