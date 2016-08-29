@@ -78,6 +78,10 @@
    (server-start))
 
 ;;;; Starting IDE, setting up windows configuration
+
+;; Opening org-mode file
+(find-file (concat org-directory "ivanp7.org"))
+
 (setq ide-started nil)
 
 (defun start-cl-ide (&optional cl-implementation prompt-prefix-text)
@@ -121,10 +125,6 @@
   (ielm)
   (ansi-term "/bin/bash")
   (switch-window--jump-to-window 1) ;;(other-window 1)
-
-  ;;;; Open org-mode files
-  ;;(find-file (concat (default-value 'default-directory) "../info.org"))
-  (find-file (concat org-directory "ivanp7.org"))
 
   ;; (desktop-read) ;; Load default desktop from file : "~/emacs.d/.emacs.desktop"
   (setq ide-started t))
