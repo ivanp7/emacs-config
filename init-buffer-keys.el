@@ -6,7 +6,8 @@
 (define-key my-buffer-keys-minor-mode-map (kbd (concat menu-key-name " <S-backspace>"))
   (lambda () (interactive) (other-window 1) (kill-this-buffer) (other-window 1)))
 
-(define-key my-buffer-keys-minor-mode-map (kbd (concat menu-key-name " '")) 'switch-window)
+(define-key my-buffer-keys-minor-mode-map (kbd (concat menu-key-name " "
+                                                       menu-key-name)) 'switch-window)
 
 (define-key my-buffer-keys-minor-mode-map (kbd (concat menu-key-name " ,")) 'previous-buffer)
 (define-key my-buffer-keys-minor-mode-map (kbd (concat menu-key-name " .")) 'next-buffer)

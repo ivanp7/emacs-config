@@ -102,7 +102,7 @@
 (transient-mark-mode t)         ; make the current 'selection' visible
 (delete-selection-mode t)       ; delete the selection area with a keypress
 
-(setq mouse-autoselect-window 0)
+;; (setq mouse-autoselect-window 0)
 
 (setq inhibit-startup-message t)
 (setq redisplay-dont-pause t)
@@ -136,7 +136,7 @@
         (beginning-of-buffer)
         (while (re-search-forward ",@[ \t]+" nil t)
           (if (not (member (plist-get (text-properties-at (point)) 'face)
-                           '(font-lock-string-face font-lock-comment-face)))
+                    '(font-lock-string-face font-lock-comment-face)))
               (replace-match ",@"))))))
 (add-to-list 'write-file-functions 'comma-at-sign-remove-spaces)
 
@@ -151,8 +151,8 @@
         (beginning-of-buffer)
         (while (re-search-forward ",@" nil t)
           (if (and (not (member (plist-get (text-properties-at (point)) 'face)
-                                '(font-lock-string-face font-lock-comment-face)))
-                   (not (member (char-after (point)) '(?\( ?\, ?\` ?\'))))
+                       '(font-lock-string-face font-lock-comment-face)))
+                 (not (member (char-after (point)) '(?\( ?\, ?\` ?\'))))
               (replace-match ",@"))))))
 
 ;; End of file newlines
