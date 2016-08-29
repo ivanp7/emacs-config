@@ -68,8 +68,8 @@
         (if reindent
             (indent-region pos (+ pos (length prefix-str) (length postfix-str)))))))
 
-;; (define-key my-lisp-keys-minor-mode-map (kbd "M-SPC")
-;;   (lambda () (interactive) (delete-selection) (insert " ") (left-char 1)))
+(define-key my-lisp-keys-minor-mode-map (kbd "S-SPC")
+  (lambda () (interactive) (delete-selection) (insert " ") (left-char 1)))
 
 ;; (define-key my-lisp-keys-minor-mode-map (kbd "<f9>")
 ;;   (lambda () (interactive) (delete-selection) (insert "(")))
@@ -83,10 +83,16 @@
 (define-key my-lisp-keys-minor-mode-map (kbd "M-z")
   (lambda () (interactive) (delete-selection) (insert "nil")))
 
-(defmacro define-expansion (key prefix postfix &optional offset-on-selection reindent final-command)
+(defmacro define-expansion (key prefix postfix &optional offset-on-selection reindent
+                                                 final-command add-to-prefix-if-selection)
   `(define-key my-lisp-keys-minor-mode-map (kbd ,key)
      (lambda () (interactive)
-        (surround-selection ,prefix ,postfix ,offset-on-selection ,reindent)
+        (surround-selection (if (use-region-p)
+                                ,(concat prefix (if add-to-prefix-if-selection
+                                                    add-to-prefix-if-selection
+                                                    ""))
+                                ,prefix)
+                            ,postfix ,offset-on-selection ,reindent)
         ,final-command)))
 
 (define-expansion "C-*" "*" "*")
@@ -134,34 +140,35 @@
 (define-expansion "M-a y" "(apply " ")") ; appl(y)
 (define-expansion "M-a e" "(eval " ")")
 
-(define-expansion "M-a p" "(progn\n" ")" 8 t (left-char))
+(define-expansion "M-a p" "(progn" ")" 8 t (left-char) "\n")
 
 (define-expansion "M-a u" "(null " ")")
 
 (define-expansion "M-a s" "(setf " ")")
 
 ;; Templates
-(define-expansion "M-a a" "#'(lambda () " ")" 11 t) ; l(a)mbda
+(define-expansion "M-a a" "#'(lambda () " ")" 9 t) ; l(a)mbda
+(define-expansion "M-a A" "(lambda () " ")" 7 t)
 
-(define-expansion "M-a d f" "(defun ~ ()\n" ")" 8 t
-                  (backward-delete-char-untabify 1))
-(define-expansion "M-a d m" "(defmacro ~ ()\n" ")" 11 t
-                  (backward-delete-char-untabify 1))
-(define-expansion "M-a d p" "(defparameter " ")")
-(define-expansion "M-a d v" "(defvar " ")")
-(define-expansion "M-a d c" "(defconstant " ")")
-(define-expansion "M-a d s" "(defclass ~ ()\n  (" "))" 11 t
-                  (backward-delete-char-untabify 1)) ; clas(s)
-(define-expansion "M-a d d" "(defmethod ~ ()\n" ")" 12 t
-                  (backward-delete-char-untabify 1)) ; metho(d)
-(define-expansion "M-a d g" "(defgeneric ~ ()\n  (:documentation \"" "\"))" 13 t
-                  (backward-delete-char-untabify 1))
+(define-expansion "M-a d f" "(defun ~ ()" ")" 8 t
+                  (backward-delete-char-untabify 1) "\n")
+(define-expansion "M-a d m" "(defmacro ~ ()" ")" 11 t
+                  (backward-delete-char-untabify 1) "\n")
+(define-expansion "M-a d p" "(defparameter " ")" 13)
+(define-expansion "M-a d v" "(defvar " ")" 7)
+(define-expansion "M-a d c" "(defconstant " ")" 12)
+(define-expansion "M-a d s" "(defclass ~ ()\n  ())" "" 11 t
+                  (backward-delete-char-untabify 1) "\n") ; clas(s)
+(define-expansion "M-a d d" "(defmethod ~ ()" ")" 12 t
+                  (backward-delete-char-untabify 1) "\n") ; metho(d)
+(define-expansion "M-a d g" "(defgeneric ~ ()\n  (:documentation \"\"))" "" 13 t
+                  (backward-delete-char-untabify 1) "\n")
 
-(define-expansion "M-a b l" "(let (())\n" ")" 7 t) ; (l)et
-(define-expansion "M-a b o" "(let* (())\n" ")" 8 t)
-(define-expansion "M-a b f" "(flet (())\n" ")" 8 t) ; (f)unction
-(define-expansion "M-a b r" "(labels (())\n" ")" 10 t) ; (r)ecursion allowed
-(define-expansion "M-a b m" "(macrolet (())\n" ")" 12 t) ; (m)acro
+(define-expansion "M-a b l" "(let ()" ")" 6 t nil "\n") ; (l)et
+(define-expansion "M-a b o" "(let* ()" ")" 7 t nil "\n") ; c(o)nsecutive let
+(define-expansion "M-a b f" "(flet (( ()))" ")" 8 t nil "\n") ; (f)unction let
+(define-expansion "M-a b r" "(labels (( ()))" ")" 10 t nil "\n") ; (r)ecursive function let
+(define-expansion "M-a b m" "(macrolet (( ()))" ")" 12 t nil "\n") ; (m)acro let
 
 ;;; Movement, selection, editing and other useful keybindings
 (define-key my-lisp-keys-minor-mode-map (kbd "M-[")
