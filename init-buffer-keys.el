@@ -52,13 +52,14 @@
 
 (define-key my-buffer-keys-minor-mode-map (kbd (concat menu-key-name " `")) 'balance-windows)
 
-(define-key my-buffer-keys-minor-mode-map (kbd (concat menu-key-name " SPC"))
-  '(lambda ()
-    (interactive)
-    (let ((buffer (current-buffer)))
-      ;;(unless (one-window-p)
-      ;;  (delete-window))
-      (display-buffer-pop-up-frame buffer nil))))
+(defun make-new-frame ()
+  (interactive)
+  (let ((buffer (current-buffer)))
+    ;;(unless (one-window-p)
+    ;;  (delete-window))
+    (display-buffer-pop-up-frame buffer nil)))
+
+(define-key my-buffer-keys-minor-mode-map (kbd (concat menu-key-name " SPC")) 'make-new-frame)
 
 ;;;; Installing minor mode for keys
 (define-minor-mode my-buffer-keys-minor-mode
