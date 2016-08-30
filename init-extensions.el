@@ -204,7 +204,7 @@
                           (slime-repl-closing-return)))
     ((kbd "<return>") 'slime-repl-newline-and-indent)
     ((kbd "<pause> <backspace>") (lambda () (interactive)
-                                         (end-of-buffer) (slime-repl-delete-current-input)))
+                                    (end-of-buffer) (slime-repl-delete-current-input)))
     ((kbd "<M-up>") 'slime-repl-previous-input)
     ((kbd "<M-down>") 'slime-repl-next-input)
     ((kbd "<C-up>") 'backward-up-list)
@@ -227,31 +227,31 @@
     ((kbd "<M-down>") 'end-of-defun)))
 
 (setf *lambda-logo*
-      (list
-       "                         ...                                        "
-       "                      .:kKXXOo.                          ..         "
-       "        ;d;          .kWMWWWMMK;                         ,xo.       "
-       "      .oOl.         .xXkc;;:xXMK;                         ,kO;      "
-       "     'k0:           ;Oc      ;0Wk.                         .kKc     "
-       "    'OK;            :l.       ;KNl                          .kXl.   "
-       "   'OXc                        lNO.                          ,KXc   "
-       "  .xWx.                        .ONl.                          oNK;  "
-       "  cNX:                         .dWOc.                         ,0Wx. "
-       " .OMO.                         ,0MNKc                         .xMX: "
-       " :XMx.                        'OMMMWk.                         oWWd "
-       " oWWd                        'OWMMMMX:                         lNMk."
-       ".xMWo                       .kWMMWNNWx.                        cNMO."
-       ".xMWo                      .xWMMWxlxKK;                        cNMO."
-       ".dWWo                     .xWMMWx..,xWd.                       lWMx."
-       " cNMx.                   .dNMMWO.   :X0,                       dWNl "
-       " '0MO.                  .oNMMM0'    .kNo                      .kM0, "
-       "  oNX:                  lNMMMK;      cN0'                     ;KNo  "
-       "  .kWx.                lXMMMK:       .OWd.       ..          .dWk.  "
-       "   ,0Xc               cXMMMXc         lNXc       cd.         cX0,   "
-       "    ;00;             :KMMMNl          .OMXd'   .:0d.        ;00,    "
-       "     ,O0:           ;KMMMNd.           ;KMWXOxx0NK;        :0k'     "
-       "     .d0l.         ;0MMMWx.             ;ONMMMMWO;       .oOl.      "
-       "       ;d:         ':ccc;.               .'cool;.        ,l,        "))
+   (list
+    "                         ...                                        "
+    "                      .:kKXXOo.                          ..         "
+    "        ;d;          .kWMWWWMMK;                         ,xo.       "
+    "      .oOl.         .xXkc;;:xXMK;                         ,kO;      "
+    "     'k0:           ;Oc      ;0Wk.                         .kKc     "
+    "    'OK;            :l.       ;KNl                          .kXl.   "
+    "   'OXc                        lNO.                          ,KXc   "
+    "  .xWx.                        .ONl.                          oNK;  "
+    "  cNX:                         .dWOc.                         ,0Wx. "
+    " .OMO.                         ,0MNKc                         .xMX: "
+    " :XMx.                        'OMMMWk.                         oWWd "
+    " oWWd                        'OWMMMMX:                         lNMk."
+    ".xMWo                       .kWMMWNNWx.                        cNMO."
+    ".xMWo                      .xWMMWxlxKK;                        cNMO."
+    ".dWWo                     .xWMMWx..,xWd.                       lWMx."
+    " cNMx.                   .dNMMWO.   :X0,                       dWNl "
+    " '0MO.                  .oNMMM0'    .kNo                      .kM0, "
+    "  oNX:                  lNMMMK;      cN0'                     ;KNo  "
+    "  .kWx.                lXMMMK:       .OWd.       ..          .dWk.  "
+    "   ,0Xc               cXMMMXc         lNXc       cd.         cX0,   "
+    "    ;00;             :KMMMNl          .OMXd'   .:0d.        ;00,    "
+    "     ,O0:           ;KMMMNd.           ;KMWXOxx0NK;        :0k'     "
+    "     .d0l.         ;0MMMWx.             ;ONMMMMWO;       .oOl.      "
+    "       ;d:         ':ccc;.               .'cool;.        ,l,        "))
 
 (defun print-hello-message ()
   (let* ((tab-string "         ")
@@ -303,11 +303,13 @@
     (insert "\n")
     ;;(right-char 18)
     ;;(insert "\n")
-    (put-text-property 1 (- (point-max) 9) 'read-only t)
-    (end-of-buffer)
-    ;;(insert "(format t \"Ok, a new REPL is started, let's hack!\")")
-    (insert "(list (lisp-implementation-type) (lisp-implementation-version))")
-    (slime-repl-closing-return)))
+    (put-text-property 1 (- (point-max) 9) 'read-only t)))
+
+(defun slime-repl-send-initial-command ()
+  (end-of-buffer)
+  ;;(insert "(format t \"Ok, a new REPL is started, let's hack!\")")
+  (insert "(list (lisp-implementation-type) (lisp-implementation-version))")
+  (slime-repl-closing-return))
 
 (defun animate-lambda ()
   (interactive)
@@ -321,6 +323,13 @@
 ;;               (incf current-vpos)))
 ;;           *lambda-logo*))
 
+(defvar slime-repl-print-logo t)
+
+(defun switch-to-slime-scratch ()
+  (set-buffer (slime-scratch-buffer))
+  (unless (eq (current-buffer) (window-buffer))
+    (switch-to-buffer (current-buffer))))
+
 (defvar slime-first-startup t)
 (add-hook 'slime-connected-hook
           (lambda ()
@@ -329,22 +338,25 @@
               (configure-slime-faces)
               (define-my-slime-keys)
               ;; (slime-load-file (concat default-directory "init/ivanp7-welcome.lisp"))
-              (slime-scratch) ; autocreate *slime-scratch* buffer
-              (insert
-               (concat
-                ";; This is a scratch buffer for Common Lisp evaluation.\n"
-                ";; Press <Alt+Enter> to evaluate expression and print result at point.\n"
-                ";; Press <F4> to evaluate expression without printing result.\n"
-                "\n"))
+              ;; Silently autocreate *slime-scratch* buffer and fill it
+              (with-current-buffer (slime-scratch-buffer)
+                (insert
+                 (concat
+                  ";; This is a scratch buffer for Common Lisp evaluation.\n"
+                  ";; Press <Alt+Enter> to evaluate expression and print result at point.\n"
+                  ";; Press <F4> to evaluate expression without printing result.\n"
+                  "\n")))
               (slime-repl)
-              (print-hello-message)
+              (when slime-repl-print-logo
+                (print-hello-message))
+              (slime-repl-send-initial-command)
               ;;(play-sound-file (concat default-directory "init/ready.wav"))
               (setq slime-first-startup nil)
               ;; Display load time
               (timer/stop)
               (run-at-time "1 sec" nil (lambda ()
-                                         (anarcat/display-timing)
-                                         (timer/reset))))))
+                                       (anarcat/display-timing)
+                                       (timer/reset))))))
 
 ;;;; TabBar
 (tabbar-mode 1)
@@ -707,8 +719,8 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                                 result-list
                                 (copy-to-list (tree-left-branch tree)
                                               (if (or (null exclude-p) (not (funcall
-                                                                          exclude-p
-                                                                          (tree-entry tree))))
+                                                                             exclude-p
+                                                                             (tree-entry tree))))
                                                   (cons (tree-entry tree)
                                                         (copy-to-list (tree-right-branch tree)
                                                                       result-list))
@@ -784,13 +796,13 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                     (let ((record (lookup-binary-tree sym rainbow-identifiers-custom-binary-tree)))
                       (if record
                           (setf (cdr record) (mod (+ rainbow-identifiers-tune-delta (cdr record))
-                                               rainbow-identifiers-face-count))
+                                                  rainbow-identifiers-face-count))
                           (setf rainbow-identifiers-custom-binary-tree
-                             (adjoin-binary-tree
-                              (cons sym (mod (+ rainbow-identifiers-tune-delta
-                                                (rainbow-identifiers--hash-function sym))
-                                             rainbow-identifiers-face-count))
-                              rainbow-identifiers-custom-binary-tree))))))))
+                                (adjoin-binary-tree
+                                 (cons sym (mod (+ rainbow-identifiers-tune-delta
+                                                   (rainbow-identifiers--hash-function sym))
+                                                rainbow-identifiers-face-count))
+                                 rainbow-identifiers-custom-binary-tree))))))))
         (font-lock-fontify-buffer))
       (message "Tune is not allowed in this mode.")))
 
@@ -805,8 +817,8 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                     (let ((record (lookup-binary-tree sym rainbow-identifiers-custom-binary-tree)))
                       (if record
                           (setf rainbow-identifiers-custom-binary-tree
-                             (delete-from-binary-tree
-                              (car record) rainbow-identifiers-custom-binary-tree))))))))
+                                (delete-from-binary-tree
+                                 (car record) rainbow-identifiers-custom-binary-tree))))))))
         (font-lock-fontify-buffer))
       (message "Tune is not allowed in this mode.")))
 

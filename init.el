@@ -81,10 +81,41 @@
 
 ;; Opening org-mode file
 (find-file (concat org-directory "ivanp7.org"))
+;;(setq slime-scratch-file (setq-default slime-scratch-file (concat cl-ide-init-path "scratch.txt")))
 
 (setq ide-started nil)
 
-(defun start-cl-ide (&optional cl-implementation prompt-prefix-text)
+(defvar ide-layouts
+  (list
+   (lambda ()
+     (interactive)
+     (split-window-horizontally)
+     (switch-window--jump-to-window 2)
+     (slime) ;;(let ((current-prefix-arg -1)) (slime))
+     (split-window-vertically (truncate (* 0.75 (window-body-height))))
+     (switch-window--jump-to-window 3) ;;(other-window 1)
+     ;; (eshell)
+     (ielm)
+     (let ((default-directory cl-ide-code-path))
+       (ansi-term "/bin/bash"))
+     (switch-window--jump-to-window 1))
+   (lambda ()
+     (interactive)
+     (split-window-vertically (truncate (* 0.75 (window-body-height))))
+     (split-window-horizontally)
+     (switch-window--jump-to-window 3)
+     (split-window-horizontally)
+     (setq slime-repl-print-logo nil)
+     (slime)
+     (switch-window--jump-to-window 4)
+     (ielm)
+     (let ((default-directory cl-ide-code-path))
+       (ansi-term "/bin/bash"))
+     (switch-window--jump-to-window 1)
+     (switch-to-slime-scratch)
+     (switch-window--jump-to-window 1))))
+
+(defun start-cl-ide (&optional cl-implementation layout prompt-prefix-text)
   (interactive)
 
   (when ide-started
@@ -109,22 +140,16 @@
                                "Common Lisp implementation to start (default: "
                                (car implementations) "; alternatives: "
                                (make-enumeration-string (cdr implementations)) "): "))
-               (result (read-from-minibuffer prompt)))
+               (result (completing-read prompt implementations)))
           (setq slime-default-lisp
                 (if (member result implementations)
                     (intern result)
                     (intern (first implementations)))))))
+
   (timer/start)
 
   (delete-other-windows)
-  (split-window-horizontally)
-  (slime) ;;(let ((current-prefix-arg -1)) (slime))
-  (split-window-vertically (truncate (* 0.75 (window-body-height))))
-  (switch-window--jump-to-window 3) ;;(other-window 1)
-  ;; (eshell)
-  (ielm)
-  (ansi-term "/bin/bash")
-  (switch-window--jump-to-window 1) ;;(other-window 1)
+  (funcall (nth (1- 2) ide-layouts))
 
   ;; (desktop-read) ;; Load default desktop from file : "~/emacs.d/.emacs.desktop"
   (setq ide-started t))

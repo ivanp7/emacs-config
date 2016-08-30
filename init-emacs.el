@@ -236,3 +236,7 @@
 
 ;;;; Input method
 (setq default-input-method "russian-computer")
+
+;;;; Displaying buffers
+(setq display-buffer-alist
+      '(("\\*inferior-lisp\\*" display-buffer-same-window (nil))))
