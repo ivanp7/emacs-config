@@ -171,14 +171,14 @@
 (define-expansion "M-a b m" "(macrolet (( ()))" ")" 12 t nil "\n") ; (m)acro let
 
 ;;; Movement, selection, editing and other useful keybindings
-(define-key my-lisp-keys-minor-mode-map (kbd "M-[")
-  (lambda () (interactive) (if mark-active (deactivate-mark)) (backward-word)))
-(define-key my-lisp-keys-minor-mode-map (kbd "M-{")
-  (lambda () (interactive) (if (not mark-active) (cua-set-mark)) (backward-word)))
-(define-key my-lisp-keys-minor-mode-map (kbd "M-]")
-  (lambda () (interactive) (if mark-active (deactivate-mark)) (forward-word)))
-(define-key my-lisp-keys-minor-mode-map (kbd "M-}")
-  (lambda () (interactive) (if (not mark-active) (cua-set-mark)) (forward-word)))
+;; (define-key my-lisp-keys-minor-mode-map (kbd "M-[")
+;;   (lambda () (interactive) (if mark-active (deactivate-mark)) (backward-word)))
+;; (define-key my-lisp-keys-minor-mode-map (kbd "M-{")
+;;   (lambda () (interactive) (if (not mark-active) (cua-set-mark)) (backward-word)))
+;; (define-key my-lisp-keys-minor-mode-map (kbd "M-]")
+;;   (lambda () (interactive) (if mark-active (deactivate-mark)) (forward-word)))
+;; (define-key my-lisp-keys-minor-mode-map (kbd "M-}")
+;;   (lambda () (interactive) (if (not mark-active) (cua-set-mark)) (forward-word)))
 
 (define-key my-lisp-keys-minor-mode-map (kbd "M-c") 'recenter-top-bottom)
 
@@ -188,6 +188,15 @@
 (define-key my-lisp-keys-minor-mode-map (kbd "C-<right>") 'forward-sexp)
 (define-key my-lisp-keys-minor-mode-map (kbd "C-<up>") 'backward-up-list)
 (define-key my-lisp-keys-minor-mode-map (kbd "C-<down>") 'down-list)
+
+(defun beginning-of-list ()
+  (interactive "^") (backward-up-list) (right-char))
+
+(defun end-of-list ()
+  (interactive "^") (up-list) (left-char))
+
+(define-key my-lisp-keys-minor-mode-map (kbd "C-<home>") 'beginning-of-list)
+(define-key my-lisp-keys-minor-mode-map (kbd "C-<end>") 'end-of-list)
 
 (defun delete-sexp-backward (&optional ARG)
   (interactive "p")
@@ -212,10 +221,14 @@
            (define-key my-lisp-keys-minor-mode-map [remap right-char] 'forward-sexp)
            (define-key my-lisp-keys-minor-mode-map [remap previous-line] 'backward-up-list)
            (define-key my-lisp-keys-minor-mode-map [remap next-line] 'down-list)
+           (define-key my-lisp-keys-minor-mode-map [remap move-beginning-of-line] 'beginning-of-list)
+           (define-key my-lisp-keys-minor-mode-map [remap move-end-of-line] 'end-of-list)
            (define-key my-lisp-keys-minor-mode-map [remap backward-sexp] 'left-char)
            (define-key my-lisp-keys-minor-mode-map [remap forward-sexp] 'right-char)
            (define-key my-lisp-keys-minor-mode-map [remap backward-up-list] 'previous-line)
            (define-key my-lisp-keys-minor-mode-map [remap down-list] 'next-line)
+           (define-key my-lisp-keys-minor-mode-map [remap beginning-of-list] 'move-beginning-of-line)
+           (define-key my-lisp-keys-minor-mode-map [remap end-of-list] 'move-end-of-line)
            (define-key my-lisp-keys-minor-mode-map [remap backward-delete-char-untabify]
              'delete-sexp-backward)
            (define-key my-lisp-keys-minor-mode-map [remap delete-forward-char]
@@ -229,10 +242,14 @@
            (define-key my-lisp-keys-minor-mode-map [remap right-char] nil)
            (define-key my-lisp-keys-minor-mode-map [remap previous-line] nil)
            (define-key my-lisp-keys-minor-mode-map [remap next-line] nil)
+           (define-key my-lisp-keys-minor-mode-map [remap move-beginning-of-line] nil)
+           (define-key my-lisp-keys-minor-mode-map [remap move-end-of-line] nil)
            (define-key my-lisp-keys-minor-mode-map [remap backward-sexp] nil)
            (define-key my-lisp-keys-minor-mode-map [remap forward-sexp] nil)
            (define-key my-lisp-keys-minor-mode-map [remap backward-up-list] nil)
            (define-key my-lisp-keys-minor-mode-map [remap down-list] nil)
+           (define-key my-lisp-keys-minor-mode-map [remap beginning-of-list] nil)
+           (define-key my-lisp-keys-minor-mode-map [remap end-of-list] nil)
            (define-key my-lisp-keys-minor-mode-map [remap backward-delete-char-untabify] nil)
            (define-key my-lisp-keys-minor-mode-map [remap delete-forward-char] nil)
            (define-key my-lisp-keys-minor-mode-map [remap delete-sexp-backward] nil)

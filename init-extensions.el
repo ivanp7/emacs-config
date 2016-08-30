@@ -343,8 +343,8 @@
               ;; Display load time
               (timer/stop)
               (run-at-time "1 sec" nil (lambda ()
-                                       (anarcat/display-timing)
-                                       (timer/reset))))))
+                                         (anarcat/display-timing)
+                                         (timer/reset))))))
 
 ;;;; TabBar
 (tabbar-mode 1)
@@ -556,36 +556,38 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
 ;;;; Pretty suscripts support
 (require 'magic-latex-buffer)
 
+(setq magic-latex-ignored-properties
+      '(font-lock-comment-face font-lock-comment-delimiter-face font-lock-string-face))
+
 (defun suscript-jit-prettifier (beg end) ; redefined ml/jit-prettifier
-  (let (magic-latex-ignored-properties)
-    (goto-char beg)
-    (ml/remove-pretty-overlays beg end)
-    ;; prettify suscripts
-    (save-excursion
-      (while (ignore-errors (ml/search-suscript t end))
-        (let* ((body-beg (match-beginning 1))
-               (body-end (match-end 1))
-               (delim-beg (match-beginning 0))
-               (delim-end (match-end 0))
-               ;; the point can be already prettified in a recursive
-               ;; suscript like "a_{b_c}".
-               (oldov (ml/overlay-at body-beg 'category 'ml/ov-pretty))
-               (oldprop (and oldov (overlay-get oldov 'display)))
-               (priority-base (and oldov (or (overlay-get oldov 'priority) 0)))
-               (raise-base (or (cadr (assoc 'raise oldprop)) 0.0))
-               (height-base (or (cadr (assoc 'height oldprop)) 1.0))
-               (ov1 (ml/make-pretty-overlay delim-beg delim-end 'invisible t))
-               ;; new overlay must have higher priority than the old
-               ;; one.
-               (ov2 (ml/make-pretty-overlay
-                     body-beg body-end 'priority (when oldov (1+ priority-base)))))
-          (cl-case (string-to-char (match-string 0))
-            ((?_) (overlay-put
-                   ov2 'display
-                   `((raise ,(- raise-base 0.2)) (height ,(* height-base 0.8)))))
-            ((?^) (overlay-put
-                   ov2 'display
-                   `((raise ,(+ raise-base 0.2)) (height ,(* height-base 0.8)))))))))))
+  (goto-char beg)
+  (ml/remove-pretty-overlays beg end)
+  ;; prettify suscripts
+  (save-excursion
+    (while (ignore-errors (ml/search-suscript t end))
+      (let* ((body-beg (match-beginning 1))
+             (body-end (match-end 1))
+             (delim-beg (match-beginning 0))
+             (delim-end (match-end 0))
+             ;; the point can be already prettified in a recursive
+             ;; suscript like "a_{b_c}".
+             (oldov (ml/overlay-at body-beg 'category 'ml/ov-pretty))
+             (oldprop (and oldov (overlay-get oldov 'display)))
+             (priority-base (and oldov (or (overlay-get oldov 'priority) 0)))
+             (raise-base (or (cadr (assoc 'raise oldprop)) 0.0))
+             (height-base (or (cadr (assoc 'height oldprop)) 1.0))
+             (ov1 (ml/make-pretty-overlay delim-beg delim-end 'invisible t))
+             ;; new overlay must have higher priority than the old
+             ;; one.
+             (ov2 (ml/make-pretty-overlay
+                   body-beg body-end 'priority (when oldov (1+ priority-base)))))
+        (cl-case (string-to-char (match-string 0))
+          ((?_) (overlay-put
+                ov2 'display
+                `((raise ,(- raise-base 0.2)) (height ,(* height-base 0.8)))))
+          ((?^) (overlay-put
+                ov2 'display
+                `((raise ,(+ raise-base 0.2)) (height ,(* height-base 0.8))))))))))
 
 (define-minor-mode magic-suscript-buffer
     "Redefinition of the magic-latex-buffer mode, that doesn't conflict with lisp-mode."
@@ -705,8 +707,8 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                                 result-list
                                 (copy-to-list (tree-left-branch tree)
                                               (if (or (null exclude-p) (not (funcall
-                                                                             exclude-p
-                                                                             (tree-entry tree))))
+                                                                          exclude-p
+                                                                          (tree-entry tree))))
                                                   (cons (tree-entry tree)
                                                         (copy-to-list (tree-right-branch tree)
                                                                       result-list))
@@ -782,13 +784,13 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                     (let ((record (lookup-binary-tree sym rainbow-identifiers-custom-binary-tree)))
                       (if record
                           (setf (cdr record) (mod (+ rainbow-identifiers-tune-delta (cdr record))
-                                                  rainbow-identifiers-face-count))
+                                               rainbow-identifiers-face-count))
                           (setf rainbow-identifiers-custom-binary-tree
-                                (adjoin-binary-tree
-                                 (cons sym (mod (+ rainbow-identifiers-tune-delta
-                                                   (rainbow-identifiers--hash-function sym))
-                                                rainbow-identifiers-face-count))
-                                 rainbow-identifiers-custom-binary-tree))))))))
+                             (adjoin-binary-tree
+                              (cons sym (mod (+ rainbow-identifiers-tune-delta
+                                                (rainbow-identifiers--hash-function sym))
+                                             rainbow-identifiers-face-count))
+                              rainbow-identifiers-custom-binary-tree))))))))
         (font-lock-fontify-buffer))
       (message "Tune is not allowed in this mode.")))
 
@@ -803,8 +805,8 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                     (let ((record (lookup-binary-tree sym rainbow-identifiers-custom-binary-tree)))
                       (if record
                           (setf rainbow-identifiers-custom-binary-tree
-                                (delete-from-binary-tree
-                                 (car record) rainbow-identifiers-custom-binary-tree))))))))
+                             (delete-from-binary-tree
+                              (car record) rainbow-identifiers-custom-binary-tree))))))))
         (font-lock-fontify-buffer))
       (message "Tune is not allowed in this mode.")))
 
