@@ -27,7 +27,7 @@
     ad-do-it))
 
 (define-key my-common-keys-minor-mode-map (kbd "C-o") 'find-file)
-(define-key my-common-keys-minor-mode-map (kbd "C-O") 'find-file-other-frame)
+(define-key my-common-keys-minor-mode-map (kbd "C-p") 'find-file-other-frame)
 
 (defun rename-current-buffer-file ()
   "Renames current buffer and file it is visiting."
@@ -93,7 +93,7 @@
 ;;;; Open hotkey help file in a new frame
 (define-key my-common-keys-minor-mode-map (kbd "<f1> SPC")
   (lambda () (interactive)
-     (find-file-other-frame (concat cl-ide-init-path "keys-description-ru.org"))))
+          (find-file-other-frame (concat cl-ide-init-path "keys-description-ru.org"))))
 
 ;;;; Installing minor mode for keys
 (define-minor-mode my-common-keys-minor-mode
@@ -104,7 +104,7 @@
     my-common-keys-minor-mode
   (lambda ()
     (when (not (memq major-mode
-                   (list 'term-mode)))
+                     (list 'term-mode)))
       (my-common-keys-minor-mode))))
 
 (my-common-keys-minor-global-mode 1)
