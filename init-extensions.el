@@ -166,6 +166,32 @@
     (with-current-buffer "*slime-apropos*" (slime-apropos-minor-mode 1))))
 
 ;;; SLIME faces
+(defun switch-to-and-fontify-repl-input ()
+  (interactive)
+  (pop-to-buffer (slime-repl-buffer))
+  (end-of-buffer)
+  (let ((end (point))
+        (begin (marker-position slime-repl-input-start-mark)))
+    (font-lock-fontify-region begin end)
+    (goto-char end)))
+
+(defun copy-expression-to-repl ()
+  "Copy-Expression-To-Repl-And-Eval"
+  (interactive)
+  (let ((bounds (bounds-of-thing-at-point 'sexp))
+        (edit-buffer (current-buffer))
+        (pos (point))
+        (lisp-buffer (slime-repl-buffer)))
+    (if (null bounds)
+        (message "There is no expression at point.")
+        (progn
+          (pop-to-buffer lisp-buffer)
+          (end-of-buffer)
+          (slime-repl-delete-current-input)
+          (pop-to-buffer edit-buffer)
+          (append-to-buffer lisp-buffer (car bounds) (cdr bounds))
+          (switch-to-and-fontify-repl-input)))))
+
 (defun configure-slime-faces ()
   (set-face-attribute 'slime-repl-input-face nil
                       :foreground "light goldenrod" :slant 'normal :weight 'normal)
@@ -197,11 +223,7 @@
   (slime-define-keys slime-repl-mode-map
     ((kbd "C-<return>") (lambda ()
                           (interactive)
-                          (end-of-buffer)
-                          (let ((end (point))
-                                (begin (marker-position slime-repl-input-start-mark)))
-                            (font-lock-fontify-region begin end)
-                            (goto-char end))
+                          (switch-to-and-fontify-repl-input)
                           (slime-repl-closing-return)))
     ((kbd "<return>") 'slime-repl-newline-and-indent)
     ((kbd "<pause> <backspace>") (lambda () (interactive)
@@ -216,7 +238,9 @@
     ((kbd "<C-pause>") 'slime-repl-clear-buffer))
   ;; ****** keys that work in all Common Lisp buffers ******
   (slime-define-keys lisp-mode-map
-    ((kbd "C-<return>") 'slime-eval-last-expression-in-repl)
+    ((kbd "C-<return>") (lambda () (interactive)
+                           (copy-expression-to-repl)
+                           (slime-repl-closing-return)))
     ((kbd "M-<return>") 'slime-eval-print-last-expression))
   ;; ****** keys that work in all Lisp buffers ******
   (slime-define-keys lisp-mode-shared-map

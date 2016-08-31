@@ -3,11 +3,20 @@
 ;;; Buffers and windows configuration control keys
 (define-key my-buffer-keys-minor-mode-map (kbd (concat menu-key-name " <backspace>"))
   'kill-this-buffer)
-(define-key my-buffer-keys-minor-mode-map (kbd (concat menu-key-name " <S-backspace>"))
-  (lambda () (interactive) (other-window 1) (kill-this-buffer) (other-window 1)))
 
 (define-key my-buffer-keys-minor-mode-map (kbd (concat menu-key-name " "
                                                        menu-key-name)) 'switch-window)
+
+(defun switch-to-last-window ()
+  (interactive)
+  (let ((win (get-mru-window t t t)))
+    (unless win (error "Last window not found."))
+    (let ((frame (window-frame win)))
+      (raise-frame frame)
+      (select-frame frame)
+      (select-window win))))
+
+(define-key my-buffer-keys-minor-mode-map (kbd (concat menu-key-name " SPC")) 'switch-to-last-window)
 
 (define-key my-buffer-keys-minor-mode-map (kbd (concat menu-key-name " ,")) 'previous-buffer)
 (define-key my-buffer-keys-minor-mode-map (kbd (concat menu-key-name " .")) 'next-buffer)
@@ -59,7 +68,7 @@
     ;;  (delete-window))
     (display-buffer-pop-up-frame buffer nil)))
 
-(define-key my-buffer-keys-minor-mode-map (kbd (concat menu-key-name " SPC")) 'make-new-frame)
+(define-key my-buffer-keys-minor-mode-map (kbd (concat menu-key-name " RET")) 'make-new-frame)
 
 ;;;; Installing minor mode for keys
 (define-minor-mode my-buffer-keys-minor-mode
