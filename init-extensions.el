@@ -227,42 +227,44 @@
     ((kbd "<M-up>") 'beginning-of-defun)
     ((kbd "<M-down>") 'end-of-defun)))
 
-(setf *lambda-logo*
-   (list
-    "                         ...                                        "
-    "                      .:kKXXOo.                          ..         "
-    "        ;d;          .kWMWWWMMK;                         ,xo.       "
-    "      .oOl.         .xXkc;;:xXMK;                         ,kO;      "
-    "     'k0:           ;Oc      ;0Wk.                         .kKc     "
-    "    'OK;            :l.       ;KNl                          .kXl.   "
-    "   'OXc                        lNO.                          ,KXc   "
-    "  .xWx.                        .ONl.                          oNK;  "
-    "  cNX:                         .dWOc.                         ,0Wx. "
-    " .OMO.                         ,0MNKc                         .xMX: "
-    " :XMx.                        'OMMMWk.                         oWWd "
-    " oWWd                        'OWMMMMX:                         lNMk."
-    ".xMWo                       .kWMMWNNWx.                        cNMO."
-    ".xMWo                      .xWMMWxlxKK;                        cNMO."
-    ".dWWo                     .xWMMWx..,xWd.                       lWMx."
-    " cNMx.                   .dNMMWO.   :X0,                       dWNl "
-    " '0MO.                  .oNMMM0'    .kNo                      .kM0, "
-    "  oNX:                  lNMMMK;      cN0'                     ;KNo  "
-    "  .kWx.                lXMMMK:       .OWd.       ..          .dWk.  "
-    "   ,0Xc               cXMMMXc         lNXc       cd.         cX0,   "
-    "    ;00;             :KMMMNl          .OMXd'   .:0d.        ;00,    "
-    "     ,O0:           ;KMMMNd.           ;KMWXOxx0NK;        :0k'     "
-    "     .d0l.         ;0MMMWx.             ;ONMMMMWO;       .oOl.      "
-    "       ;d:         ':ccc;.               .'cool;.        ,l,        "))
+(defvar *lambda-logo*
+  (list
+   "                         ...                                        "
+   "                      .:kKXXOo.                          ..         "
+   "        ;d;          .kWMWWWMMK;                         ,xo.       "
+   "      .oOl.         .xXkc;;:xXMK;                         ,kO;      "
+   "     'k0:           ;Oc      ;0Wk.                         .kKc     "
+   "    'OK;            :l.       ;KNl                          .kXl.   "
+   "   'OXc                        lNO.                          ,KXc   "
+   "  .xWx.                        .ONl.                          oNK;  "
+   "  cNX:                         .dWOc.                         ,0Wx. "
+   " .OMO.                         ,0MNKc                         .xMX: "
+   " :XMx.                        'OMMMWk.                         oWWd "
+   " oWWd                        'OWMMMMX:                         lNMk."
+   ".xMWo                       .kWMMWNNWx.                        cNMO."
+   ".xMWo                      .xWMMWxlxKK;                        cNMO."
+   ".dWWo                     .xWMMWx..,xWd.                       lWMx."
+   " cNMx.                   .dNMMWO.   :X0,                       dWNl "
+   " '0MO.                  .oNMMM0'    .kNo                      .kM0, "
+   "  oNX:                  lNMMMK;      cN0'                     ;KNo  "
+   "  .kWx.                lXMMMK:       .OWd.       ..          .dWk.  "
+   "   ,0Xc               cXMMMXc         lNXc       cd.         cX0,   "
+   "    ;00;             :KMMMNl          .OMXd'   .:0d.        ;00,    "
+   "     ,O0:           ;KMMMNd.           ;KMWXOxx0NK;        :0k'     "
+   "     .d0l.         ;0MMMWx.             ;ONMMMMWO;       .oOl.      "
+   "       ;d:         ':ccc;.               .'cool;.        ,l,        "))
+
+(defun make-lambda-logo-string (tab-string)
+  (apply 'concat
+         (append ;; (list "\n")
+          (mapcar (lambda (line)
+                    (concat tab-string line "\n"))
+                  *lambda-logo*)
+          (list "\n"))))
 
 (defun print-hello-message ()
   (let* ((tab-string "         ")
-         (lambda-logo-string
-          (apply 'concat
-                 (append ;; (list "\n")
-                  (mapcar (lambda (line)
-                            (concat tab-string line "\n"))
-                          *lambda-logo*)
-                  (list "\n"))))
+         (lambda-logo-string (make-lambda-logo-string tab-string))
          (width (+ (length tab-string) (length (first *lambda-logo*))))
          (height (length *lambda-logo*))
          (prompt-string "CL-USER> ")
@@ -326,6 +328,13 @@
 
 (defvar slime-repl-print-logo t)
 
+(defvar slime-scratch-text
+  (concat
+   ";; This is a scratch buffer for Common Lisp evaluation.\n"
+   ";; Press <Alt+Enter> to evaluate expression and print result at point.\n"
+   ";; Press <F4> to evaluate expression without printing result.\n"
+   "\n"))
+
 (defun switch-to-slime-scratch ()
   (set-buffer (slime-scratch-buffer))
   (unless (eq (current-buffer) (window-buffer))
@@ -341,13 +350,8 @@
               ;; (slime-load-file (concat default-directory "init/ivanp7-welcome.lisp"))
               ;; Silently autocreate *slime-scratch* buffer and fill it
               (with-current-buffer (slime-scratch-buffer)
-                (insert
-                 (concat
-                  ";; This is a scratch buffer for Common Lisp evaluation.\n"
-                  ";; Press <Alt+Enter> to evaluate expression and print result at point.\n"
-                  ";; Press <F4> to evaluate expression without printing result.\n"
-                  "\n")))
-              (slime-repl)
+                (insert slime-scratch-text))
+              (slime-repl) ; switch to REPL
               (when slime-repl-print-logo
                 (print-hello-message))
               (slime-repl-send-initial-command)

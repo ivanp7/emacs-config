@@ -75,7 +75,7 @@
 
 ;; Starting server
 (or (server-running-p)
-   (server-start))
+    (server-start))
 
 ;;;; Starting IDE, setting up windows configuration
 
@@ -97,8 +97,7 @@
      ;; (eshell)
      (ielm)
      (let ((default-directory cl-ide-code-path))
-       (ansi-term "/bin/bash"))
-     (switch-window--jump-to-window 1))
+       (ansi-term "/bin/bash")))
    (lambda ()
      (interactive)
      (split-window-vertically (truncate (* 0.75 (window-body-height))))
@@ -113,7 +112,9 @@
        (ansi-term "/bin/bash"))
      (switch-window--jump-to-window 1)
      (switch-to-slime-scratch)
-     (switch-window--jump-to-window 1))))
+     (setq slime-scratch-text (concat slime-scratch-text (make-lambda-logo-string ";;    "))))))
+
+(defvar selected-ide-layout 2)
 
 (defun start-cl-ide (&optional cl-implementation layout prompt-prefix-text)
   (interactive)
@@ -149,7 +150,7 @@
   (timer/start)
 
   (delete-other-windows)
-  (funcall (nth (1- 2) ide-layouts))
+  (funcall (nth (1- selected-ide-layout) ide-layouts))
 
   ;; (desktop-read) ;; Load default desktop from file : "~/emacs.d/.emacs.desktop"
   (setq ide-started t))
