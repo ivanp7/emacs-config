@@ -345,11 +345,13 @@
           (lambda ()
             (slime-load-file (concat cl-ide-init-path "cl-init.lisp"))
             (when slime-first-startup
+              (slime-set-default-directory (default-value 'default-directory))
               (configure-slime-faces)
               (define-my-slime-keys)
               ;; (slime-load-file (concat default-directory "init/ivanp7-welcome.lisp"))
               ;; Silently autocreate *slime-scratch* buffer and fill it
               (with-current-buffer (slime-scratch-buffer)
+                (setq default-directory (default-value 'default-directory))
                 (insert slime-scratch-text))
               (slime-repl) ; switch to REPL
               (when slime-repl-print-logo
