@@ -19,7 +19,7 @@ Files:
 * elisp/random-idle-quote.el     - random-idle-quote mode
 * color-themes/granger-theme.el  - Emacs color theme
 
-* ivanp7.lisp                    - Common Lisp on-startup setup
+* cl-init.lisp                    - Common Lisp on-startup setup
 
 * keys-description-ru.org        - description of all defined keys in russian
 * screenshot*.png                - example views: the result all this magic creates

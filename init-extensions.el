@@ -120,6 +120,7 @@
 
 (setq slime-lisp-implementations
       '((sbcl ("sbcl"))
+        (ccl ("ccl"))
         (ecl ("ecl"))))
 ;; Optionally, specify the lisp program you are using. Default is "lisp"
 (setq inferior-lisp-program "sbcl")
@@ -333,7 +334,7 @@
 (defvar slime-first-startup t)
 (add-hook 'slime-connected-hook
           (lambda ()
-            (slime-load-file (concat cl-ide-init-path "ivanp7.lisp"))
+            (slime-load-file (concat cl-ide-init-path "cl-init.lisp"))
             (when slime-first-startup
               (configure-slime-faces)
               (define-my-slime-keys)
@@ -595,11 +596,11 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                    body-beg body-end 'priority (when oldov (1+ priority-base)))))
         (cl-case (string-to-char (match-string 0))
           ((?_) (overlay-put
-                ov2 'display
-                `((raise ,(- raise-base 0.2)) (height ,(* height-base 0.8)))))
+                 ov2 'display
+                 `((raise ,(- raise-base 0.2)) (height ,(* height-base 0.8)))))
           ((?^) (overlay-put
-                ov2 'display
-                `((raise ,(+ raise-base 0.2)) (height ,(* height-base 0.8))))))))))
+                 ov2 'display
+                 `((raise ,(+ raise-base 0.2)) (height ,(* height-base 0.8))))))))))
 
 (define-minor-mode magic-suscript-buffer
     "Redefinition of the magic-latex-buffer mode, that doesn't conflict with lisp-mode."
