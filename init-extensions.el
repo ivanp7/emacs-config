@@ -350,7 +350,7 @@
 ;;               (incf current-vpos)))
 ;;           *lambda-logo*))
 
-(defvar slime-repl-print-logo t)
+(defvar slime-repl-print-logo nil)
 
 (defvar slime-scratch-text
   (concat
