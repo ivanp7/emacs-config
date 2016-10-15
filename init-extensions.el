@@ -120,6 +120,7 @@
 
 (setq slime-lisp-implementations
       '((sbcl ("sbcl"))
+        (clasp ("clasp"))
         (ccl ("ccl"))
         (ecl ("ecl"))))
 ;; Optionally, specify the lisp program you are using. Default is "lisp"
