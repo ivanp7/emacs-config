@@ -31,7 +31,7 @@
         ("DELAYED" . (:foreground "peru" :weight bold))
         ("INPROGRESS" . (:foreground "OrangeRed1" :weight bold))
         ("DONE" . (:foreground "green" :weight bold))
-        ("CANCELED" . (:foreground "gray" :weight bold))))
+        ("CANCELLED" . (:foreground "gray" :weight bold))))
 
 (setq org-capture-templates
       '(("j" "Journal" entry (file+datetree "ivanp7-journal.org")
@@ -120,8 +120,8 @@
 
 (setq slime-lisp-implementations
       '((sbcl ("sbcl"))
-        (clasp ("clasp"))
         (ccl ("ccl"))
+        (clasp ("clasp"))
         (ecl ("ecl"))))
 ;; Optionally, specify the lisp program you are using. Default is "lisp"
 (setq inferior-lisp-program "sbcl")
@@ -227,16 +227,16 @@
                           (switch-to-and-fontify-repl-input)
                           (slime-repl-closing-return)))
     ((kbd "<return>") 'slime-repl-newline-and-indent)
-    ((kbd "<pause> <backspace>") (lambda () (interactive)
-                                    (end-of-buffer) (slime-repl-delete-current-input)))
     ((kbd "<M-up>") 'slime-repl-previous-input)
     ((kbd "<M-down>") 'slime-repl-next-input)
     ((kbd "<C-up>") 'backward-up-list)
     ((kbd "<C-down>") 'down-list)
     ((kbd "<M-S-up>") 'slime-repl-previous-prompt)
     ((kbd "<M-S-down>") 'slime-repl-next-prompt)
-    ((kbd "<pause> <delete>") (lambda () (interactive) (end-of-buffer) (slime-repl-clear-output)))
-    ((kbd "<C-pause>") 'slime-repl-clear-buffer))
+    ((kbd "C-] <backspace>") (lambda () (interactive)
+                                     (end-of-buffer) (slime-repl-delete-current-input)))
+    ((kbd "C-] <delete>") (lambda () (interactive) (end-of-buffer) (slime-repl-clear-output)))
+    ((kbd "C-] <return>") 'slime-repl-clear-buffer))
   ;; ****** keys that work in all Common Lisp buffers ******
   (slime-define-keys lisp-mode-map
     ((kbd "C-<return>") (lambda () (interactive)
@@ -387,8 +387,8 @@
               ;; Display load time
               (timer/stop)
               (run-at-time "1 sec" nil (lambda ()
-                                       (anarcat/display-timing)
-                                       (timer/reset))))))
+                                         (anarcat/display-timing)
+                                         (timer/reset))))))
 
 ;;;; TabBar
 (tabbar-mode 1)

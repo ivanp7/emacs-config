@@ -150,8 +150,8 @@
 (define-expansion "M-a s" "(setf " ")")
 
 ;; Templates
-(define-expansion "M-a a" "#'(lambda () " ")" 9 t) ; l(a)mbda
-(define-expansion "M-a A" "(lambda () " ")" 7 t)
+(define-expansion "M-a a" "(lambda () " ")" 7 t)
+(define-expansion "M-a A" "#'(lambda () " ")" 9 t) ; l(a)mbda
 
 (define-expansion "M-a d f" "(defun ~ ()" ")" 8 t
                   (backward-delete-char-untabify 1) "\n")
@@ -224,13 +224,15 @@
            (define-key my-lisp-keys-minor-mode-map [remap right-char] 'forward-sexp)
            (define-key my-lisp-keys-minor-mode-map [remap previous-line] 'backward-up-list)
            (define-key my-lisp-keys-minor-mode-map [remap next-line] 'down-list)
-           (define-key my-lisp-keys-minor-mode-map [remap move-beginning-of-line] 'beginning-of-list)
+           (define-key my-lisp-keys-minor-mode-map [remap move-beginning-of-line]
+             'beginning-of-list)
            (define-key my-lisp-keys-minor-mode-map [remap move-end-of-line] 'end-of-list)
            (define-key my-lisp-keys-minor-mode-map [remap backward-sexp] 'left-char)
            (define-key my-lisp-keys-minor-mode-map [remap forward-sexp] 'right-char)
            (define-key my-lisp-keys-minor-mode-map [remap backward-up-list] 'previous-line)
            (define-key my-lisp-keys-minor-mode-map [remap down-list] 'next-line)
-           (define-key my-lisp-keys-minor-mode-map [remap beginning-of-list] 'move-beginning-of-line)
+           (define-key my-lisp-keys-minor-mode-map [remap beginning-of-list]
+             'move-beginning-of-line)
            (define-key my-lisp-keys-minor-mode-map [remap end-of-list] 'move-end-of-line)
            (define-key my-lisp-keys-minor-mode-map [remap backward-delete-char-untabify]
              'delete-sexp-backward)
@@ -282,12 +284,12 @@
 (defun remove-pair-of-parens ()
   (interactive)
   (let ((left (condition-case nil (save-excursion
-                                  (backward-up-list)
-                                  (point))
+                                    (backward-up-list)
+                                    (point))
                 (error nil)))
         (right (condition-case nil (save-excursion
-                                   (up-list)
-                                   (point))
+                                     (up-list)
+                                     (point))
                  (error nil)))
         (pos (point)))
     (if (and left right)
@@ -338,7 +340,7 @@
               (when (<= match-beg pos)
                 (replace-match "" nil nil)
                 (when (not (or (eql (char-after) ?\))
-                            (eql (char-before) ?\()))
+                               (eql (char-before) ?\()))
                   (insert " ")
                   (setq space-inserted t))
                 (setq pos (if (and (< match-beg pos) space-inserted)
