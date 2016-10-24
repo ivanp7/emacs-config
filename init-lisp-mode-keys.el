@@ -143,7 +143,7 @@
 (define-expansion "M-a y" "(apply " ")") ; appl(y)
 (define-expansion "M-a e" "(eval " ")")
 
-(define-expansion "M-a p" "(progn" ")" 8 t (left-char) "\n")
+(define-expansion "M-a p" "(progn" ")" nil t nil "\n")
 
 (define-expansion "M-a u" "(null " ")")
 
@@ -284,12 +284,12 @@
 (defun remove-pair-of-parens ()
   (interactive)
   (let ((left (condition-case nil (save-excursion
-                                    (backward-up-list)
-                                    (point))
+                                  (backward-up-list)
+                                  (point))
                 (error nil)))
         (right (condition-case nil (save-excursion
-                                     (up-list)
-                                     (point))
+                                   (up-list)
+                                   (point))
                  (error nil)))
         (pos (point)))
     (if (and left right)
@@ -340,7 +340,7 @@
               (when (<= match-beg pos)
                 (replace-match "" nil nil)
                 (when (not (or (eql (char-after) ?\))
-                               (eql (char-before) ?\()))
+                            (eql (char-before) ?\()))
                   (insert " ")
                   (setq space-inserted t))
                 (setq pos (if (and (< match-beg pos) space-inserted)
