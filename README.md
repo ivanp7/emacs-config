@@ -10,7 +10,6 @@ Files:
 * init.el                        - main script that loads everything, should be loaded from .emacs
 * init-emacs.el                  - generic Emacs customizations, installation of Emacs packages
 * init-extensions.el             - Emacs packages loading & tuning code
-* init-cl-symbols-list.el        - list of CL standard symbols for syntax highlighting purposes
 * init-keys.el                   - binding of common key sequences
 * init-buffer-keys.el            - binding of keys to work with buffer configuration
 * init-lisp-mode-keys.el         - binding of Lisp modes only key sequences
@@ -19,7 +18,10 @@ Files:
 * elisp/random-idle-quote.el     - random-idle-quote mode
 * color-themes/granger-theme.el  - Emacs color theme
 
-* cl-init.lisp                    - Common Lisp on-startup setup
+* cl-init.lisp                   - Common Lisp on-startup setup
+
+* cl-symbols-list.sexp           - list of CL standard symbols for syntax highlighting purposes
+* cl-implementations.sexp        - list of installed CL implementations
 
 * keys-description-ru.org        - description of all defined keys in russian
 * screenshot*.png                - example views: the result all this magic creates
