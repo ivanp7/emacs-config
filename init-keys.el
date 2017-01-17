@@ -81,6 +81,16 @@
 (define-key my-common-keys-minor-mode-map (kbd "<C-M-next>") 'text-scale-decrease)
 (define-key my-common-keys-minor-mode-map (kbd "<C-M-prior>") 'text-scale-increase)
 
+;; Horizontal wheeling
+(define-key my-common-keys-minor-mode-map (kbd "<C-M-mouse-4>")
+  '(lambda ()
+    (interactive)
+    (scroll-right 2 t)))
+(define-key my-common-keys-minor-mode-map (kbd "<C-M-mouse-5>")
+  '(lambda ()
+    (interactive)
+    (scroll-left 2 t)))
+
 ;;; Transparency control keybindings
 
 ;; C-M-i will decrease opacity (== increase transparency
@@ -97,6 +107,9 @@
 (define-key my-common-keys-minor-mode-map (kbd "<f1> SPC")
   (lambda () (interactive)
      (find-file-other-frame (concat cl-ide-init-path "keys-description-ru.org"))))
+
+;;;; Redraw display
+(define-key my-common-keys-minor-mode-map (kbd "C-`") 'redraw-display)
 
 ;;;; Installing minor mode for keys
 (define-minor-mode my-common-keys-minor-mode

@@ -187,14 +187,6 @@
 
 (setq next-screen-context-lines 30)
 
-;; Ignoring mouse horizontal wheeling
-(global-set-key (kbd "M--") '(lambda ()
-                              (interactive)
-                              (scroll-right 2 t)))
-(global-set-key (kbd "M-=") '(lambda ()
-                              (interactive)
-                              (scroll-left 2 t)))
-
 (global-set-key (kbd "<wheel-right>") 'ignore)
 (global-set-key (kbd "<double-wheel-right>") 'ignore)
 (global-set-key (kbd "<triple-wheel-right>") 'ignore)
