@@ -156,10 +156,11 @@
 
   (if cl-implementation
       (setq slime-default-lisp cl-implementation)
-      (flet ((make-enumeration-string (lst)
-               (apply 'concat (cons (first lst)
-                                    (mapcar (lambda (str) (concat ", " str))
-                                            (cdr lst))))))
+      (cl-flet ((make-enumeration-string
+                 (lst)
+                 (apply 'concat (cons (first lst)
+                                      (mapcar (lambda (str) (concat ", " str))
+                                              (cdr lst))))))
         (let* ((implementations (mapcar (lambda (impl) (prin1-to-string (car impl)))
                                         slime-lisp-implementations))
                (prompt (concat (if (plusp (length prompt-prefix-text))
