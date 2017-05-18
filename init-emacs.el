@@ -11,7 +11,7 @@
  '(size-indication-mode t) ; show file size
  '(org-replace-disputed-keys t))
 (custom-set-faces
- '(default ((t (:family "Anonymous Pro" :foundry "outline" :slant normal
+ '(default ((t (:family "FreeMono" :foundry "outline" :slant normal
                         :weight normal :height 80 :width normal)))))
 ;;(set-default-font "DejaVu Sans Mono") ; :height 75
 ;;(set-default-font "Consolas-8")
@@ -136,7 +136,7 @@
         (beginning-of-buffer)
         (while (re-search-forward ",@[ \t]+" nil t)
           (if (not (member (plist-get (text-properties-at (point)) 'face)
-                    '(font-lock-string-face font-lock-comment-face)))
+                           '(font-lock-string-face font-lock-comment-face)))
               (replace-match ",@"))))))
 (add-to-list 'write-file-functions 'comma-at-sign-remove-spaces)
 
@@ -151,8 +151,8 @@
         (beginning-of-buffer)
         (while (re-search-forward ",@" nil t)
           (if (and (not (member (plist-get (text-properties-at (point)) 'face)
-                       '(font-lock-string-face font-lock-comment-face)))
-                 (not (member (char-after (point)) '(?\( ?\, ?\` ?\'))))
+                                '(font-lock-string-face font-lock-comment-face)))
+                   (not (member (char-after (point)) '(?\( ?\, ?\` ?\'))))
               (replace-match ",@"))))))
 
 ;; End of file newlines
