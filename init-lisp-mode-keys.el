@@ -1,47 +1,75 @@
 (defvar my-lisp-keys-minor-mode-map (make-keymap) "my-common-keys-minor-mode keymap.")
 
 ;;; SLIME commands
-(define-key my-lisp-keys-minor-mode-map (kbd "<f1> <f1>") 'slime-hyperspec-lookup)
-(define-key my-lisp-keys-minor-mode-map (kbd "<f1> <f2> a") 'slime-apropos)
-(define-key my-lisp-keys-minor-mode-map (kbd "<f1> <f2> z") 'slime-apropos-all)
-(define-key my-lisp-keys-minor-mode-map (kbd "<f1> <f2> p") 'slime-apropos-package)
-(define-key my-lisp-keys-minor-mode-map (kbd "<f1> <f2> ~") 'common-lisp-hyperspec-format)
-(define-key my-lisp-keys-minor-mode-map (kbd "<f1> <f2> #") 'common-lisp-hyperspec-lookup-reader-macro)
-(define-key my-lisp-keys-minor-mode-map (kbd "<f1> <f2> d") 'slime-describe-symbol)
-(define-key my-lisp-keys-minor-mode-map (kbd "<f1> <f2> f") 'slime-describe-function)
+(define-key my-lisp-keys-minor-mode-map (kbd "<f1> <f1>")
+  'slime-hyperspec-lookup)
+(define-key my-lisp-keys-minor-mode-map (kbd "<f1> <f2> a")
+  'slime-apropos)
+(define-key my-lisp-keys-minor-mode-map (kbd "<f1> <f2> z")
+  'slime-apropos-all)
+(define-key my-lisp-keys-minor-mode-map (kbd "<f1> <f2> p")
+  'slime-apropos-package)
+(define-key my-lisp-keys-minor-mode-map (kbd "<f1> <f2> ~")
+  'common-lisp-hyperspec-format)
+(define-key my-lisp-keys-minor-mode-map (kbd "<f1> <f2> #")
+  'common-lisp-hyperspec-lookup-reader-macro)
+(define-key my-lisp-keys-minor-mode-map (kbd "<f1> <f2> d")
+  'slime-describe-symbol)
+(define-key my-lisp-keys-minor-mode-map (kbd "<f1> <f2> f")
+  'slime-describe-function)
 
-(define-key my-lisp-keys-minor-mode-map (kbd "<S-escape>") 'slime-interrupt)
-(define-key my-lisp-keys-minor-mode-map (kbd "M-e") 'slime-interactive-eval)
-(define-key my-lisp-keys-minor-mode-map (kbd "M-d") 'slime-edit-value)
-(define-key my-lisp-keys-minor-mode-map (kbd "M-f") 'slime-inspect)
-(define-key my-lisp-keys-minor-mode-map (kbd "C-M-f") 'slime-inspect-definition)
+(define-key my-lisp-keys-minor-mode-map (kbd "<S-escape>")
+  'slime-interrupt)
+(define-key my-lisp-keys-minor-mode-map (kbd "M-e")
+  'slime-interactive-eval)
+(define-key my-lisp-keys-minor-mode-map (kbd "M-d")
+  'slime-edit-value)
+(define-key my-lisp-keys-minor-mode-map (kbd "M-f")
+  'slime-inspect)
+(define-key my-lisp-keys-minor-mode-map (kbd "C-M-f")
+  'slime-inspect-definition)
 
-(define-key my-lisp-keys-minor-mode-map (kbd "<C-insert>") 'slime-close-all-parens-in-sexp)
-(define-key my-lisp-keys-minor-mode-map (kbd "<S-return>") 'indent-new-comment-line)
+(define-key my-lisp-keys-minor-mode-map (kbd "<C-insert>")
+  'slime-close-all-parens-in-sexp)
+(define-key my-lisp-keys-minor-mode-map (kbd "<S-return>")
+  'indent-new-comment-line)
 
-(define-key my-lisp-keys-minor-mode-map (kbd "C-;") 'slime-insert-balanced-comments)
-(define-key my-lisp-keys-minor-mode-map (kbd "C-:") 'slime-remove-balanced-comments)
+(define-key my-lisp-keys-minor-mode-map (kbd "C-;")
+  'slime-insert-balanced-comments)
+(define-key my-lisp-keys-minor-mode-map (kbd "C-:")
+  'slime-remove-balanced-comments)
 
+(define-key my-lisp-keys-minor-mode-map (kbd "<f3>")
+  'copy-expression-to-repl)
 
-(define-key my-lisp-keys-minor-mode-map (kbd "<f3>") 'copy-expression-to-repl)
-
-(define-key my-lisp-keys-minor-mode-map (kbd "<f4>") 'slime-eval-last-expression)
-(define-key my-lisp-keys-minor-mode-map (kbd "C-<f4>") 'slime-pprint-eval-last-expression)
+(define-key my-lisp-keys-minor-mode-map (kbd "<f4>")
+  'slime-eval-last-expression)
+(define-key my-lisp-keys-minor-mode-map (kbd "C-<f4>")
+  'slime-pprint-eval-last-expression)
 (define-key my-lisp-keys-minor-mode-map (kbd "<f5>")
   (lambda ()
     (interactive)
     (if (use-region-p)
         (slime-eval-region (region-beginning) (region-end))
         (message "No region is selected to evaluate"))))
-(define-key my-lisp-keys-minor-mode-map (kbd "C-<f5>") 'slime-pprint-eval-region)
-(define-key my-lisp-keys-minor-mode-map (kbd "<f6>") 'slime-eval-defun)
-(define-key my-lisp-keys-minor-mode-map (kbd "C-<f6>") 'slime-re-evaluate-defvar)
-(define-key my-lisp-keys-minor-mode-map (kbd "S-<f6>") 'slime-call-defun)
-(define-key my-lisp-keys-minor-mode-map (kbd "<f7>") 'slime-eval-buffer)
-(define-key my-lisp-keys-minor-mode-map (kbd "<f8>") 'slime-macroexpand-1)
-(define-key my-lisp-keys-minor-mode-map (kbd "S-<f8>") 'slime-macroexpand-all)
-(define-key my-lisp-keys-minor-mode-map (kbd "<f9>") 'slime-complete-form)
-(define-key my-lisp-keys-minor-mode-map (kbd "C-<f9>") 'slime-autodoc-manually)
+(define-key my-lisp-keys-minor-mode-map (kbd "C-<f5>")
+  'slime-pprint-eval-region)
+(define-key my-lisp-keys-minor-mode-map (kbd "<f6>")
+  'slime-eval-defun)
+(define-key my-lisp-keys-minor-mode-map (kbd "C-<f6>")
+  'slime-re-evaluate-defvar)
+(define-key my-lisp-keys-minor-mode-map (kbd "S-<f6>")
+  'slime-call-defun)
+(define-key my-lisp-keys-minor-mode-map (kbd "<f7>")
+  'slime-eval-buffer)
+(define-key my-lisp-keys-minor-mode-map (kbd "<f8>")
+  'slime-macroexpand-1)
+(define-key my-lisp-keys-minor-mode-map (kbd "S-<f8>")
+  'slime-macroexpand-all)
+(define-key my-lisp-keys-minor-mode-map (kbd "<f9>")
+  'slime-complete-form)
+(define-key my-lisp-keys-minor-mode-map (kbd "C-<f9>")
+  'slime-autodoc-manually)
 
 ;;; Quick editing
 (defun delete-selection ()
@@ -49,7 +77,8 @@
   (if (use-region-p)
       (delete-region (region-beginning) (region-end))))
 
-(defun surround-selection (prefix-str postfix-str &optional offset-on-selection reindent)
+(defun surround-selection (prefix-str postfix-str &optional offset-on-selection
+                                                    reindent)
   (interactive)
   (if (use-region-p)
       (let ((begin-pos (region-beginning)) (end-pos (region-end)))
@@ -62,14 +91,16 @@
             (goto-char (+ begin-pos offset-on-selection))
             (left-char (length postfix-str)))
         (if reindent
-            (indent-region begin-pos (+ end-pos (length prefix-str) (length postfix-str)))))
+            (indent-region begin-pos (+ end-pos (length prefix-str)
+                                        (length postfix-str)))))
       (let ((pos (point)))
         (insert prefix-str postfix-str)
         (if offset-on-selection
             (goto-char (+ pos offset-on-selection))
             (left-char (length postfix-str)))
         (if reindent
-            (indent-region pos (+ pos (length prefix-str) (length postfix-str)))))))
+            (indent-region pos (+ pos (length prefix-str)
+                                  (length postfix-str)))))))
 
 (define-key my-lisp-keys-minor-mode-map (kbd "S-SPC")
   (lambda () (interactive) (delete-selection) (insert " ") (left-char 1)))
@@ -86,8 +117,10 @@
 (define-key my-lisp-keys-minor-mode-map (kbd "M-z")
   (lambda () (interactive) (delete-selection) (insert "nil")))
 
-(defmacro define-expansion (key prefix postfix &optional offset-on-selection reindent
-                                                 final-command add-to-prefix-if-selection)
+(defmacro define-expansion (key prefix postfix &optional offset-on-selection
+                                                 reindent
+                                                 final-command
+                                                 add-to-prefix-if-selection)
   `(define-key my-lisp-keys-minor-mode-map (kbd ,key)
      (lambda () (interactive)
         (surround-selection (if (use-region-p)
@@ -105,7 +138,8 @@
 (define-expansion "C-#" "#|" "|#")
 
 (lexical-let ((make-parens (lambda () (interactive) (surround-selection "(" ")" 1))))
-  (define-key lisp-mode-shared-map (kbd "<tab>") make-parens) ; will work in all Lisp modes
+  ;; will work in all Lisp modes
+  (define-key lisp-mode-shared-map (kbd "<tab>") make-parens)
   (define-key lisp-mode-shared-map (kbd "M-q") make-parens)
   (add-hook 'minibuffer-setup-hook
             (lambda ()
@@ -170,7 +204,7 @@
 (define-expansion "M-a b l" "(let ()" ")" 6 t nil "\n") ; (l)et
 (define-expansion "M-a b o" "(let* ()" ")" 7 t nil "\n") ; c(o)nsecutive let
 (define-expansion "M-a b f" "(flet (( ()))" ")" 8 t nil "\n") ; (f)unction let
-(define-expansion "M-a b r" "(labels (( ()))" ")" 10 t nil "\n") ; (r)ecursive function let
+(define-expansion "M-a b r" "(labels (( ()))" ")" 10 t nil "\n") ; (r)ecursive flet
 (define-expansion "M-a b m" "(macrolet (( ()))" ")" 12 t nil "\n") ; (m)acro let
 
 ;;; Movement, selection, editing and other useful keybindings
@@ -211,8 +245,10 @@
   (delete-selection)
   (deactivate-mark) (cua-set-mark) (forward-sexp ARG) (delete-selection))
 
-(define-key my-lisp-keys-minor-mode-map (kbd "C-<backspace>") 'delete-sexp-backward)
-(define-key my-lisp-keys-minor-mode-map (kbd "C-<delete>") 'delete-sexp-forward)
+(define-key my-lisp-keys-minor-mode-map (kbd "C-<backspace>")
+  'delete-sexp-backward)
+(define-key my-lisp-keys-minor-mode-map (kbd "C-<delete>")
+  'delete-sexp-forward)
 
 (defvar sexp-edition-mode nil)
 
@@ -220,21 +256,32 @@
   (lambda () (interactive)
      (if (not sexp-edition-mode)
          (progn
-           (define-key my-lisp-keys-minor-mode-map [remap left-char] 'backward-sexp)
-           (define-key my-lisp-keys-minor-mode-map [remap right-char] 'forward-sexp)
-           (define-key my-lisp-keys-minor-mode-map [remap previous-line] 'backward-up-list)
-           (define-key my-lisp-keys-minor-mode-map [remap next-line] 'down-list)
+           (define-key my-lisp-keys-minor-mode-map [remap left-char]
+             'backward-sexp)
+           (define-key my-lisp-keys-minor-mode-map [remap right-char]
+             'forward-sexp)
+           (define-key my-lisp-keys-minor-mode-map [remap previous-line]
+             'backward-up-list)
+           (define-key my-lisp-keys-minor-mode-map [remap next-line]
+             'down-list)
            (define-key my-lisp-keys-minor-mode-map [remap move-beginning-of-line]
              'beginning-of-list)
-           (define-key my-lisp-keys-minor-mode-map [remap move-end-of-line] 'end-of-list)
-           (define-key my-lisp-keys-minor-mode-map [remap backward-sexp] 'left-char)
-           (define-key my-lisp-keys-minor-mode-map [remap forward-sexp] 'right-char)
-           (define-key my-lisp-keys-minor-mode-map [remap backward-up-list] 'previous-line)
-           (define-key my-lisp-keys-minor-mode-map [remap down-list] 'next-line)
+           (define-key my-lisp-keys-minor-mode-map [remap move-end-of-line]
+             'end-of-list)
+           (define-key my-lisp-keys-minor-mode-map [remap backward-sexp]
+             'left-char)
+           (define-key my-lisp-keys-minor-mode-map [remap forward-sexp]
+             'right-char)
+           (define-key my-lisp-keys-minor-mode-map [remap backward-up-list]
+             'previous-line)
+           (define-key my-lisp-keys-minor-mode-map [remap down-list]
+             'next-line)
            (define-key my-lisp-keys-minor-mode-map [remap beginning-of-list]
              'move-beginning-of-line)
-           (define-key my-lisp-keys-minor-mode-map [remap end-of-list] 'move-end-of-line)
-           (define-key my-lisp-keys-minor-mode-map [remap backward-delete-char-untabify]
+           (define-key my-lisp-keys-minor-mode-map [remap end-of-list]
+             'move-end-of-line)
+           (define-key my-lisp-keys-minor-mode-map
+               [remap backward-delete-char-untabify]
              'delete-sexp-backward)
            (define-key my-lisp-keys-minor-mode-map [remap delete-forward-char]
              'delete-sexp-forward)
@@ -243,24 +290,41 @@
            (define-key my-lisp-keys-minor-mode-map [remap delete-sexp-forward]
              'delete-forward-char))
          (progn
-           (define-key my-lisp-keys-minor-mode-map [remap left-char] nil)
-           (define-key my-lisp-keys-minor-mode-map [remap right-char] nil)
-           (define-key my-lisp-keys-minor-mode-map [remap previous-line] nil)
-           (define-key my-lisp-keys-minor-mode-map [remap next-line] nil)
-           (define-key my-lisp-keys-minor-mode-map [remap move-beginning-of-line] nil)
-           (define-key my-lisp-keys-minor-mode-map [remap move-end-of-line] nil)
-           (define-key my-lisp-keys-minor-mode-map [remap backward-sexp] nil)
-           (define-key my-lisp-keys-minor-mode-map [remap forward-sexp] nil)
-           (define-key my-lisp-keys-minor-mode-map [remap backward-up-list] nil)
-           (define-key my-lisp-keys-minor-mode-map [remap down-list] nil)
-           (define-key my-lisp-keys-minor-mode-map [remap beginning-of-list] nil)
-           (define-key my-lisp-keys-minor-mode-map [remap end-of-list] nil)
-           (define-key my-lisp-keys-minor-mode-map [remap backward-delete-char-untabify] nil)
-           (define-key my-lisp-keys-minor-mode-map [remap delete-forward-char] nil)
-           (define-key my-lisp-keys-minor-mode-map [remap delete-sexp-backward] nil)
-           (define-key my-lisp-keys-minor-mode-map [remap delete-sexp-forward] nil)))
+           (define-key my-lisp-keys-minor-mode-map
+               [remap left-char] nil)
+           (define-key my-lisp-keys-minor-mode-map
+               [remap right-char] nil)
+           (define-key my-lisp-keys-minor-mode-map
+               [remap previous-line] nil)
+           (define-key my-lisp-keys-minor-mode-map
+               [remap next-line] nil)
+           (define-key my-lisp-keys-minor-mode-map
+               [remap move-beginning-of-line] nil)
+           (define-key my-lisp-keys-minor-mode-map
+               [remap move-end-of-line] nil)
+           (define-key my-lisp-keys-minor-mode-map
+               [remap backward-sexp] nil)
+           (define-key my-lisp-keys-minor-mode-map
+               [remap forward-sexp] nil)
+           (define-key my-lisp-keys-minor-mode-map
+               [remap backward-up-list] nil)
+           (define-key my-lisp-keys-minor-mode-map
+               [remap down-list] nil)
+           (define-key my-lisp-keys-minor-mode-map
+               [remap beginning-of-list] nil)
+           (define-key my-lisp-keys-minor-mode-map
+               [remap end-of-list] nil)
+           (define-key my-lisp-keys-minor-mode-map
+               [remap backward-delete-char-untabify] nil)
+           (define-key my-lisp-keys-minor-mode-map
+               [remap delete-forward-char] nil)
+           (define-key my-lisp-keys-minor-mode-map
+               [remap delete-sexp-backward] nil)
+           (define-key my-lisp-keys-minor-mode-map
+               [remap delete-sexp-forward] nil)))
      (setq sexp-edition-mode (not sexp-edition-mode))
-     (message "S-exp edition mode is %s" (if sexp-edition-mode "ON" "OFF"))))
+     (message "S-exp edition mode is %s"
+              (if sexp-edition-mode "ON" "OFF"))))
 
 ;; following is defined in init-extensions.el
 ;; (define-key my-lisp-keys-minor-mode-map (kbd "<M-up>") 'beginning-of-defun)
@@ -278,8 +342,10 @@
   (delete-region (point)
                  (progn (move-beginning-of-line 1) (point))))
 
-(define-key my-lisp-keys-minor-mode-map (kbd "<S-backspace>") 'delete-line-backward)
-(define-key my-lisp-keys-minor-mode-map (kbd "<S-delete>") 'delete-line-forward)
+(define-key my-lisp-keys-minor-mode-map (kbd "<S-backspace>")
+  'delete-line-backward)
+(define-key my-lisp-keys-minor-mode-map (kbd "<S-delete>")
+  'delete-line-forward)
 
 (defun remove-pair-of-parens ()
   (interactive)
@@ -300,7 +366,8 @@
           (delete-char 1)
           (goto-char (- pos 1))))))
 
-(define-key my-lisp-keys-minor-mode-map (kbd "<backtab>") 'remove-pair-of-parens)
+(define-key my-lisp-keys-minor-mode-map (kbd "<backtab>")
+  'remove-pair-of-parens)
 
 
 
@@ -321,10 +388,12 @@
             (pos (point)))
         (if (and left right)
             (indent-region left right)
-            (unless (get-text-property (line-beginning-position) 'slime-repl-prompt)
+            (unless (get-text-property (line-beginning-position)
+                                       'slime-repl-prompt)
               (lisp-indent-line))))))
 
-(define-key my-lisp-keys-minor-mode-map (kbd "<C-tab>") 'indent-current-sexp-or-selection)
+(define-key my-lisp-keys-minor-mode-map (kbd "<C-tab>")
+  'indent-current-sexp-or-selection)
 
 (defun kill-whitespace ()
   "Kill the whitespace between two non-whitespace characters"
@@ -377,20 +446,29 @@ Version 2015-04-09"
        (downcase-region fp1 fp2)
        (put this-command 'state 0)))))
 
-(define-key my-lisp-keys-minor-mode-map (kbd "C-=") 'xah-toggle-letter-case)
+(define-key my-lisp-keys-minor-mode-map (kbd "C-=")
+  'xah-toggle-letter-case)
 
 ;;; Bugs workaround keys
-(define-key my-lisp-keys-minor-mode-map (kbd "M-b") 'comma-at-sign-add-spaces)
+(define-key my-lisp-keys-minor-mode-map (kbd "M-b")
+  'comma-at-sign-add-spaces)
 
 ;;; Extensions and modes keybindings
-(define-key my-lisp-keys-minor-mode-map (kbd "<f2>") 'auto-complete)
-(define-key my-lisp-keys-minor-mode-map (kbd "M-t") 'ac-isearch)
+(define-key my-lisp-keys-minor-mode-map (kbd "<f2>")
+  'auto-complete)
+(define-key my-lisp-keys-minor-mode-map (kbd "M-t")
+  'ac-isearch)
 
-(define-key my-lisp-keys-minor-mode-map (kbd "M-m") 'highlight-symbol)
-(define-key my-lisp-keys-minor-mode-map (kbd "M-.") 'highlight-symbol-next)
-(define-key my-lisp-keys-minor-mode-map (kbd "M-,") 'highlight-symbol-prev)
-(define-key my-lisp-keys-minor-mode-map (kbd "M-/") 'highlight-symbol-count)
-(define-key my-lisp-keys-minor-mode-map (kbd "M-n") 'highlight-symbol-query-replace)
+(define-key my-lisp-keys-minor-mode-map (kbd "M-m")
+  'highlight-symbol)
+(define-key my-lisp-keys-minor-mode-map (kbd "M-.")
+  'highlight-symbol-next)
+(define-key my-lisp-keys-minor-mode-map (kbd "M-,")
+  'highlight-symbol-prev)
+(define-key my-lisp-keys-minor-mode-map (kbd "M-/")
+  'highlight-symbol-count)
+(define-key my-lisp-keys-minor-mode-map (kbd "M-n")
+  'highlight-symbol-query-replace)
 
 (defun doc-function ()
   (interactive)
@@ -398,34 +476,60 @@ Version 2015-04-09"
     (if (not symbol-name) (error "No symbol at point")
         (let ((symbol-name (substring-no-properties symbol-name)))
           (message "Symbol: %s" symbol-name)
-          (popup-tip (format "%s" (slime-eval `(swank:documentation-symbol ,symbol-name)))
-                     :nostrip t)))))
+          (pos-tip-show
+           (format "%s" (slime-eval `(swank:documentation-symbol
+                                      ,symbol-name))))
+          ;; (popup-tip
+          ;;  (format "%s" (slime-eval `(swank:documentation-symbol
+          ;;                             ,symbol-name)))
+          ;;  :nostrip t)
+          ))))
 
 (define-key my-lisp-keys-minor-mode-map (kbd "<C-M-mouse-1>")
-  (lambda (event) (interactive "e") (mouse-set-point event) (deactivate-mark) (doc-function)))
+  (lambda (event) (interactive "e")
+     (mouse-set-point event)
+     (deactivate-mark)
+     (doc-function)))
 (define-key my-lisp-keys-minor-mode-map (kbd "M-i")
-  (lambda () (interactive) (deactivate-mark) (doc-function)))
+  (lambda () (interactive)
+     (deactivate-mark)
+     (doc-function)))
 
-(global-set-key (kbd "<mouse-2>") 'hs-mouse-toggle-hiding)
+(global-set-key (kbd "<mouse-2>")
+                'hs-mouse-toggle-hiding)
 ;; it doesn't work as expected this way (*Completions* buffer bug):
-;;(define-key my-lisp-keys-minor-mode-map (kbd "<mouse-2>") 'hs-mouse-toggle-hiding)
+;;(define-key my-lisp-keys-minor-mode-map (kbd "<mouse-2>")
+;;  'hs-mouse-toggle-hiding)
 
-(define-key my-lisp-keys-minor-mode-map (kbd "<M-S-mouse-4>") 'er/expand-region)
-(define-key my-lisp-keys-minor-mode-map (kbd "<M-S-mouse-5>") 'er/contract-region)
+(define-key my-lisp-keys-minor-mode-map (kbd "<M-S-mouse-4>")
+  'er/expand-region)
+(define-key my-lisp-keys-minor-mode-map (kbd "<M-S-mouse-5>")
+  'er/contract-region)
 (define-key my-lisp-keys-minor-mode-map (kbd "<mouse-3>")
-  (lambda (event) (interactive "e") (mouse-set-point event) (er/mark-symbol)))
+  (lambda (event) (interactive "e")
+     (mouse-set-point event)
+     (er/mark-symbol)))
 (define-key my-lisp-keys-minor-mode-map (kbd "<double-mouse-3>")
-  (lambda (event) (interactive "e") (mouse-set-point event) (er/mark-symbol-with-prefix)))
+  (lambda (event) (interactive "e")
+     (mouse-set-point event)
+     (er/mark-symbol-with-prefix)))
 
-(define-key my-lisp-keys-minor-mode-map (kbd "M-w") 'highlight-stages-global-mode)
+(define-key my-lisp-keys-minor-mode-map (kbd "M-w")
+  'highlight-stages-global-mode)
 
 ;;; Rainbow identifiers keys
-(define-key my-lisp-keys-minor-mode-map (kbd "M-k") 'rainbow-identifiers-tune)
+(define-key my-lisp-keys-minor-mode-map (kbd "M-k")
+  'rainbow-identifiers-tune)
 (define-key my-lisp-keys-minor-mode-map (kbd "M-K")
-  (lambda () (interactive) (let ((rainbow-identifiers-tune-delta -1)) (rainbow-identifiers-tune))))
-(define-key my-lisp-keys-minor-mode-map (kbd "M-j r") 'rainbow-identifiers-cancel-tuning)
-(define-key my-lisp-keys-minor-mode-map (kbd "M-j l") 'rainbow-identifiers-load-tune)
-(define-key my-lisp-keys-minor-mode-map (kbd "M-j s") 'rainbow-identifiers-save-tune)
+  (lambda () (interactive)
+     (let ((rainbow-identifiers-tune-delta -1))
+       (rainbow-identifiers-tune))))
+(define-key my-lisp-keys-minor-mode-map (kbd "M-j r")
+  'rainbow-identifiers-cancel-tuning)
+(define-key my-lisp-keys-minor-mode-map (kbd "M-j l")
+  'rainbow-identifiers-load-tune)
+(define-key my-lisp-keys-minor-mode-map (kbd "M-j s")
+  'rainbow-identifiers-save-tune)
 
 ;;;; Installing minor mode for keys
 (define-minor-mode my-lisp-keys-minor-mode

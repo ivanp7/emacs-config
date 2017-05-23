@@ -1,6 +1,8 @@
 
 ;;;; Basic Emacs tuning
-(setq cua-rectangle-mark-key (kbd "C-x j")) ; needed to be able to rebind <C-return>
+;; needed to be able to rebind <C-return>:
+(setq cua-rectangle-mark-key (kbd "C-x j"))
+
 (custom-set-variables
  '(cua-mode t nil (cua-base)) ; use CUA keys (Ctrl+C, Ctrl+X, Ctrl+V)
  '(save-place t nil (saveplace)) ; save places in files between sessions
@@ -76,7 +78,7 @@
      when (not (package-installed-p p)) do (return nil)
      finally (return t)))
 
-;; if not all packages are installed, check one by one and install the missing ones.
+;; if not all packages are installed, check and install the missing ones.
 (unless (packages-installed-p)
   ;; check for new packages (package versions)
   (message "%s" "Emacs is now refreshing its package database...")
@@ -136,12 +138,13 @@
         (beginning-of-buffer)
         (while (re-search-forward ",@[ \t]+" nil t)
           (if (not (member (plist-get (text-properties-at (point)) 'face)
-                           '(font-lock-string-face font-lock-comment-face)))
+                    '(font-lock-string-face font-lock-comment-face)))
               (replace-match ",@"))))))
 (add-to-list 'write-file-functions 'comma-at-sign-remove-spaces)
 
 ;; A ",@symbol" highlight bug workaround:
-;; insert one space between ",@" and a symbol in code (except for strings and comments)
+;; insert one space between ",@" and a symbol in code
+;; (except for strings and comments)
 ;; do not insert space between ",@" and "("
 (defun comma-at-sign-add-spaces ()
   (interactive)
@@ -151,18 +154,18 @@
         (beginning-of-buffer)
         (while (re-search-forward ",@" nil t)
           (if (and (not (member (plist-get (text-properties-at (point)) 'face)
-                                '(font-lock-string-face font-lock-comment-face)))
-                   (not (member (char-after (point)) '(?\( ?\, ?\` ?\'))))
+                       '(font-lock-string-face font-lock-comment-face)))
+                 (not (member (char-after (point)) '(?\( ?\, ?\` ?\'))))
               (replace-match ",@"))))))
 
 ;; End of file newlines
 (setq require-final-newline t) ; add newline to the end of file when saving
-(setq next-line-add-newlines nil) ; do not add newline when moving point by arrow keys
+(setq next-line-add-newlines nil) ; don't add newline when moving point by arrow keys
 
 (setq truncate-lines nil)
 
 ;;; Configure backups and autosaves
-(setq-default make-backup-files nil)
+(setq-default make-backup-files t)
 (setq-default auto-save-defaults t)
 
 ;;;; Scrolling settings
@@ -224,7 +227,8 @@
    (setq locale-coding-system 'utf-8)
    (set-default-coding-systems 'utf-8)))
 
-(setq utf-translate-cjk-mode nil) ; disable CJK coding/encoding (Chinese/Japanese/Korean characters)
+;; disable CJK coding/encoding (Chinese/Japanese/Korean characters)
+(setq utf-translate-cjk-mode nil)
 
 ;;;; Input method
 (setq default-input-method "russian-computer")

@@ -1,13 +1,17 @@
-(defvar my-common-keys-minor-mode-map (make-keymap) "my-common-keys-minor-mode keymap.")
+(defvar my-common-keys-minor-mode-map (make-keymap)
+  "my-common-keys-minor-mode keymap.")
 
 ;;; Basic keys
-(define-key my-common-keys-minor-mode-map (kbd "C-z") 'undo-tree-undo)
-(define-key my-common-keys-minor-mode-map (kbd "C-y") 'undo-tree-redo)
+(define-key my-common-keys-minor-mode-map (kbd "C-z")
+  'undo-tree-undo)
+(define-key my-common-keys-minor-mode-map (kbd "C-y")
+  'undo-tree-redo)
 
 (define-key my-common-keys-minor-mode-map (kbd "C-S-v")
   (lambda () (interactive) (popup-menu 'yank-menu)))
 
-(define-key my-common-keys-minor-mode-map (kbd "<backspace>") 'backward-delete-char-untabify)
+(define-key my-common-keys-minor-mode-map (kbd "<backspace>")
+  'backward-delete-char-untabify)
 
 ;; Needed to disable destroying windows configuration by pressing <escape>
 (defadvice keyboard-escape-quit (around my-keyboard-escape-quit activate)
@@ -18,16 +22,20 @@
          ad-do-it
       (fset 'one-window-p (symbol-function 'orig-one-window-p)))))
 
-(define-key my-common-keys-minor-mode-map (kbd "<escape>") 'keyboard-escape-quit)
+(define-key my-common-keys-minor-mode-map (kbd "<escape>")
+  'keyboard-escape-quit)
 
 ;; Always open or create file with GUI
-(defadvice find-file-read-args (around find-file-read-args-always-use-dialog-box act)
+(defadvice find-file-read-args
+    (around find-file-read-args-always-use-dialog-box act)
   "Simulate invoking menu item as if by the mouse; see `use-dialog-box'."
   (let ((last-nonmenu-event nil))
     ad-do-it))
 
-(define-key my-common-keys-minor-mode-map (kbd "C-o") 'find-file)
-(define-key my-common-keys-minor-mode-map (kbd "C-p") 'find-file-other-frame)
+(define-key my-common-keys-minor-mode-map (kbd "C-o")
+  'find-file)
+(define-key my-common-keys-minor-mode-map (kbd "C-p")
+  'find-file-other-frame)
 
 (defun rename-current-buffer-file ()
   "Renames current buffer and file it is visiting."
@@ -46,40 +54,61 @@
               (message "File '%s' successfully renamed to '%s'"
                        name (file-name-nondirectory new-name)))))))
 
-(define-key my-common-keys-minor-mode-map (kbd "C-s") 'save-buffer)
-(define-key my-common-keys-minor-mode-map (kbd "C-S-s") 'write-file)
-(define-key my-common-keys-minor-mode-map (kbd "M-s s") 'rename-current-buffer-file)
+(define-key my-common-keys-minor-mode-map (kbd "C-s")
+  'save-buffer)
+(define-key my-common-keys-minor-mode-map (kbd "C-S-s")
+  'write-file)
+(define-key my-common-keys-minor-mode-map (kbd "M-s s")
+  'rename-current-buffer-file)
 
-(define-key my-common-keys-minor-mode-map (kbd "C-a") 'mark-whole-buffer)
-(define-key my-common-keys-minor-mode-map (kbd "C-l") 'goto-line)
+(define-key my-common-keys-minor-mode-map (kbd "C-a")
+  'mark-whole-buffer)
+(define-key my-common-keys-minor-mode-map (kbd "C-l")
+  'goto-line)
 
-(define-key my-common-keys-minor-mode-map (kbd "<M-home>") 'beginning-of-buffer)
-(define-key my-common-keys-minor-mode-map (kbd "<M-end>") 'end-of-buffer)
+(define-key my-common-keys-minor-mode-map (kbd "<M-home>")
+  'beginning-of-buffer)
+(define-key my-common-keys-minor-mode-map (kbd "<M-end>")
+  'end-of-buffer)
 
-(define-key my-common-keys-minor-mode-map (kbd "C-<f1>") 'slime-selector)
+(define-key my-common-keys-minor-mode-map (kbd "C-<f1>")
+  'slime-selector)
 
 ;;; Commands execution
-(define-key my-common-keys-minor-mode-map (kbd "C-M-x") 'shell-command)
-(define-key my-common-keys-minor-mode-map (kbd "S-C-M-x") 'repeat-complex-command)
+(define-key my-common-keys-minor-mode-map (kbd "C-M-x")
+  'shell-command)
+(define-key my-common-keys-minor-mode-map (kbd "S-C-M-x")
+  'repeat-complex-command)
 
 ;;;; Search
-;;(define-key my-common-keys-minor-mode-map (kbd "M-h") 'highlight-symbol-at-point)
-(define-key my-common-keys-minor-mode-map (kbd "M-r") 'highlight-regexp)
-(define-key my-common-keys-minor-mode-map (kbd "M-u") 'unhighlight-regexp)
+;;(define-key my-common-keys-minor-mode-map (kbd "M-h")
+;;  'highlight-symbol-at-point)
+(define-key my-common-keys-minor-mode-map (kbd "M-r")
+  'highlight-regexp)
+(define-key my-common-keys-minor-mode-map (kbd "M-u")
+  'unhighlight-regexp)
 
-(define-key my-common-keys-minor-mode-map (kbd "C-S-f") 'occur)
+(define-key my-common-keys-minor-mode-map (kbd "C-S-f")
+  'occur)
 
-;; (define-key my-common-keys-minor-mode-map (kbd "C-S-G <up>") 'isearch-backward)
-;; (define-key my-common-keys-minor-mode-map (kbd "M-C-S-G <up>") 'isearch-repeat-backward)
-;; (define-key my-common-keys-minor-mode-map (kbd "C-S-G <down>") 'isearch-forward)
-;; (define-key my-common-keys-minor-mode-map (kbd "M-C-S-G <down>") 'isearch-repeat-forward)
+;; (define-key my-common-keys-minor-mode-map (kbd "C-S-G <up>")
+;;   'isearch-backward)
+;; (define-key my-common-keys-minor-mode-map (kbd "M-C-S-G <up>")
+;;   'isearch-repeat-backward)
+;; (define-key my-common-keys-minor-mode-map (kbd "C-S-G <down>")
+;;   'isearch-forward)
+;; (define-key my-common-keys-minor-mode-map (kbd "M-C-S-G <down>")
+;;   'isearch-repeat-forward)
 
 ;;;; Toggle input method
-(define-key my-common-keys-minor-mode-map (kbd "C-/") 'toggle-input-method)
+(define-key my-common-keys-minor-mode-map (kbd "C-/")
+  'toggle-input-method)
 
 ;;; Font size control keybindings
-(define-key my-common-keys-minor-mode-map (kbd "<C-M-next>") 'text-scale-decrease)
-(define-key my-common-keys-minor-mode-map (kbd "<C-M-prior>") 'text-scale-increase)
+(define-key my-common-keys-minor-mode-map (kbd "<C-M-next>")
+  'text-scale-decrease)
+(define-key my-common-keys-minor-mode-map (kbd "<C-M-prior>")
+  'text-scale-increase)
 
 ;; Horizontal wheeling
 (define-key my-common-keys-minor-mode-map (kbd "<C-M-mouse-4>")
@@ -106,10 +135,12 @@
 ;;;; Open hotkey help file in a new frame
 (define-key my-common-keys-minor-mode-map (kbd "<f1> SPC")
   (lambda () (interactive)
-     (find-file-other-frame (concat cl-ide-init-path "keys-description-ru.org"))))
+     (find-file-other-frame (concat cl-ide-init-path
+                                    "keys-description-ru.org"))))
 
 ;;;; Redraw display
-(define-key my-common-keys-minor-mode-map (kbd "C-`") 'redraw-display)
+(define-key my-common-keys-minor-mode-map (kbd "C-`")
+  'redraw-display)
 
 ;;;; Installing minor mode for keys
 (define-minor-mode my-common-keys-minor-mode

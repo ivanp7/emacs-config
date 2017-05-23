@@ -3,7 +3,8 @@
 (defvar *timer-start-time* nil)
 
 (defun timer/time-to-s (time)
-  (/ (+ (* (+ (* (car time) (expt 2 16)) (car (cdr time))) 1000000) (car (cdr (cdr time))))
+  (/ (+ (* (+ (* (car time) (expt 2 16)) (car (cdr time))) 1000000)
+        (car (cdr (cdr time))))
      1000000.0))
 
 (defun timer/start ()
@@ -110,7 +111,8 @@
        (ansi-term "/bin/bash"))
      (switch-window--jump-to-window 1)
      (switch-to-slime-scratch)
-     (setq slime-scratch-text (concat slime-scratch-text (make-lambda-logo-string ";;    "))))
+     (setq slime-scratch-text (concat slime-scratch-text
+                                      (make-lambda-logo-string ";;    "))))
    (lambda ()
      (interactive)
      (let ((N 3))
@@ -135,7 +137,8 @@
        (let ((default-directory cl-ide-code-path))
          (ansi-term "/bin/bash"))
 
-       (setq slime-scratch-text (concat slime-scratch-text (make-lambda-logo-string ";;    ")))
+       (setq slime-scratch-text (concat slime-scratch-text
+                                        (make-lambda-logo-string ";;    ")))
 
        (dotimes (i (- (* 2 N) 4))
          (switch-window--jump-to-window (+ i 1))
@@ -161,14 +164,16 @@
                  (apply 'concat (cons (first lst)
                                       (mapcar (lambda (str) (concat ", " str))
                                               (cdr lst))))))
-        (let* ((implementations (mapcar (lambda (impl) (prin1-to-string (car impl)))
-                                        slime-lisp-implementations))
-               (prompt (concat (if (plusp (length prompt-prefix-text))
-                                   (concat "[" prompt-prefix-text "] ")
-                                   "")
-                               "Common Lisp implementation to start (default: "
-                               (car implementations) "; alternatives: "
-                               (make-enumeration-string (cdr implementations)) "): "))
+        (let* ((implementations
+                (mapcar (lambda (impl) (prin1-to-string (car impl)))
+                        slime-lisp-implementations))
+               (prompt
+                (concat (if (plusp (length prompt-prefix-text))
+                            (concat "[" prompt-prefix-text "] ")
+                            "")
+                        "Common Lisp implementation to start (default: "
+                        (car implementations) "; alternatives: "
+                        (make-enumeration-string (cdr implementations)) "): "))
                (result (completing-read prompt implementations)))
           (setq slime-default-lisp
                 (if (member result implementations)
@@ -184,4 +189,7 @@
   (setq ide-started t))
 
 (add-hook 'window-setup-hook 'timer/stop t)
-(add-hook 'window-setup-hook (lambda () (start-cl-ide nil (concat (format "%.2f" *timer*) " sec"))) t)
+(add-hook 'window-setup-hook
+          (lambda ()
+            (start-cl-ide nil (concat (format "%.2f" *timer*) " sec")))
+          t)

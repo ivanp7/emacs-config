@@ -23,13 +23,17 @@
 (add-hook 'org-mode-hook
           (lambda ()
             (define-key org-mode-map (kbd "<mouse-3>")
-              (lambda (event) (interactive "e") (mouse-set-point event) (org-todo)))
+              (lambda (event) (interactive "e")
+                 (mouse-set-point event) (org-todo)))
             (define-key org-mode-map (kbd "<mouse-2>")
-              (lambda (event) (interactive "e") (mouse-set-point event) (org-cycle)))
+              (lambda (event) (interactive "e")
+                 (mouse-set-point event) (org-cycle)))
             (define-key org-mode-map (kbd "<S-mouse-2>")
-              (lambda (event) (interactive "e") (mouse-set-point event) (org-shifttab)))))
+              (lambda (event) (interactive "e")
+                 (mouse-set-point event) (org-shifttab)))))
 
-(setq org-todo-keywords '((sequence "TODO" "DELAYED" "INPROGRESS" "|" "DONE" "CANCELED")))
+(setq org-todo-keywords
+      '((sequence "TODO" "DELAYED" "INPROGRESS" "|" "DONE" "CANCELED")))
 (setq org-todo-keyword-faces
       '(("TODO" . (:foreground "red" :weight bold))
         ("DELAYED" . (:foreground "peru" :weight bold))
@@ -96,7 +100,8 @@
 
 ;; Fix 'nlinum--face-width: Invalid face: linum' error
 (defvar frame-ready nil)
-(add-hook 'after-make-frame-functions (lambda (frame) (set-frame-parameter frame 'frame-ready t)))
+(add-hook 'after-make-frame-functions
+          (lambda (frame) (set-frame-parameter frame 'frame-ready t)))
 (add-hook 'after-init-hook (lambda () (set-frame-parameter nil 'frame-ready t)))
 
 (defun nlinum--setup-window ()
@@ -202,32 +207,39 @@
 
 (defun configure-slime-faces ()
   (set-face-attribute 'slime-repl-input-face nil
-                      :foreground "light goldenrod" :slant 'normal :weight 'normal)
+                      :foreground "light goldenrod"
+                      :slant 'normal :weight 'normal)
   (set-face-attribute 'slime-repl-output-face nil ; inherits string face
-                      :foreground "steel blue" :slant 'italic :weight 'normal)
+                      :foreground "steel blue"
+                      :slant 'italic :weight 'normal)
   (set-face-attribute 'slime-repl-inputed-output-face nil
-                      :foreground "firebrick" :slant 'italic :weight 'normal)
+                      :foreground "firebrick"
+                      :slant 'italic :weight 'normal)
   (set-face-attribute 'slime-repl-output-mouseover-face nil
                       :box "chocolate")
   (set-face-attribute 'slime-repl-result-face nil
-                      :foreground "chocolate" :slant 'italic)
+                      :foreground "chocolate"
+                      :slant 'italic)
   (set-face-attribute 'slime-repl-prompt-face nil ; inherits keyword face
-                      :foreground "sea green" :slant 'normal :weight 'bold)
+                      :foreground "sea green"
+                      :slant 'normal :weight 'bold)
 
   (set-face-attribute 'slime-reader-conditional-face nil ; inherits comment face
                       :foreground "burlywood4")
 
   (set-face-attribute 'slime-inspector-action-face nil
-                      :foreground "orange1" :slant 'normal :weight 'bold)
+                      :foreground "orange1"
+                      :slant 'normal :weight 'bold)
   (set-face-attribute 'slime-inspector-value-face nil
-                      :foreground "forest green" :slant 'italic :weight 'normal))
+                      :foreground "forest green"
+                      :slant 'italic :weight 'normal))
 
 ;;; SLIME-only keys
 (defun define-my-slime-keys ()
   (slime-define-keys slime-edit-value-mode-map ; bug workaround
     ((kbd "q") 'self-insert-command)
     ((kbd "S-q") 'self-insert-command))
-  ;; ****** keys that work in REPL only (can override keys from generic lisp keymap) ******
+  ;; * keys that work in REPL only (can override keys from generic lisp keymap) *
   (slime-define-keys slime-repl-mode-map
     ((kbd "C-<return>") (lambda ()
                           (interactive)
@@ -240,15 +252,21 @@
     ((kbd "<C-down>") 'down-list)
     ((kbd "<M-S-up>") 'slime-repl-previous-prompt)
     ((kbd "<M-S-down>") 'slime-repl-next-prompt)
-    ((kbd "C-] <backspace>") (lambda () (interactive)
-                                     (end-of-buffer) (slime-repl-delete-current-input)))
-    ((kbd "C-] <delete>") (lambda () (interactive) (end-of-buffer) (slime-repl-clear-output)))
+    ((kbd "C-] <backspace>")
+     (lambda () (interactive)
+        (end-of-buffer)
+        (slime-repl-delete-current-input)))
+    ((kbd "C-] <delete>")
+     (lambda () (interactive)
+        (end-of-buffer)
+        (slime-repl-clear-output)))
     ((kbd "C-] <return>") 'slime-repl-clear-buffer))
   ;; ****** keys that work in all Common Lisp buffers ******
   (slime-define-keys lisp-mode-map
-    ((kbd "C-<return>") (lambda () (interactive)
-                                (copy-expression-to-repl)
-                                (slime-repl-closing-return)))
+    ((kbd "C-<return>")
+     (lambda () (interactive)
+        (copy-expression-to-repl)
+        (slime-repl-closing-return)))
     ((kbd "M-<return>") 'slime-eval-print-last-expression))
   ;; ****** keys that work in all Lisp buffers ******
   (slime-define-keys lisp-mode-shared-map
@@ -295,19 +313,21 @@
           (list "\n"))))
 
 (defun print-hello-message ()
-  (let* ((tab-string "         ")
-         (lambda-logo-string (make-lambda-logo-string tab-string))
-         (width (+ (length tab-string) (length (first *lambda-logo*))))
-         (height (length *lambda-logo*))
-         (prompt-string "CL-USER> ")
-         (quine-string ; \u03BB is a lambda letter
-          "((lambda (x) (list x (list 'quote x))) '(lambda (x) (list x (list 'quote x))))\n")
-         (comment-string ";; Elegant weapons, for a more... civilized age.\n"))
+  (let*
+      ((tab-string "         ")
+       (lambda-logo-string (make-lambda-logo-string tab-string))
+       (width (+ (length tab-string) (length (first *lambda-logo*))))
+       (height (length *lambda-logo*))
+       (prompt-string "CL-USER> ")
+       (quine-string ; \u03BB is a lambda letter
+        "((lambda (x) (list x (list 'quote x))) '(lambda (x) (list x (list 'quote x))))\n")
+       (comment-string ";; Elegant weapons, for a more... civilized age.\n"))
     (goto-char 1) ; 19
     ;; (insert "\n\n")
     (put-text-property 0 (length lambda-logo-string)
-                       'font-lock-face (list :foreground "white" :background "gray6"
-                                             :weight 'bold :slant 'italic)
+                       'font-lock-face
+                       (list :foreground "white" :background "gray6"
+                             :weight 'bold :slant 'italic)
                        lambda-logo-string)
     (insert lambda-logo-string)
     (let ((pos (point)))
@@ -315,9 +335,10 @@
         (let ((color (cond ((< line (+ 2 (/ height 3))) "dark red")
                            ((< line (+ 2 (* 2 (/ height 3)))) "gold")
                            (t "forest green"))))
-          (put-text-property (+ 25 (* line (1+ width))) (+ 64 (* line (1+ width)))
-                             'font-lock-face (list :foreground color :background "gray6"
-                                                   :weight 'bold :slant 'italic))))
+          (put-text-property
+           (+ 25 (* line (1+ width))) (+ 64 (* line (1+ width)))
+           'font-lock-face (list :foreground color :background "gray6"
+                                 :weight 'bold :slant 'italic))))
       (goto-char pos))
     (insert "\n")
     (put-text-property 0 (length comment-string)
@@ -380,7 +401,9 @@
               (slime-set-default-directory (default-value 'default-directory))
               (configure-slime-faces)
               (define-my-slime-keys)
-              ;; (slime-load-file (concat default-directory "init/ivanp7-welcome.lisp"))
+              ;; (slime-load-file (concat default-directory
+              ;;                          "init/ivanp7-welcome.lisp"))
+
               ;; Silently autocreate *slime-scratch* buffer and fill it
               (with-current-buffer (slime-scratch-buffer)
                 (setq default-directory (default-value 'default-directory))
@@ -393,9 +416,10 @@
               (setq slime-first-startup nil)
               ;; Display load time
               (timer/stop)
-              (run-at-time "1 sec" nil (lambda ()
-                                         (anarcat/display-timing)
-                                         (timer/reset))))))
+              (run-at-time "1 sec" nil
+                           (lambda ()
+                             (anarcat/display-timing)
+                             (timer/reset))))))
 
 ;;;; TabBar
 (tabbar-mode 1)
@@ -416,7 +440,7 @@
 ;;;; Auto-complete
 (require 'auto-complete)
 
-(setq ac-quick-help-prefer-pos-tip nil) ; pos-tip works not so well on Ubuntu
+(setq ac-quick-help-prefer-pos-tip t)
 
 (setq ac-auto-start nil)
 (setq ac-quick-help-delay 1.5)
@@ -428,8 +452,11 @@
 (global-auto-complete-mode t)
 (add-to-list 'ac-modes 'lisp-mode)
 
-(setq-default ac-sources '(ac-source-filename ac-source-files-in-current-dir
-                           ac-source-words-in-buffer ac-source-words-in-same-mode-buffers))
+(setq-default ac-sources
+              '(ac-source-filename
+                ac-source-files-in-current-dir
+                ac-source-words-in-buffer
+                ac-source-words-in-same-mode-buffers))
 
 (add-hook 'emacs-lisp-mode
           (lambda ()
@@ -459,15 +486,19 @@
 ;;       (pretty-mode -1)
 ;;       new-buffer)))
 
-;; (advice-add 'slime-create-macroexpansion-buffer :around 'slime-create-macroexpansion-buffer-advice)
+;; (advice-add 'slime-create-macroexpansion-buffer
+;;             :around 'slime-create-macroexpansion-buffer-advice)
 
 ;; Disabling case inconsistency because of bug
 (setq-default font-lock-keywords-case-fold-search nil)
-(add-hook 'lisp-mode-hook (lambda () (setq font-lock-keywords-case-fold-search nil)))
-(add-hook 'emacs-lisp-mode-hook (lambda () (setq font-lock-keywords-case-fold-search nil)))
+(add-hook 'lisp-mode-hook
+          (lambda () (setq font-lock-keywords-case-fold-search nil)))
+(add-hook 'emacs-lisp-mode-hook
+          (lambda () (setq font-lock-keywords-case-fold-search nil)))
 
 ;; redefining pretty-patterns:
-;; these patterns would be replaced only if separate symbols (neither in comments nor strings)
+;; these patterns would be replaced only if separate symbols
+;; (neither in comments nor strings)
 (defun pretty-patterns ()
   "*List of pretty patterns.
 
@@ -478,7 +509,8 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
          (all (append lispy mley c-like (list 'octave))))
     (pretty-compile-patterns
      `(
-       ;;; Values taken directly from `The Unicode Standard, Version 5.2' documented
+       ;;; Values taken directly from
+       ;;; `The Unicode Standard, Version 5.2' documented
        (?\u00AC :neg (:logic) (:not "not" ,@lispy))
        ;; duplucation to get around of font-lock bug
        (?\u00AC :neg-up (:logic) (:not-up "NOT" ,@lispy))
@@ -543,7 +575,8 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                      lisp-mode scheme-mode)))
         (append pretty-symbol-patterns
                 `((?\u2205 custom "nil" (,@lisps))
-                  (?\u2205 custom "NIL" (,@lisps)) ; uppercase duplication to get around of a bug
+                  ;; uppercase duplication to get around of a bug
+                  (?\u2205 custom "NIL" (,@lisps))
                   (?\u223E custom "~" (,@lisps))
                   (?\u2260 custom "/=" (,@lisps))
                   ;;(?\u2248 custom "~=" (,@lisps))
@@ -554,8 +587,8 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                   (?\u00B1 custom "\\+-" (,@lisps))
                   (?\u2213 custom "-\\+" (,@lisps))
                   (?\u221E custom "\\<inf\\>" (,@lisps))
-                  (?\u221E custom "\\<INF\\>" (,@lisps)) ; uppercase duplication to get around of a bug
-                  )
+                  ;; uppercase duplication to get around of a bug
+                  (?\u221E custom "\\<INF\\>" (,@lisps)))
                 (loop for pair in
                      (cl-pairlis
                       '("alpha" "beta" "gamma" "delta" "epsilon" "zeta" "eta"
@@ -585,7 +618,8 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
 ;;             ))))
 ;;     (dolist (font-set symbols-fonts)
 ;;       (dolist (sym (cadr font-set))
-;;         (set-fontset-font "fontset-default" sym (car font-set) nil nil) ;; -set) nil 'prepend)
+;;         (set-fontset-font "fontset-default" sym (car font-set) nil nil)
+;;          ;; -set) nil 'prepend)
 ;;         ))))
 
 ;; (defun custom-fonts-for-pretty-symbols ()
@@ -600,7 +634,8 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
 ;;              )))))
 ;;     (dolist (font-set symbols-fonts)
 ;;       (dolist (sym (cadr font-set))
-;;         (set-fontset-font "fontset-default" sym (car font-set) nil nil) ;; -set) nil 'prepend)
+;;         (set-fontset-font "fontset-default" sym (car font-set) nil nil)
+;;          ;; -set) nil 'prepend)
 ;;         ))))
 
 ;;(custom-fonts-for-pretty-symbols)
@@ -609,7 +644,9 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
 (require 'magic-latex-buffer)
 
 (setq magic-latex-ignored-properties
-      '(font-lock-comment-face font-lock-comment-delimiter-face font-lock-string-face))
+      '(font-lock-comment-face
+        font-lock-comment-delimiter-face
+        font-lock-string-face))
 
 (defun suscript-jit-prettifier (beg end) ; redefined ml/jit-prettifier
   (goto-char beg)
@@ -632,14 +669,17 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
              ;; new overlay must have higher priority than the old
              ;; one.
              (ov2 (ml/make-pretty-overlay
-                   body-beg body-end 'priority (when oldov (1+ priority-base)))))
+                   body-beg body-end 'priority
+                   (when oldov (1+ priority-base)))))
         (cl-case (string-to-char (match-string 0))
           ((?_) (overlay-put
-                 ov2 'display
-                 `((raise ,(- raise-base 0.2)) (height ,(* height-base 0.8)))))
+                ov2 'display
+                `((raise ,(- raise-base 0.2))
+                  (height ,(* height-base 0.8)))))
           ((?^) (overlay-put
-                 ov2 'display
-                 `((raise ,(+ raise-base 0.2)) (height ,(* height-base 0.8))))))))))
+                ov2 'display
+                `((raise ,(+ raise-base 0.2))
+                  (height ,(* height-base 0.8))))))))))
 
 (define-minor-mode magic-suscript-buffer
     "Redefinition of the magic-latex-buffer mode, that doesn't conflict with lisp-mode."
@@ -693,7 +733,8 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
 (setq use-colors-count 28)
 (setq use-colors-shift -4)
 
-(setq rainbow-identifiers-face-count rainbow-identifiers-cie-l*a*b*-color-count)
+(setq rainbow-identifiers-face-count
+      rainbow-identifiers-cie-l*a*b*-color-count)
 
 (defun rainbow-identifiers-face-chooser (hash)
   (if (numberp hash)
@@ -704,7 +745,8 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
              rainbow-identifiers-cie-l*a*b*-color-count)))
       ;; (intern-soft
       ;;  (concat "rainbow-identifiers-custom-"
-      ;;          (number-to-string (1+ (mod hash rainbow-identifiers-face-count)))))
+      ;;          (number-to-string
+      ;;           (1+ (mod hash rainbow-identifiers-face-count)))))
       (list (append (list :foreground "white")
                     (if (eq hash :cl-special) (list :slant 'italic))))))
 
@@ -730,7 +772,7 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
   "User-selected custom hash values for specific symbols.")
 (defvar rainbow-identifiers-custom-binary-tree nil)
 
-;; --- Binary tree implementation ------------------------------------------------------------------
+;; --- Binary tree implementation ------------------------------------------
 
 (defun make-binary-tree (entry left right)
   (list entry left right))
@@ -755,26 +797,30 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
   (cond ((null tree) (make-binary-tree x nil nil))
         ((string-equal (car x) (car (tree-entry tree))) tree)
         ((string-lessp (car x) (car (tree-entry tree)))
-         (make-binary-tree (tree-entry tree)
-                           (adjoin-binary-tree x (tree-left-branch tree))
-                           (tree-right-branch tree)))
-        (t (make-binary-tree (tree-entry tree)
-                             (tree-left-branch tree)
-                             (adjoin-binary-tree x (tree-right-branch tree))))))
+         (make-binary-tree
+          (tree-entry tree)
+          (adjoin-binary-tree x (tree-left-branch tree))
+          (tree-right-branch tree)))
+        (t (make-binary-tree
+            (tree-entry tree)
+            (tree-left-branch tree)
+            (adjoin-binary-tree x (tree-right-branch tree))))))
 
 (defun tree->list (tree &optional exclude-p)
-  (cl-labels ((copy-to-list (tree result-list)
-                            (if (null tree)
-                                result-list
-                                (copy-to-list (tree-left-branch tree)
-                                              (if (or (null exclude-p) (not (funcall
-                                                                             exclude-p
-                                                                             (tree-entry tree))))
-                                                  (cons (tree-entry tree)
-                                                        (copy-to-list (tree-right-branch tree)
-                                                                      result-list))
-                                                  (copy-to-list (tree-right-branch tree)
-                                                                result-list))))))
+  (cl-labels ((copy-to-list
+               (tree result-list)
+               (if (null tree)
+                   result-list
+                   (copy-to-list
+                    (tree-left-branch tree)
+                    (if (or (null exclude-p) (not (funcall
+                                                exclude-p
+                                                (tree-entry tree))))
+                        (cons (tree-entry tree)
+                              (copy-to-list (tree-right-branch tree)
+                                            result-list))
+                        (copy-to-list (tree-right-branch tree)
+                                      result-list))))))
     (copy-to-list tree nil)))
 
 (defun partial-tree (elts n)
@@ -798,17 +844,22 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
 (defun delete-from-binary-tree (x tree)
   (list->tree (tree->list tree (lambda (entry) (string-equal x (car entry))))))
 
-;; --- End of binary tree implementation -----------------------------------------------------------
+;; --- End of binary tree implementation ----------------------------------
 
 ;; (defun rainbow-identifiers--incremental-hash-function (func identifier)
 ;;   (let ((hash-value (funcall func identifier)))
 ;;     (if (not (numberp hash-value))
 ;;         (if (consp hash-value) (cdr hash-value) hash-value)
-;;         (let* ((hashes (mapcar (lambda (id) (mod (funcall func id t)
-;;                                           (* 10 rainbow-identifiers-face-count)))
-;;                                (loop for i from 1 to (length identifier)
-;;                                   collect (substring identifier 0 i))))
-;;                (new-hash 0) (n (length hashes)) (q 0.9) (r (/ (- 1 q) (- 1 (expt q n)))))
+;;         (let* ((hashes
+;;                 (mapcar (lambda (id)
+;;                           (mod (funcall func id t)
+;;                                (* 10 rainbow-identifiers-face-count)))
+;;                         (loop for i from 1 to (length identifier)
+;;                            collect (substring identifier 0 i))))
+;;                (new-hash 0)
+;;                (n (length hashes))
+;;                (q 0.9)
+;;                (r (/ (- 1 q) (- 1 (expt q n)))))
 ;;           (round (dolist (h hashes new-hash)
 ;;                    (setf new-hash (+ new-hash (* h r)))
 ;;                    (setf r (* r q))))))))
@@ -816,9 +867,12 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
 (defun rainbow-identifiers--hash-function (identifier &optional cl-also)
   "Redefined version of the standard 'rainbow-identifiers--hash-function'"
   (let* ((identifier (downcase identifier))
-         (record (lookup-binary-tree identifier rainbow-identifiers-custom-binary-tree)))
+         (record (lookup-binary-tree
+                  identifier
+                  rainbow-identifiers-custom-binary-tree)))
     (cond
-      ((and (not cl-also) (member identifier cl-special-operators-symbols-list)) :cl-special)
+      ((and (not cl-also) (member identifier cl-special-operators-symbols-list))
+       :cl-special)
       ((and (not cl-also) (member identifier cl-symbols-list)) :cl-standard)
       (record (cdr record)) ;; (cons :tuned (cdr record))
       (t (let* ((hash (secure-hash 'sha1 identifier nil nil t))
@@ -842,16 +896,22 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
           (if sym
               (let ((sym (downcase (substring-no-properties sym))))
                 (if (not (member sym cl-symbols-list))
-                    (let ((record (lookup-binary-tree sym rainbow-identifiers-custom-binary-tree)))
+                    (let ((record (lookup-binary-tree
+                                   sym
+                                   rainbow-identifiers-custom-binary-tree)))
                       (if record
-                          (setf (cdr record) (mod (+ rainbow-identifiers-tune-delta (cdr record))
-                                                  rainbow-identifiers-face-count))
+                          (setf (cdr record)
+                             (mod (+ rainbow-identifiers-tune-delta
+                                     (cdr record))
+                                  rainbow-identifiers-face-count))
                           (setf rainbow-identifiers-custom-binary-tree
-                                (adjoin-binary-tree
-                                 (cons sym (mod (+ rainbow-identifiers-tune-delta
-                                                   (rainbow-identifiers--hash-function sym))
-                                                rainbow-identifiers-face-count))
-                                 rainbow-identifiers-custom-binary-tree))))))))
+                             (adjoin-binary-tree
+                              (cons sym
+                                    (mod (+ rainbow-identifiers-tune-delta
+                                            (rainbow-identifiers--hash-function
+                                             sym))
+                                         rainbow-identifiers-face-count))
+                              rainbow-identifiers-custom-binary-tree))))))))
         (font-lock-fontify-buffer))
       (message "Tune is not allowed in this mode.")))
 
@@ -863,36 +923,46 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
           (if sym
               (let ((sym (downcase (substring-no-properties sym))))
                 (if (not (member sym cl-symbols-list))
-                    (let ((record (lookup-binary-tree sym rainbow-identifiers-custom-binary-tree)))
+                    (let ((record (lookup-binary-tree
+                                   sym
+                                   rainbow-identifiers-custom-binary-tree)))
                       (if record
                           (setf rainbow-identifiers-custom-binary-tree
-                                (delete-from-binary-tree
-                                 (car record) rainbow-identifiers-custom-binary-tree))))))))
+                             (delete-from-binary-tree
+                              (car record)
+                              rainbow-identifiers-custom-binary-tree))))))))
         (font-lock-fontify-buffer))
       (message "Tune is not allowed in this mode.")))
 
 ;; load 'rainbow-identifiers-custom-list' from file
 (defun rainbow-identifiers-load-tune ()
   (interactive)
-  (let ((tuning-file (concat (default-value 'default-directory) "init/rainbow-tuning.el")))
+  (let ((tuning-file (concat (default-value 'default-directory)
+                             "init/rainbow-tuning.el")))
     (if (file-readable-p tuning-file)
         (load-file tuning-file)
         (setq rainbow-identifiers-custom-list nil)))
-  (sort rainbow-identifiers-custom-list (lambda (rec1 rec2) (string-lessp (car rec1) (car rec2))))
-  (setq rainbow-identifiers-custom-binary-tree (list->tree rainbow-identifiers-custom-list))
+  (sort rainbow-identifiers-custom-list
+        (lambda (rec1 rec2)
+          (string-lessp (car rec1) (car rec2))))
+  (setq rainbow-identifiers-custom-binary-tree
+        (list->tree rainbow-identifiers-custom-list))
   (font-lock-fontify-buffer))
 
 ;; save 'rainbow-identifiers-custom-list' to file
 (defun rainbow-identifiers-save-tune ()
   (interactive)
-  (setq rainbow-identifiers-custom-list (tree->list rainbow-identifiers-custom-binary-tree))
+  (setq rainbow-identifiers-custom-list
+        (tree->list rainbow-identifiers-custom-binary-tree))
   (write-region
    (format "(setq rainbow-identifiers-custom-list \n  (list\n%s    ))\n"
-           (apply 'concat (loop for el in rainbow-identifiers-custom-list collect
-                               (format "    (cons %S %S)\n" (car el) (cdr el)))))
+           (apply 'concat
+                  (loop for el in rainbow-identifiers-custom-list collect
+                       (format "    (cons %S %S)\n" (car el) (cdr el)))))
    nil (concat (default-value 'default-directory) "init/rainbow-tuning.el")))
 
-;; Customized filter: don't mark numbers CL notation '#\name', and '@' in ',@', mark '|name|' symbols
+;; Customized filter: don't mark numbers, CL notation '#\name',
+;; and '@' in ',@', mark '|name|' symbols
 (defun rainbow-identifiers-filter (beg end)
   (let ((str (buffer-substring-no-properties beg end)) (len (- end beg))
         (prefix2 (buffer-substring-no-properties
@@ -901,22 +971,27 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                    (max (point-min) (- beg 11)) beg))
         (prefix17 (buffer-substring-no-properties
                    (max (point-min) (- beg 17)) beg))
-        (prev-char (char-before beg)) (first-char (char-after beg)) (second-char (char-after (+ beg 1)))
-        (third-char (char-after (+ beg 2))) (prev-last-char (char-before (- end 1)))
+        (prev-char (char-before beg)) (first-char (char-after beg))
+        (second-char (char-after (+ beg 1)))
+        (third-char (char-after (+ beg 2)))
+        (prev-last-char (char-before (- end 1)))
         (last-char (char-before end)) (next-char (char-after end)))
     (cond
       ((and (equal prev-char ?\|) (equal next-char ?\|)) t)
       ((or (and (= len 1) (equal first-char ?\.))
-           ;; (and (equal first-char ?\@) (equal prev-char ?\,))
-           (equal prefix2 "#\\") (equal prev-char ?\#)
-           (and (or (equal (upcase prefix11) "#<FUNCTION ")
-                    (equal (upcase prefix17) "#<STANDARD-CLASS ")) (equal last-char ?\>))
-           (and (equal first-char ?\{) (equal prev-last-char ?\}) (equal last-char ?\>))
-           (member first-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
-           (and (>= len 2) (member first-char '(?+ ?- ?\.))
-                (member second-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))
-           (and (>= len 3) (member first-char '(?+ ?-)) (equal second-char ?\.)
-                (member third-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))) nil)
+          ;; (and (equal first-char ?\@) (equal prev-char ?\,))
+          (equal prefix2 "#\\") (equal prev-char ?\#)
+          (and (or (equal (upcase prefix11) "#<FUNCTION ")
+                (equal (upcase prefix17) "#<STANDARD-CLASS "))
+             (equal last-char ?\>))
+          (and (equal first-char ?\{)
+             (equal prev-last-char ?\})
+             (equal last-char ?\>))
+          (member first-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
+          (and (>= len 2) (member first-char '(?+ ?- ?\.))
+             (member second-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))
+          (and (>= len 3) (member first-char '(?+ ?-)) (equal second-char ?\.)
+             (member third-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))) nil)
       (t t))))
 
 (add-hook 'rainbow-identifiers-filter-functions 'rainbow-identifiers-filter)
@@ -948,7 +1023,7 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
 \(Unless it's a minibuffer window.)"
   (when hl-sexp-mode                    ; Could be made buffer-local.
     (unless (or (use-region-p)
-                (window-minibuffer-p (selected-window))) ; silly in minibuffer
+               (window-minibuffer-p (selected-window))) ; silly in minibuffer
       (unless hl-sexp-overlay
         (setq hl-sexp-overlay (make-overlay 1 1)) ; to be moved
         (overlay-put hl-sexp-overlay 'face 'hl-sexp-face))
@@ -984,8 +1059,8 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
   (interactive)
   (let* ((cb (char-before (point)))
          (matching-text (and cb
-                             (char-equal (char-syntax cb) ?\) )
-                             (blink-matching-open))))
+                           (char-equal (char-syntax cb) ?\) )
+                           (blink-matching-open))))
     (when matching-text (message matching-text))))
 
 ;;;; Paren face
@@ -1000,9 +1075,9 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
 (setq highlight-symbol-on-navigation-p t)
 (setq highlight-symbol-idle-delay 0.2)
 (let ((hook (lambda () (interactive)
-                    (cl-pushnew '(highlight-symbol-face :underline t)
-                                face-remapping-alist :test 'equal)
-                    (highlight-symbol-mode))))
+               (cl-pushnew '(highlight-symbol-face :underline t)
+                           face-remapping-alist :test 'equal)
+               (highlight-symbol-mode))))
   (add-hook 'lisp-mode-hook hook)
   (add-hook 'emacs-lisp-mode-hook hook))
 
@@ -1026,12 +1101,13 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
 ;; (defun bounds-of-thing-at-point-advice (oldfun &rest args)
 ;;   (let ((result (apply oldfun args)))
 ;;     (if result
-;;         (let ((prefix-shift (if (eql (first args) 'sexp)
-;;                                 (if (eql (char-before (car result)) ?@)
-;;                                     (if (eql (char-before (1- (car result))) ?,)
-;;                                         -2 -1)
-;;                                     0)
-;;                                 0)))
+;;         (let ((prefix-shift
+;;                (if (eql (first args) 'sexp)
+;;                    (if (eql (char-before (car result)) ?@)
+;;                        (if (eql (char-before (1- (car result))) ?,)
+;;                            -2 -1)
+;;                        0)
+;;                    0)))
 ;;           (cons (+ prefix-shift (car result)) (cdr result))))))
 
 ;; (advice-add 'bounds-of-thing-at-point :around 'bounds-of-thing-at-point-advice)
