@@ -123,13 +123,13 @@
                                                  add-to-prefix-if-selection)
   `(define-key my-lisp-keys-minor-mode-map (kbd ,key)
      (lambda () (interactive)
-        (surround-selection (if (use-region-p)
-                                ,(concat prefix (if add-to-prefix-if-selection
-                                                    add-to-prefix-if-selection
-                                                    ""))
-                                ,prefix)
-                            ,postfix ,offset-on-selection ,reindent)
-        ,final-command)))
+             (surround-selection (if (use-region-p)
+                                     ,(concat prefix (if add-to-prefix-if-selection
+                                                         add-to-prefix-if-selection
+                                                         ""))
+                                     ,prefix)
+                                 ,postfix ,offset-on-selection ,reindent)
+             ,final-command)))
 
 (define-expansion "C-*" "*" "*")
 (define-expansion "C-+" "+" "+")
@@ -179,7 +179,13 @@
 
 (define-expansion "M-a p" "(progn" ")" nil t nil "\n")
 
-(define-expansion "M-a u" "(null " ")")
+(define-expansion "M-a i" "(if " ")")
+(define-expansion "M-a h" "(when " ")") ; w(h)en
+(define-expansion "M-a u" "(unless " ")")
+
+(define-expansion "M-a g a" "(and " ")")
+(define-expansion "M-a g o" "(or " ")")
+(define-expansion "M-a g n" "(not " ")")
 
 (define-expansion "M-a s" "(setf " ")")
 
