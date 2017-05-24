@@ -560,6 +560,10 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
        (?\u2190 :setf (:equality) (:setf "setf" ,@lispy))
        (?\u2190 :setf-up (:equality) (:setf-up "SETF" ,@lispy))
        (?\u2190 :setf-up2 (:equality) (:setf-up2 "Setf" ,@lispy))
+
+       (?\u21C7 :psetf (:equality) (:setf "psetf" ,@lispy))
+       (?\u21C7 :psetf-up (:equality) (:setf-up "PSETF" ,@lispy))
+       (?\u21C7 :psetf-up2 (:equality) (:setf-up2 "Psetf" ,@lispy))
        ))))
 
 (require 'pretty-symbols)
@@ -673,13 +677,13 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                    (when oldov (1+ priority-base)))))
         (cl-case (string-to-char (match-string 0))
           ((?_) (overlay-put
-                ov2 'display
-                `((raise ,(- raise-base 0.2))
-                  (height ,(* height-base 0.8)))))
+                 ov2 'display
+                 `((raise ,(- raise-base 0.2))
+                   (height ,(* height-base 0.8)))))
           ((?^) (overlay-put
-                ov2 'display
-                `((raise ,(+ raise-base 0.2))
-                  (height ,(* height-base 0.8))))))))))
+                 ov2 'display
+                 `((raise ,(+ raise-base 0.2))
+                   (height ,(* height-base 0.8))))))))))
 
 (define-minor-mode magic-suscript-buffer
     "Redefinition of the magic-latex-buffer mode, that doesn't conflict with lisp-mode."
@@ -814,8 +818,8 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                    (copy-to-list
                     (tree-left-branch tree)
                     (if (or (null exclude-p) (not (funcall
-                                                exclude-p
-                                                (tree-entry tree))))
+                                                   exclude-p
+                                                   (tree-entry tree))))
                         (cons (tree-entry tree)
                               (copy-to-list (tree-right-branch tree)
                                             result-list))
@@ -901,17 +905,17 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                                    rainbow-identifiers-custom-binary-tree)))
                       (if record
                           (setf (cdr record)
-                             (mod (+ rainbow-identifiers-tune-delta
-                                     (cdr record))
-                                  rainbow-identifiers-face-count))
+                                (mod (+ rainbow-identifiers-tune-delta
+                                        (cdr record))
+                                     rainbow-identifiers-face-count))
                           (setf rainbow-identifiers-custom-binary-tree
-                             (adjoin-binary-tree
-                              (cons sym
-                                    (mod (+ rainbow-identifiers-tune-delta
-                                            (rainbow-identifiers--hash-function
-                                             sym))
-                                         rainbow-identifiers-face-count))
-                              rainbow-identifiers-custom-binary-tree))))))))
+                                (adjoin-binary-tree
+                                 (cons sym
+                                       (mod (+ rainbow-identifiers-tune-delta
+                                               (rainbow-identifiers--hash-function
+                                                sym))
+                                            rainbow-identifiers-face-count))
+                                 rainbow-identifiers-custom-binary-tree))))))))
         (font-lock-fontify-buffer))
       (message "Tune is not allowed in this mode.")))
 
@@ -928,9 +932,9 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                                    rainbow-identifiers-custom-binary-tree)))
                       (if record
                           (setf rainbow-identifiers-custom-binary-tree
-                             (delete-from-binary-tree
-                              (car record)
-                              rainbow-identifiers-custom-binary-tree))))))))
+                                (delete-from-binary-tree
+                                 (car record)
+                                 rainbow-identifiers-custom-binary-tree))))))))
         (font-lock-fontify-buffer))
       (message "Tune is not allowed in this mode.")))
 
@@ -979,19 +983,19 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
     (cond
       ((and (equal prev-char ?\|) (equal next-char ?\|)) t)
       ((or (and (= len 1) (equal first-char ?\.))
-          ;; (and (equal first-char ?\@) (equal prev-char ?\,))
-          (equal prefix2 "#\\") (equal prev-char ?\#)
-          (and (or (equal (upcase prefix11) "#<FUNCTION ")
-                (equal (upcase prefix17) "#<STANDARD-CLASS "))
-             (equal last-char ?\>))
-          (and (equal first-char ?\{)
-             (equal prev-last-char ?\})
-             (equal last-char ?\>))
-          (member first-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
-          (and (>= len 2) (member first-char '(?+ ?- ?\.))
-             (member second-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))
-          (and (>= len 3) (member first-char '(?+ ?-)) (equal second-char ?\.)
-             (member third-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))) nil)
+           ;; (and (equal first-char ?\@) (equal prev-char ?\,))
+           (equal prefix2 "#\\") (equal prev-char ?\#)
+           (and (or (equal (upcase prefix11) "#<FUNCTION ")
+                    (equal (upcase prefix17) "#<STANDARD-CLASS "))
+                (equal last-char ?\>))
+           (and (equal first-char ?\{)
+                (equal prev-last-char ?\})
+                (equal last-char ?\>))
+           (member first-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
+           (and (>= len 2) (member first-char '(?+ ?- ?\.))
+                (member second-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))
+           (and (>= len 3) (member first-char '(?+ ?-)) (equal second-char ?\.)
+                (member third-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))) nil)
       (t t))))
 
 (add-hook 'rainbow-identifiers-filter-functions 'rainbow-identifiers-filter)
@@ -1023,7 +1027,7 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
 \(Unless it's a minibuffer window.)"
   (when hl-sexp-mode                    ; Could be made buffer-local.
     (unless (or (use-region-p)
-               (window-minibuffer-p (selected-window))) ; silly in minibuffer
+                (window-minibuffer-p (selected-window))) ; silly in minibuffer
       (unless hl-sexp-overlay
         (setq hl-sexp-overlay (make-overlay 1 1)) ; to be moved
         (overlay-put hl-sexp-overlay 'face 'hl-sexp-face))
@@ -1059,8 +1063,8 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
   (interactive)
   (let* ((cb (char-before (point)))
          (matching-text (and cb
-                           (char-equal (char-syntax cb) ?\) )
-                           (blink-matching-open))))
+                             (char-equal (char-syntax cb) ?\) )
+                             (blink-matching-open))))
     (when matching-text (message matching-text))))
 
 ;;;; Paren face
@@ -1075,9 +1079,9 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
 (setq highlight-symbol-on-navigation-p t)
 (setq highlight-symbol-idle-delay 0.2)
 (let ((hook (lambda () (interactive)
-               (cl-pushnew '(highlight-symbol-face :underline t)
-                           face-remapping-alist :test 'equal)
-               (highlight-symbol-mode))))
+                    (cl-pushnew '(highlight-symbol-face :underline t)
+                                face-remapping-alist :test 'equal)
+                    (highlight-symbol-mode))))
   (add-hook 'lisp-mode-hook hook)
   (add-hook 'emacs-lisp-mode-hook hook))
 
