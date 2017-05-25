@@ -1085,23 +1085,12 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
   (add-hook 'lisp-mode-hook hook)
   (add-hook 'emacs-lisp-mode-hook hook))
 
-(defadvice highlight-symbol-next
-    (after highlight-symbol-next-and-refresh activate)
-  "Refresh screen after jump to the next symbol."
-  (interactive)
-  (redraw-display))
-
-(defadvice highlight-symbol-prev
-    (after highlight-symbol-prev-and-refresh activate)
-  "Refresh screen after jump to the previous symbol."
-  (interactive)
-  (redraw-display))
-
-(defadvice query-replace-regexp
-    (after query-replace-regexp-and-refresh activate)
-  "Refresh screen after replacing text."
-  (interactive)
-  (redraw-display))
+(let ((redraw-fn (lambda (&rest args)
+                   (redraw-display))))
+  (advice-add 'highlight-symbol-next :after redraw-fn)
+  (advice-add 'highlight-symbol-prev :after redraw-fn)
+  (advice-add 'query-replace :after redraw-fn)
+  (advice-add 'query-replace-regexp :after redraw-fn))
 
 (modify-syntax-entry ?@ "'" lisp-mode-syntax-table)
 
