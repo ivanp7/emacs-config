@@ -254,19 +254,19 @@
     ((kbd "<M-S-down>") 'slime-repl-next-prompt)
     ((kbd "C-] <backspace>")
      (lambda () (interactive)
-        (end-of-buffer)
-        (slime-repl-delete-current-input)))
+             (end-of-buffer)
+             (slime-repl-delete-current-input)))
     ((kbd "C-] <delete>")
      (lambda () (interactive)
-        (end-of-buffer)
-        (slime-repl-clear-output)))
+             (end-of-buffer)
+             (slime-repl-clear-output)))
     ((kbd "C-] <return>") 'slime-repl-clear-buffer))
   ;; ****** keys that work in all Common Lisp buffers ******
   (slime-define-keys lisp-mode-map
     ((kbd "C-<return>")
      (lambda () (interactive)
-        (copy-expression-to-repl)
-        (slime-repl-closing-return)))
+             (copy-expression-to-repl)
+             (slime-repl-closing-return)))
     ((kbd "M-<return>") 'slime-eval-print-last-expression))
   ;; ****** keys that work in all Lisp buffers ******
   (slime-define-keys lisp-mode-shared-map
@@ -818,8 +818,8 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                    (copy-to-list
                     (tree-left-branch tree)
                     (if (or (null exclude-p) (not (funcall
-                                                exclude-p
-                                                (tree-entry tree))))
+                                                   exclude-p
+                                                   (tree-entry tree))))
                         (cons (tree-entry tree)
                               (copy-to-list (tree-right-branch tree)
                                             result-list))
@@ -905,17 +905,17 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                                    rainbow-identifiers-custom-binary-tree)))
                       (if record
                           (setf (cdr record)
-                             (mod (+ rainbow-identifiers-tune-delta
-                                     (cdr record))
-                                  rainbow-identifiers-face-count))
+                                (mod (+ rainbow-identifiers-tune-delta
+                                        (cdr record))
+                                     rainbow-identifiers-face-count))
                           (setf rainbow-identifiers-custom-binary-tree
-                             (adjoin-binary-tree
-                              (cons sym
-                                    (mod (+ rainbow-identifiers-tune-delta
-                                            (rainbow-identifiers--hash-function
-                                             sym))
-                                         rainbow-identifiers-face-count))
-                              rainbow-identifiers-custom-binary-tree))))))))
+                                (adjoin-binary-tree
+                                 (cons sym
+                                       (mod (+ rainbow-identifiers-tune-delta
+                                               (rainbow-identifiers--hash-function
+                                                sym))
+                                            rainbow-identifiers-face-count))
+                                 rainbow-identifiers-custom-binary-tree))))))))
         (font-lock-fontify-buffer))
       (message "Tune is not allowed in this mode.")))
 
@@ -932,9 +932,9 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
                                    rainbow-identifiers-custom-binary-tree)))
                       (if record
                           (setf rainbow-identifiers-custom-binary-tree
-                             (delete-from-binary-tree
-                              (car record)
-                              rainbow-identifiers-custom-binary-tree))))))))
+                                (delete-from-binary-tree
+                                 (car record)
+                                 rainbow-identifiers-custom-binary-tree))))))))
         (font-lock-fontify-buffer))
       (message "Tune is not allowed in this mode.")))
 
@@ -983,19 +983,19 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
     (cond
       ((and (equal prev-char ?\|) (equal next-char ?\|)) t)
       ((or (and (= len 1) (equal first-char ?\.))
-          ;; (and (equal first-char ?\@) (equal prev-char ?\,))
-          (equal prefix2 "#\\") (equal prev-char ?\#)
-          (and (or (equal (upcase prefix11) "#<FUNCTION ")
-                (equal (upcase prefix17) "#<STANDARD-CLASS "))
-             (equal last-char ?\>))
-          (and (equal first-char ?\{)
-             (equal prev-last-char ?\})
-             (equal last-char ?\>))
-          (member first-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
-          (and (>= len 2) (member first-char '(?+ ?- ?\.))
-             (member second-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))
-          (and (>= len 3) (member first-char '(?+ ?-)) (equal second-char ?\.)
-             (member third-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))) nil)
+           ;; (and (equal first-char ?\@) (equal prev-char ?\,))
+           (equal prefix2 "#\\") (equal prev-char ?\#)
+           (and (or (equal (upcase prefix11) "#<FUNCTION ")
+                    (equal (upcase prefix17) "#<STANDARD-CLASS "))
+                (equal last-char ?\>))
+           (and (equal first-char ?\{)
+                (equal prev-last-char ?\})
+                (equal last-char ?\>))
+           (member first-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
+           (and (>= len 2) (member first-char '(?+ ?- ?\.))
+                (member second-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))
+           (and (>= len 3) (member first-char '(?+ ?-)) (equal second-char ?\.)
+                (member third-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))) nil)
       (t t))))
 
 (add-hook 'rainbow-identifiers-filter-functions 'rainbow-identifiers-filter)
@@ -1027,7 +1027,7 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
 \(Unless it's a minibuffer window.)"
   (when hl-sexp-mode                    ; Could be made buffer-local.
     (unless (or (use-region-p)
-               (window-minibuffer-p (selected-window))) ; silly in minibuffer
+                (window-minibuffer-p (selected-window))) ; silly in minibuffer
       (unless hl-sexp-overlay
         (setq hl-sexp-overlay (make-overlay 1 1)) ; to be moved
         (overlay-put hl-sexp-overlay 'face 'hl-sexp-face))
@@ -1094,6 +1094,12 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
 (defadvice highlight-symbol-prev
     (after highlight-symbol-prev-and-refresh activate)
   "Refresh screen after jump to the previous symbol."
+  (interactive)
+  (redraw-display))
+
+(defadvice query-replace-regexp
+    (after query-replace-regexp-and-refresh activate)
+  "Refresh screen after replacing text."
   (interactive)
   (redraw-display))
 
