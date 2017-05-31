@@ -236,3 +236,9 @@
 ;;;; Displaying buffers
 (setq display-buffer-alist
       '(("\\*inferior-lisp\\*" display-buffer-same-window (nil))))
+
+;;;; Window refresh function
+(defun refresh-window ()
+  (interactive)
+  (force-window-update (get-buffer-window))
+  (redisplay))

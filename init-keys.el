@@ -114,11 +114,13 @@
 (define-key my-common-keys-minor-mode-map (kbd "<C-M-mouse-4>")
   '(lambda ()
     (interactive)
-    (scroll-right 2 t)))
+    (scroll-right 10 t)
+    (refresh-window)))
 (define-key my-common-keys-minor-mode-map (kbd "<C-M-mouse-5>")
   '(lambda ()
     (interactive)
-    (scroll-left 2 t)))
+    (scroll-left 10 t)
+    (refresh-window)))
 
 ;;; Transparency control keybindings
 

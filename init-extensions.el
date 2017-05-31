@@ -1086,7 +1086,7 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
   (add-hook 'emacs-lisp-mode-hook hook))
 
 (let ((redraw-fn (lambda (&rest args)
-                   (redraw-display))))
+                   (refresh-window))))
   (advice-add 'highlight-symbol-next :after redraw-fn)
   (advice-add 'highlight-symbol-prev :after redraw-fn)
   (advice-add 'query-replace :after redraw-fn)
