@@ -122,24 +122,24 @@
          (split-window-vertically (truncate (* 0.5 (window-body-height))))
          (other-window 2))
        (balance-windows)
-
+       
        (switch-window--jump-to-window (- (* 2 N) 3))
        (find-file "notes.org")
-
+       
        (other-window 1)
        (find-file (concat org-directory "ivanp7.org"))
-
+       
        (other-window 1)
        (slime)
-
+       
        (switch-window--jump-to-window (* 2 N))
        (ielm)
        (let ((default-directory cl-ide-code-path))
          (ansi-term "/bin/bash"))
-
+       
        (setq slime-scratch-text (concat slime-scratch-text
                                         (make-lambda-logo-string ";;    ")))
-
+       
        (dotimes (i (- (* 2 N) 4))
          (switch-window--jump-to-window (+ i 1))
          (switch-to-slime-scratch))))))
@@ -148,15 +148,15 @@
 
 (defun start-cl-ide (&optional cl-implementation layout prompt-prefix-text)
   (interactive)
-
+  
   (when ide-started
     (return-from start-cl-ide))
-
+  
   ;;; Maximize frame
   (if (memq (frame-parameter nil 'fullscreen) '(fullscreen fullboth))
       (modify-frame-parameters nil `((maximized . maximized)))
       (modify-frame-parameters nil `((fullscreen . maximized))))
-
+  
   (if cl-implementation
       (setq slime-default-lisp cl-implementation)
       (cl-flet ((make-enumeration-string
@@ -179,12 +179,12 @@
                 (if (member result implementations)
                     (intern result)
                     (intern (first implementations)))))))
-
+  
   (timer/start)
-
+  
   (delete-other-windows)
   (funcall (nth (1- selected-ide-layout) ide-layouts))
-
+  
   ;; (desktop-read) ;; Load default desktop from file : "~/emacs.d/.emacs.desktop"
   (setq ide-started t))
 

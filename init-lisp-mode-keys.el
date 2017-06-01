@@ -123,13 +123,13 @@
                                                  add-to-prefix-if-selection)
   `(define-key my-lisp-keys-minor-mode-map (kbd ,key)
      (lambda () (interactive)
-             (surround-selection (if (use-region-p)
-                                     ,(concat prefix (if add-to-prefix-if-selection
-                                                         add-to-prefix-if-selection
-                                                         ""))
-                                     ,prefix)
-                                 ,postfix ,offset-on-selection ,reindent)
-             ,final-command)))
+        (surround-selection (if (use-region-p)
+                                ,(concat prefix (if add-to-prefix-if-selection
+                                                    add-to-prefix-if-selection
+                                                    ""))
+                                ,prefix)
+                            ,postfix ,offset-on-selection ,reindent)
+        ,final-command)))
 
 (define-expansion "C-*" "*" "*")
 (define-expansion "C-+" "+" "+")
@@ -224,7 +224,11 @@
 ;; (define-key my-lisp-keys-minor-mode-map (kbd "M-}")
 ;;   (lambda () (interactive) (if (not mark-active) (cua-set-mark)) (forward-word)))
 
-(define-key my-lisp-keys-minor-mode-map (kbd "M-c") 'recenter-top-bottom)
+(define-key my-lisp-keys-minor-mode-map (kbd "M-c")
+  (lambda ()
+    (interactive)
+    (recenter-top-bottom)
+    (refresh-window)))
 
 
 
@@ -261,77 +265,77 @@
 
 (define-key my-lisp-keys-minor-mode-map (kbd (concat "C-" menu-key-name))
   (lambda () (interactive)
-          (if (not sexp-edition-mode)
-              (progn
-                (define-key my-lisp-keys-minor-mode-map [remap left-char]
-                  'backward-sexp)
-                (define-key my-lisp-keys-minor-mode-map [remap right-char]
-                  'forward-sexp)
-                (define-key my-lisp-keys-minor-mode-map [remap previous-line]
-                  'backward-up-list)
-                (define-key my-lisp-keys-minor-mode-map [remap next-line]
-                  'down-list)
-                (define-key my-lisp-keys-minor-mode-map [remap move-beginning-of-line]
-                  'beginning-of-list)
-                (define-key my-lisp-keys-minor-mode-map [remap move-end-of-line]
-                  'end-of-list)
-                (define-key my-lisp-keys-minor-mode-map [remap backward-sexp]
-                  'left-char)
-                (define-key my-lisp-keys-minor-mode-map [remap forward-sexp]
-                  'right-char)
-                (define-key my-lisp-keys-minor-mode-map [remap backward-up-list]
-                  'previous-line)
-                (define-key my-lisp-keys-minor-mode-map [remap down-list]
-                  'next-line)
-                (define-key my-lisp-keys-minor-mode-map [remap beginning-of-list]
-                  'move-beginning-of-line)
-                (define-key my-lisp-keys-minor-mode-map [remap end-of-list]
-                  'move-end-of-line)
-                (define-key my-lisp-keys-minor-mode-map
-                    [remap backward-delete-char-untabify]
-                  'delete-sexp-backward)
-                (define-key my-lisp-keys-minor-mode-map [remap delete-forward-char]
-                  'delete-sexp-forward)
-                (define-key my-lisp-keys-minor-mode-map [remap delete-sexp-backward]
-                  'backward-delete-char-untabify)
-                (define-key my-lisp-keys-minor-mode-map [remap delete-sexp-forward]
-                  'delete-forward-char))
-              (progn
-                (define-key my-lisp-keys-minor-mode-map
-                    [remap left-char] nil)
-                (define-key my-lisp-keys-minor-mode-map
-                    [remap right-char] nil)
-                (define-key my-lisp-keys-minor-mode-map
-                    [remap previous-line] nil)
-                (define-key my-lisp-keys-minor-mode-map
-                    [remap next-line] nil)
-                (define-key my-lisp-keys-minor-mode-map
-                    [remap move-beginning-of-line] nil)
-                (define-key my-lisp-keys-minor-mode-map
-                    [remap move-end-of-line] nil)
-                (define-key my-lisp-keys-minor-mode-map
-                    [remap backward-sexp] nil)
-                (define-key my-lisp-keys-minor-mode-map
-                    [remap forward-sexp] nil)
-                (define-key my-lisp-keys-minor-mode-map
-                    [remap backward-up-list] nil)
-                (define-key my-lisp-keys-minor-mode-map
-                    [remap down-list] nil)
-                (define-key my-lisp-keys-minor-mode-map
-                    [remap beginning-of-list] nil)
-                (define-key my-lisp-keys-minor-mode-map
-                    [remap end-of-list] nil)
-                (define-key my-lisp-keys-minor-mode-map
-                    [remap backward-delete-char-untabify] nil)
-                (define-key my-lisp-keys-minor-mode-map
-                    [remap delete-forward-char] nil)
-                (define-key my-lisp-keys-minor-mode-map
-                    [remap delete-sexp-backward] nil)
-                (define-key my-lisp-keys-minor-mode-map
-                    [remap delete-sexp-forward] nil)))
-          (setq sexp-edition-mode (not sexp-edition-mode))
-          (message "S-exp edition mode is %s"
-                   (if sexp-edition-mode "ON" "OFF"))))
+     (if (not sexp-edition-mode)
+         (progn
+           (define-key my-lisp-keys-minor-mode-map [remap left-char]
+             'backward-sexp)
+           (define-key my-lisp-keys-minor-mode-map [remap right-char]
+             'forward-sexp)
+           (define-key my-lisp-keys-minor-mode-map [remap previous-line]
+             'backward-up-list)
+           (define-key my-lisp-keys-minor-mode-map [remap next-line]
+             'down-list)
+           (define-key my-lisp-keys-minor-mode-map [remap move-beginning-of-line]
+             'beginning-of-list)
+           (define-key my-lisp-keys-minor-mode-map [remap move-end-of-line]
+             'end-of-list)
+           (define-key my-lisp-keys-minor-mode-map [remap backward-sexp]
+             'left-char)
+           (define-key my-lisp-keys-minor-mode-map [remap forward-sexp]
+             'right-char)
+           (define-key my-lisp-keys-minor-mode-map [remap backward-up-list]
+             'previous-line)
+           (define-key my-lisp-keys-minor-mode-map [remap down-list]
+             'next-line)
+           (define-key my-lisp-keys-minor-mode-map [remap beginning-of-list]
+             'move-beginning-of-line)
+           (define-key my-lisp-keys-minor-mode-map [remap end-of-list]
+             'move-end-of-line)
+           (define-key my-lisp-keys-minor-mode-map
+               [remap backward-delete-char-untabify]
+             'delete-sexp-backward)
+           (define-key my-lisp-keys-minor-mode-map [remap delete-forward-char]
+             'delete-sexp-forward)
+           (define-key my-lisp-keys-minor-mode-map [remap delete-sexp-backward]
+             'backward-delete-char-untabify)
+           (define-key my-lisp-keys-minor-mode-map [remap delete-sexp-forward]
+             'delete-forward-char))
+         (progn
+           (define-key my-lisp-keys-minor-mode-map
+               [remap left-char] nil)
+           (define-key my-lisp-keys-minor-mode-map
+               [remap right-char] nil)
+           (define-key my-lisp-keys-minor-mode-map
+               [remap previous-line] nil)
+           (define-key my-lisp-keys-minor-mode-map
+               [remap next-line] nil)
+           (define-key my-lisp-keys-minor-mode-map
+               [remap move-beginning-of-line] nil)
+           (define-key my-lisp-keys-minor-mode-map
+               [remap move-end-of-line] nil)
+           (define-key my-lisp-keys-minor-mode-map
+               [remap backward-sexp] nil)
+           (define-key my-lisp-keys-minor-mode-map
+               [remap forward-sexp] nil)
+           (define-key my-lisp-keys-minor-mode-map
+               [remap backward-up-list] nil)
+           (define-key my-lisp-keys-minor-mode-map
+               [remap down-list] nil)
+           (define-key my-lisp-keys-minor-mode-map
+               [remap beginning-of-list] nil)
+           (define-key my-lisp-keys-minor-mode-map
+               [remap end-of-list] nil)
+           (define-key my-lisp-keys-minor-mode-map
+               [remap backward-delete-char-untabify] nil)
+           (define-key my-lisp-keys-minor-mode-map
+               [remap delete-forward-char] nil)
+           (define-key my-lisp-keys-minor-mode-map
+               [remap delete-sexp-backward] nil)
+           (define-key my-lisp-keys-minor-mode-map
+               [remap delete-sexp-forward] nil)))
+     (setq sexp-edition-mode (not sexp-edition-mode))
+     (message "S-exp edition mode is %s"
+              (if sexp-edition-mode "ON" "OFF"))))
 
 ;; following is defined in init-extensions.el
 ;; (define-key my-lisp-keys-minor-mode-map (kbd "<M-up>") 'beginning-of-defun)
@@ -430,7 +434,7 @@
 (defun xah-toggle-letter-case (fp1 fp2)
   "Toggle the letter case of current word or text selection.
 Always cycle in this order: Init Caps, ALL CAPS, all lower.
-
+ 
 In lisp code, fp1 fp2 are region boundary.
 URL `http://ergoemacs.org/emacs/modernization_upcase-word.html'
 Version 2015-04-09"

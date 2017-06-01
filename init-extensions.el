@@ -223,10 +223,10 @@
   (set-face-attribute 'slime-repl-prompt-face nil ; inherits keyword face
                       :foreground "sea green"
                       :slant 'normal :weight 'bold)
-
+  
   (set-face-attribute 'slime-reader-conditional-face nil ; inherits comment face
                       :foreground "burlywood4")
-
+  
   (set-face-attribute 'slime-inspector-action-face nil
                       :foreground "orange1"
                       :slant 'normal :weight 'bold)
@@ -403,7 +403,7 @@
               (define-my-slime-keys)
               ;; (slime-load-file (concat default-directory
               ;;                          "init/ivanp7-welcome.lisp"))
-
+              
               ;; Silently autocreate *slime-scratch* buffer and fill it
               (with-current-buffer (slime-scratch-buffer)
                 (setq default-directory (default-value 'default-directory))
@@ -501,7 +501,7 @@
 ;; (neither in comments nor strings)
 (defun pretty-patterns ()
   "*List of pretty patterns.
-
+ 
 Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
   (let* ((lispy '(scheme emacs-lisp lisp clojure jess clips))
          (mley '(haskell tuareg sml fsharp))
@@ -515,52 +515,52 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
        ;; duplucation to get around of font-lock bug
        (?\u00AC :neg-up (:logic) (:not-up "NOT" ,@lispy))
        (?\u00AC :neg-up2 (:logic) (:not-up2 "Not" ,@lispy))
-
+       
        (?\u2227 :wedge (:logic) (:and "and" ,@lispy))
        (?\u2227 :wedge-up (:logic) (:and-up "AND" ,@lispy))
        (?\u2227 :wedge-up2 (:logic) (:and-up2 "And" ,@lispy))
-
+       
        (?\u2228 :vee (:logic) (:or "or" ,@lispy))
        (?\u2228 :vee-up (:logic) (:or-up "OR" ,@lispy))
        (?\u2228 :vee-up2 (:logic) (:or-up2 "Or" ,@lispy))
-
+       
        (?\u221A :sqrt (:arithmetic) (:sqrt "sqrt" ,@lispy))
        (?\u221A :sqrt-up (:arithmetic) (:sqrt-up "SQRT" ,@lispy))
        (?\u221A :sqrt-up2 (:arithmetic) (:sqrt-up2 "Sqrt" ,@lispy))
-
+       
        (?\u005E :expt (:arithmetic) (:expt "expt" ,@lispy))
        (?\u005E :expt-up (:arithmetic) (:expt-up "EXPT" ,@lispy))
        (?\u005E :expt-up2 (:arithmetic) (:expt-up2 "Expt" ,@lispy))
-
+       
        ;;(?\u0025 :mod (:arithmetic) (:mod "mod" ,@lispy))
        ;;(?\u0025 :mod-up (:arithmetic) (:mod-up "MOD" ,@lispy))
-
+       
        (?\u00D7 :mult (:arithmetic) (:mult "*" ,@lispy))
-
+       
        ;;(?\u00F7 :div (:arithmetic) (:div "/" ,@lispy)) ; conflicts with /=
        ;;(?\u2116 :nth (:sets) (:nth "nth" ,@lispy))
        ;;(?\u2116 :nth-up (:sets) (:nth-up "NTH" ,@lispy))
-
+       
        (?\u2208 :member (:sets) (:member "member" ,@lispy))
        (?\u2208 :member-up (:sets) (:member-up "MEMBER" ,@lispy))
        (?\u2208 :member-up2 (:sets) (:member-up2 "Member" ,@lispy))
-
+       
        (?\u2200 :every (:sets) (:every "every" ,@lispy))
        (?\u2200 :every-up (:sets) (:every-up "EVERY" ,@lispy))
        (?\u2200 :every-up2 (:sets) (:every-up2 "Every" ,@lispy))
-
+       
        (?\u2203 :some (:sets) (:some "some" ,@lispy))
        (?\u2203 :some-up (:sets) (:some-up "SOME" ,@lispy))
        (?\u2203 :some-up2 (:sets) (:some-up2 "Some" ,@lispy))
-
+       
        (?\u2204 :notany (:sets) (:notany "notany" ,@lispy))
        (?\u2204 :notany-up (:sets) (:notany-up "NOTANY" ,@lispy))
        (?\u2204 :notany-up2 (:sets) (:notany-up2 "Notany" ,@lispy))
-
+       
        (?\u2190 :setf (:equality) (:setf "setf" ,@lispy))
        (?\u2190 :setf-up (:equality) (:setf-up "SETF" ,@lispy))
        (?\u2190 :setf-up2 (:equality) (:setf-up2 "Setf" ,@lispy))
-
+       
        (?\u21C7 :psetf (:equality) (:setf "psetf" ,@lispy))
        (?\u21C7 :psetf-up (:equality) (:setf-up "PSETF" ,@lispy))
        (?\u21C7 :psetf-up2 (:equality) (:setf-up2 "Psetf" ,@lispy))

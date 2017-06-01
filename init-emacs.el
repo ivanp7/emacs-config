@@ -162,14 +162,17 @@
                     '(font-lock-string-face font-lock-comment-face)))
               (replace-match ",@"))))))
 
-(add-to-list 'write-file-functions
-             (lambda ()
-               (interactive)
-               (untabify-current-buffer)
-               (delete-trailing-whitespace)
-               (add-space-in-empty-lines)
-               (indent-current-buffer)
-               (comma-at-sign-remove-spaces)))
+(defun prepare-buffer-for-saving ()
+  (interactive)
+  (untabify-current-buffer)
+  (delete-trailing-whitespace)
+  (add-space-in-empty-lines)
+  (indent-current-buffer)
+  (comma-at-sign-remove-spaces)
+  (recenter-top-bottom)
+  (refresh-window))
+
+(add-to-list 'write-file-functions 'prepare-buffer-for-saving)
 
 ;; A ",@symbol" highlight bug workaround:
 ;; insert one space between ",@" and a symbol in code
