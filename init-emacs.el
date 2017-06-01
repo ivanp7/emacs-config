@@ -119,17 +119,38 @@
 
 ;; Delete trailing whitespaces, format buffer and untabify when save buffer
 (setq indent-buffer-exception-modes '(bibtex-mode))
+(setq-default untabify-on-saving nil)
 (setq-default indent-tabs-mode nil)
+
 (defun indent-current-buffer ()
+  (interactive)
   (unless (member major-mode indent-buffer-exception-modes)
     (indent-region (point-min) (point-max))))
+
 (defun untabify-current-buffer ()
-  (if (not indent-tabs-mode)
+  (interactive)
+  (if (not untabify-on-saving)
       (untabify (point-min) (point-max)))
   nil)
-(add-to-list 'write-file-functions 'indent-current-buffer)
-(add-to-list 'write-file-functions 'untabify-current-buffer)
-(add-to-list 'write-file-functions 'delete-trailing-whitespace)
+
+(defun current-line-empty-p ()
+  (interactive)
+  (save-excursion
+    (beginning-of-line)
+    (looking-at "[[:space:]]*$")))
+
+(defun add-space-in-empty-lines ()
+  (interactive)
+  (let ((on-empty-line (and (eql (char-before (point)) ?\n)
+                          (eql (char-after (point)) ?\n))))
+    (save-excursion
+      (beginning-of-buffer)
+      (while (re-search-forward "\n\n" nil t)
+        (if (not (member (plist-get (text-properties-at (point)) 'face)
+                  '(font-lock-string-face font-lock-comment-face)))
+            (replace-match "\n \n"))))
+    (if on-empty-line
+        (right-char))))
 
 (defun comma-at-sign-remove-spaces ()
   (interactive)
@@ -140,7 +161,15 @@
           (if (not (member (plist-get (text-properties-at (point)) 'face)
                     '(font-lock-string-face font-lock-comment-face)))
               (replace-match ",@"))))))
-(add-to-list 'write-file-functions 'comma-at-sign-remove-spaces)
+
+(add-to-list 'write-file-functions
+             (lambda ()
+               (interactive)
+               (untabify-current-buffer)
+               (delete-trailing-whitespace)
+               (add-space-in-empty-lines)
+               (indent-current-buffer)
+               (comma-at-sign-remove-spaces)))
 
 ;; A ",@symbol" highlight bug workaround:
 ;; insert one space between ",@" and a symbol in code
