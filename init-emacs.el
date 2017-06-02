@@ -169,7 +169,6 @@
   (add-space-in-empty-lines)
   (indent-current-buffer)
   (comma-at-sign-remove-spaces)
-  (recenter-top-bottom)
   (refresh-window))
 
 (add-to-list 'write-file-functions 'prepare-buffer-for-saving)
