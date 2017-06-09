@@ -55,11 +55,11 @@
                        name (file-name-nondirectory new-name)))))))
 
 (define-key my-common-keys-minor-mode-map (kbd "C-s")
-  'save-buffer)
+  (lambda () (interactive) (save-buffer) (refresh-window)))
 (define-key my-common-keys-minor-mode-map (kbd "C-S-s")
-  'write-file)
+  (lambda () (interactive) (write-file) (refresh-window)))
 (define-key my-common-keys-minor-mode-map (kbd "M-s s")
-  'rename-current-buffer-file)
+  (lambda () (interactive) (rename-current-buffer-file) (refresh-window)))
 
 (define-key my-common-keys-minor-mode-map (kbd "C-a")
   'mark-whole-buffer)

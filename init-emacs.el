@@ -168,8 +168,7 @@
   (delete-trailing-whitespace)
   (add-space-in-empty-lines)
   (indent-current-buffer)
-  (comma-at-sign-remove-spaces)
-  (refresh-window))
+  (comma-at-sign-remove-spaces))
 
 (add-to-list 'write-file-functions 'prepare-buffer-for-saving)
 
