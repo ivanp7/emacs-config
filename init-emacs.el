@@ -141,16 +141,17 @@
 
 (defun add-space-in-empty-lines ()
   (interactive)
-  (let ((on-empty-line (and (eql (char-before (point)) ?\n)
-                          (eql (char-after (point)) ?\n))))
-    (save-excursion
-      (beginning-of-buffer)
-      (while (re-search-forward "\n\n" nil t)
-        (if (not (member (plist-get (text-properties-at (point)) 'face)
-                  '(font-lock-string-face font-lock-comment-face)))
-            (replace-match "\n \n"))))
-    (if on-empty-line
-        (right-char))))
+  (if (member major-mode '(lisp-mode emacs-lisp-mode))
+      (let ((on-empty-line (and (eql (char-before (point)) ?\n)
+                              (eql (char-after (point)) ?\n))))
+        (save-excursion
+          (beginning-of-buffer)
+          (while (re-search-forward "\n\n" nil t)
+            (if (not (member (plist-get (text-properties-at (point)) 'face)
+                      '(font-lock-string-face font-lock-comment-face)))
+                (replace-match "\n \n"))))
+        (if on-empty-line
+            (right-char)))))
 
 (defun comma-at-sign-remove-spaces ()
   (interactive)
@@ -164,13 +165,16 @@
 
 (defun prepare-buffer-for-saving ()
   (interactive)
-  (untabify-current-buffer)
-  (delete-trailing-whitespace)
-  (add-space-in-empty-lines)
-  (indent-current-buffer)
-  (comma-at-sign-remove-spaces))
+  (unless (eql major-mode 'fundamental-mode)
+    (untabify-current-buffer)
+    (delete-trailing-whitespace)
+    (add-space-in-empty-lines)
+    (indent-current-buffer)
+    (comma-at-sign-remove-spaces)))
 
 (add-to-list 'write-file-functions 'prepare-buffer-for-saving)
+
+(global-auto-revert-mode 1)
 
 ;; A ",@symbol" highlight bug workaround:
 ;; insert one space between ",@" and a symbol in code
