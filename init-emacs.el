@@ -49,46 +49,6 @@
 (load-theme 'granger t)
 (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
 
-;;;; Advanced Emacs tuning
-(defvar *required-packages*
-  '(ac-slime auto-complete auto-indent-mode buffer-move cursor-chg expand-region
-    highlight-stages highlight-symbol hl-sexp imenu+ magic-latex-buffer magit
-    nlinum org paren-face pos-tip pretty-mode pretty-symbols rainbow-identifiers
-    slime switch-window tabbar undo-tree)
-  "a list of packages to ensure are installed at launch.")
-
-;;;; Initializing package manager and loading useful packages
-(require 'cl)
-
-(require 'package)
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.org/packages/") t)
-(add-to-list 'package-archives
-             '("melpa-stable" . "http://stable.melpa.org/packages/") t)
-;; (add-to-list 'package-archives
-;;              '("marmalade" . "https://marmalade-repo.org/packages/") t)
-(when (< emacs-major-version 24)
-  ;; For important compatibility libraries like cl-lib
-  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
-(package-initialize)
-
-;; method to check if all packages are installed
-(defun packages-installed-p ()
-  (loop for p in *required-packages*
-     when (not (package-installed-p p)) do (return nil)
-     finally (return t)))
-
-;; if not all packages are installed, check and install the missing ones.
-(unless (packages-installed-p)
-  ;; check for new packages (package versions)
-  (message "%s" "Emacs is now refreshing its package database...")
-  (package-refresh-contents)
-  (message "%s" " done.")
-  ;; install the missing packages
-  (dolist (p *required-packages*)
-    (when (not (package-installed-p p))
-      (package-install p))))
-
 ;;;; Generic settings
 (tool-bar-mode -1)
 ;; (scroll-bar-mode -1)
@@ -99,7 +59,7 @@
 ;; If you want to create a file, visit that file with <Ctrl+O>,
 ;; then enter the text in that file's own buffer.
 ;; Press <Ctrl+J> to evaluate expression and print result at the point.
-;; For Common Lisp evaluation use the *slime-scratch* buffer instead.\n\n")
+;; For Common Lisp evaluation use the *sl(ime/y)-scratch* buffer instead.\n\n")
 
 (transient-mark-mode t)         ; make the current 'selection' visible
 (delete-selection-mode t)       ; delete the selection area with a keypress
@@ -200,9 +160,9 @@
 
 ;;; Configure backups and autosaves
 (setq-default make-backup-files t)
-(setq-default auto-save-defaults t)
+(setq-default auto-save-default t)
 
-;;;; Scrolling settings
+;;; Scrolling settings
 (setq scroll-margin 1
       scroll-conservatively 0
       scroll-up-aggressively 0.01
@@ -222,26 +182,7 @@
 (setq hscroll-margin 1)
 (setq hscroll-step 1)
 
-(setq next-screen-context-lines 30)
-
-(global-set-key (kbd "<wheel-right>") 'ignore)
-(global-set-key (kbd "<double-wheel-right>") 'ignore)
-(global-set-key (kbd "<triple-wheel-right>") 'ignore)
-(global-set-key (kbd "<wheel-left>") 'ignore)
-(global-set-key (kbd "<double-wheel-left>") 'ignore)
-(global-set-key (kbd "<triple-wheel-left>") 'ignore)
-(global-set-key (kbd "<S-wheel-right>") 'ignore)
-(global-set-key (kbd "<S-double-wheel-right>") 'ignore)
-(global-set-key (kbd "<S-triple-wheel-right>") 'ignore)
-(global-set-key (kbd "<S-wheel-left>") 'ignore)
-(global-set-key (kbd "<S-double-wheel-left>") 'ignore)
-(global-set-key (kbd "<S-triple-wheel-left>") 'ignore)
-(global-set-key (kbd "<C-wheel-right>") 'ignore)
-(global-set-key (kbd "<C-double-wheel-right>") 'ignore)
-(global-set-key (kbd "<C-triple-wheel-right>") 'ignore)
-(global-set-key (kbd "<C-wheel-left>") 'ignore)
-(global-set-key (kbd "<C-double-wheel-left>") 'ignore)
-(global-set-key (kbd "<C-triple-wheel-left>") 'ignore)
+(setq next-screen-context-lines 25)
 
 ;;;; Coding systems
 (cond
@@ -276,3 +217,9 @@
   (interactive)
   (force-window-update (get-buffer-window))
   (redisplay))
+
+;;;; Frame maximization function
+(defun maximize-frame ()
+  (if (memq (frame-parameter nil 'fullscreen) '(fullscreen fullboth))
+      (modify-frame-parameters nil `((maximized . maximized)))
+      (modify-frame-parameters nil `((fullscreen . maximized)))))

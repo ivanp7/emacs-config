@@ -1,16 +1,16 @@
-(defvar my-common-keys-minor-mode-map (make-keymap)
-  "my-common-keys-minor-mode keymap.")
+(defvar my-emacs-keymap (make-keymap)
+  "My common Emacs keymap.")
 
 ;;; Basic keys
-(define-key my-common-keys-minor-mode-map (kbd "C-z")
+(define-key my-emacs-keymap (kbd "C-z")
   'undo-tree-undo)
-(define-key my-common-keys-minor-mode-map (kbd "C-y")
+(define-key my-emacs-keymap (kbd "C-y")
   'undo-tree-redo)
 
-(define-key my-common-keys-minor-mode-map (kbd "C-S-v")
+(define-key my-emacs-keymap (kbd "C-S-v")
   (lambda () (interactive) (popup-menu 'yank-menu)))
 
-(define-key my-common-keys-minor-mode-map (kbd "<backspace>")
+(define-key my-emacs-keymap (kbd "<backspace>")
   'backward-delete-char-untabify)
 
 ;; Needed to disable destroying windows configuration by pressing <escape>
@@ -22,7 +22,7 @@
          ad-do-it
       (fset 'one-window-p (symbol-function 'orig-one-window-p)))))
 
-(define-key my-common-keys-minor-mode-map (kbd "<escape>")
+(define-key my-emacs-keymap (kbd "<escape>")
   'keyboard-escape-quit)
 
 ;; Always open or create file with GUI
@@ -32,9 +32,9 @@
   (let ((last-nonmenu-event nil))
     ad-do-it))
 
-(define-key my-common-keys-minor-mode-map (kbd "C-o")
+(define-key my-emacs-keymap (kbd "C-o")
   'find-file)
-(define-key my-common-keys-minor-mode-map (kbd "C-p")
+(define-key my-emacs-keymap (kbd "C-p")
   'find-file-other-frame)
 
 (defun rename-current-buffer-file ()
@@ -54,69 +54,69 @@
               (message "File '%s' successfully renamed to '%s'"
                        name (file-name-nondirectory new-name)))))))
 
-(define-key my-common-keys-minor-mode-map (kbd "C-s")
+(define-key my-emacs-keymap (kbd "C-s")
   (lambda () (interactive) (save-buffer) (refresh-window)))
-(define-key my-common-keys-minor-mode-map (kbd "C-S-s")
+(define-key my-emacs-keymap (kbd "C-S-s")
   (lambda () (interactive) (write-file) (refresh-window)))
-(define-key my-common-keys-minor-mode-map (kbd "M-s s")
+(define-key my-emacs-keymap (kbd "M-s s")
   (lambda () (interactive) (rename-current-buffer-file) (refresh-window)))
 
-(define-key my-common-keys-minor-mode-map (kbd "C-a")
+(define-key my-emacs-keymap (kbd "C-a")
   'mark-whole-buffer)
-(define-key my-common-keys-minor-mode-map (kbd "C-l")
+(define-key my-emacs-keymap (kbd "C-l")
   'goto-line)
 
-(define-key my-common-keys-minor-mode-map (kbd "<M-home>")
+(define-key my-emacs-keymap (kbd "<M-home>")
   'beginning-of-buffer)
-(define-key my-common-keys-minor-mode-map (kbd "<M-end>")
+(define-key my-emacs-keymap (kbd "<M-end>")
   'end-of-buffer)
 
-(define-key my-common-keys-minor-mode-map (kbd "C-<f1>")
+(define-key my-emacs-keymap (kbd "C-<f1>")
   'slime-selector)
 
 ;;; Commands execution
-(define-key my-common-keys-minor-mode-map (kbd "C-M-x")
+(define-key my-emacs-keymap (kbd "C-M-x")
   'shell-command)
-(define-key my-common-keys-minor-mode-map (kbd "S-C-M-x")
+(define-key my-emacs-keymap (kbd "S-C-M-x")
   'repeat-complex-command)
 
 ;;;; Search
-;;(define-key my-common-keys-minor-mode-map (kbd "M-h")
+;;(define-key my-emacs-keymap (kbd "M-h")
 ;;  'highlight-symbol-at-point)
-(define-key my-common-keys-minor-mode-map (kbd "M-r")
+(define-key my-emacs-keymap (kbd "M-r")
   'highlight-regexp)
-(define-key my-common-keys-minor-mode-map (kbd "M-u")
+(define-key my-emacs-keymap (kbd "M-u")
   'unhighlight-regexp)
 
-(define-key my-common-keys-minor-mode-map (kbd "C-S-f")
+(define-key my-emacs-keymap (kbd "C-S-f")
   'occur)
 
-;; (define-key my-common-keys-minor-mode-map (kbd "C-S-G <up>")
+;; (define-key my-emacs-keymap (kbd "C-S-G <up>")
 ;;   'isearch-backward)
-;; (define-key my-common-keys-minor-mode-map (kbd "M-C-S-G <up>")
+;; (define-key my-emacs-keymap (kbd "M-C-S-G <up>")
 ;;   'isearch-repeat-backward)
-;; (define-key my-common-keys-minor-mode-map (kbd "C-S-G <down>")
+;; (define-key my-emacs-keymap (kbd "C-S-G <down>")
 ;;   'isearch-forward)
-;; (define-key my-common-keys-minor-mode-map (kbd "M-C-S-G <down>")
+;; (define-key my-emacs-keymap (kbd "M-C-S-G <down>")
 ;;   'isearch-repeat-forward)
 
 ;;;; Toggle input method
-(define-key my-common-keys-minor-mode-map (kbd "C-/")
+(define-key my-emacs-keymap (kbd "C-/")
   'toggle-input-method)
 
 ;;; Font size control keybindings
-(define-key my-common-keys-minor-mode-map (kbd "<C-M-next>")
+(define-key my-emacs-keymap (kbd "<C-M-next>")
   'text-scale-decrease)
-(define-key my-common-keys-minor-mode-map (kbd "<C-M-prior>")
+(define-key my-emacs-keymap (kbd "<C-M-prior>")
   'text-scale-increase)
 
 ;; Horizontal wheeling
-(define-key my-common-keys-minor-mode-map (kbd "<C-M-mouse-4>")
+(define-key my-emacs-keymap (kbd "<C-M-mouse-4>")
   '(lambda ()
     (interactive)
     (scroll-right 10 t)
     (refresh-window)))
-(define-key my-common-keys-minor-mode-map (kbd "<C-M-mouse-5>")
+(define-key my-emacs-keymap (kbd "<C-M-mouse-5>")
   '(lambda ()
     (interactive)
     (scroll-left 10 t)
@@ -127,41 +127,40 @@
 ;; C-M-i will decrease opacity (== increase transparency
 ;; C-M-o will increase opacity (== decrease transparency)
 ;; C-M-p will returns the state to normal
-(define-key my-common-keys-minor-mode-map (kbd "C-M-i")
+(define-key my-emacs-keymap (kbd "C-M-i")
   (lambda () (interactive) (djcb-opacity-modify t)))
-(define-key my-common-keys-minor-mode-map (kbd "C-M-o")
+(define-key my-emacs-keymap (kbd "C-M-o")
   (lambda () (interactive) (djcb-opacity-modify)))
-(define-key my-common-keys-minor-mode-map (kbd "C-M-p")
+(define-key my-emacs-keymap (kbd "C-M-p")
   (lambda () (interactive) (modify-frame-parameters nil `((alpha . 100)))))
 
 ;;;; Open hotkey help file in a new frame
-(define-key my-common-keys-minor-mode-map (kbd "<f1> SPC")
+(define-key my-emacs-keymap (kbd "<f1> SPC")
   (lambda () (interactive)
      (find-file-other-frame (concat cl-ide-init-path
-                                    "keys-description-ru.org"))))
+                                    "info/keymaps-description-ru.org"))))
 
 ;;;; Redraw display
-(define-key my-common-keys-minor-mode-map (kbd "C-`")
+(define-key my-emacs-keymap (kbd "C-`")
   'redraw-display)
 
 ;;;; Installing minor mode for keys
-(define-minor-mode my-common-keys-minor-mode
+(define-minor-mode my-emacs-keymap-mode
     "A minor mode so that my key settings override annoying major modes."
-  t " myk1" 'my-common-keys-minor-mode-map)
+  t " my-emacs-keys" my-emacs-keymap)
 
-(define-global-minor-mode my-common-keys-minor-global-mode
-    my-common-keys-minor-mode
+(define-global-minor-mode my-emacs-keymap-global-mode
+    my-emacs-keymap-mode
   (lambda ()
-    (when (not (memq major-mode
-                   (list 'term-mode)))
-      (my-common-keys-minor-mode))))
+    (when (not (memq major-mode (list 'term-mode)))
+      (my-emacs-keymap-mode))))
 
-(my-common-keys-minor-global-mode 1)
+(my-emacs-keymap-global-mode 1)
 
-(defadvice load (after give-my-keybindings-priority)
-  "Try to ensure that my keybindings always have priority."
-  (if (not (eq (car (car minor-mode-map-alist)) 'my-common-keys-minor-mode))
-      (let ((mykeys (assq 'my-common-keys-minor-mode minor-mode-map-alist)))
-        (assq-delete-all 'my-common-keys-minor-mode minor-mode-map-alist)
+(defadvice load (after give-custom-keybindings-priority)
+  "Try to ensure that these custom keybindings always have priority."
+  (if (not (eq (car (car minor-mode-map-alist)) 'my-emacs-keymap-mode))
+      (let ((mykeys (assq 'my-emacs-keymap-mode minor-mode-map-alist)))
+        (assq-delete-all 'my-emacs-keymap-mode minor-mode-map-alist)
         (add-to-list 'minor-mode-map-alist mykeys))))
 (ad-activate 'load)
