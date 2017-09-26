@@ -1,6 +1,4 @@
-;;;; Setting personal data
-(setq user-full-name   "ivanp7")
-(setq user-mail-adress "podmazov@gmail.com")
+(require 'cl)
 
 ;;;; System-type detection functions
 (defun system-is-linux ()
@@ -29,6 +27,20 @@
 (add-to-list 'load-path (concat cl-ide-init-path "3rdparty/"))
 (add-to-list 'custom-theme-load-path
              (concat cl-ide-init-path "3rdparty/color-themes/"))
+
+;;;; Setting personal data
+(ignore-errors
+  (with-temp-buffer
+    (insert-file-contents (concat cl-ide-init-aux-path
+                                  "credentials.sexp"))
+    (goto-char (point-min))
+    (let ((credentials (sexp-at-point)))
+      (when (getf credentials :login-name)
+        (setq user-login-name (getf credentials :login-name)))
+      (when (getf credentials :full-name)
+        (setq user-full-name (getf credentials :full-name)))
+      (when (getf credentials :e-mail)
+        (setq user-mail-adress (getf credentials :e-mail))))))
 
 ;;;; Starting countdown of Emacs loading time
 (load "init-timer.el")

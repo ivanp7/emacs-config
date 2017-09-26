@@ -1,5 +1,3 @@
-(require 'cl)
-
 ;;;; Acquiring list of the used packages
 (defvar required-packages
   (set-difference
