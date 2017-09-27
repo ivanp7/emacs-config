@@ -64,5 +64,5 @@
 (add-hook 'window-setup-hook 'timer/stop t)
 (add-hook 'window-setup-hook
           (lambda ()
-            (start-cl-ide nil (concat (format "%.1f" *timer*) " sec")))
+            (start-cl-ide nil (concat (format "%.2f" *timer*) " sec")))
           t)
