@@ -368,8 +368,8 @@
                                   (point))
                 (error nil)))
         (right (condition-case nil (save-excursion
-                                     (up-list)
-                                     (point))
+                                   (up-list)
+                                   (point))
                  (error nil)))
         (pos (point)))
     (if (and left right)
@@ -406,7 +406,7 @@
                                        'slime-repl-prompt)
               (lisp-indent-line))))))
 
-(define-key my-lisp-mode-keymap (kbd "<C-tab>")
+(define-key my-lisp-mode-keymap (kbd "C-`")
   'indent-current-sexp-or-selection)
 
 (defun kill-whitespace ()
@@ -423,7 +423,7 @@
               (when (<= match-beg pos)
                 (replace-match "" nil nil)
                 (when (not (or (eql (char-after) ?\))
-                               (eql (char-before) ?\()))
+                            (eql (char-before) ?\()))
                   (insert " ")
                   (setq space-inserted t))
                 (setq pos (if (and (< match-beg pos) space-inserted)

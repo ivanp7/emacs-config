@@ -141,7 +141,7 @@
                                     "info/keymaps-description-ru.org"))))
 
 ;;;; Redraw display
-(define-key my-emacs-keymap (kbd "C-`")
+(define-key my-emacs-keymap (kbd "M-`")
   'redraw-display)
 
 ;;;; Installing minor mode for keys
