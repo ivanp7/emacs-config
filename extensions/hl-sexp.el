@@ -26,15 +26,6 @@
 (add-hook 'emacs-lisp-mode-hook 'hl-sexp-mode)
 (add-hook 'slime-repl-mode-hook 'hl-sexp-mode)
 
-;;;; Highlight matching parens
-(set-face-background 'show-paren-match "red") ;; "steelblue4"
-(set-face-foreground 'show-paren-match "white")
-(set-face-attribute 'show-paren-match nil :weight 'extra-bold)
-
-(set-face-background 'show-paren-mismatch "yellow")
-(set-face-foreground 'show-paren-mismatch "white")
-(set-face-attribute 'show-paren-mismatch nil :weight 'extra-bold)
-
 (defadvice show-paren-function
     (after show-matching-paren-offscreen activate)
   "If the matching paren is offscreen, show the matching line in the
@@ -46,3 +37,5 @@
                            (char-equal (char-syntax cb) ?\) )
                            (blink-matching-open))))
     (when matching-text (message matching-text))))
+
+(set-face-background 'hl-sexp-face "gray20" nil)
