@@ -25,6 +25,9 @@
 (global-set-key (kbd "<C-double-wheel-left>") 'ignore)
 (global-set-key (kbd "<C-triple-wheel-left>") 'ignore)
 
+(define-key lisp-interaction-mode-map (kbd "C-j")
+  (lambda () (interactive) (eval-print-last-sexp 0)))
+
 ;;;; Installing custom keymaps
 (dolist (f (directory-files cl-ide-init-keymaps-path nil
                             "^\\([^_[:space:]]+[[:graph:]]*[.]el\\)$" nil))

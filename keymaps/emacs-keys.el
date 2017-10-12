@@ -71,9 +71,6 @@
 (define-key my-emacs-keymap (kbd "<M-end>")
   'end-of-buffer)
 
-(define-key my-emacs-keymap (kbd "C-<f1>")
-  'slime-selector)
-
 ;;; Commands execution
 (define-key my-emacs-keymap (kbd "C-M-x")
   'shell-command)

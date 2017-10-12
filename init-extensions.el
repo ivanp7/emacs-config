@@ -1,14 +1,26 @@
 ;;;; Acquiring list of the used packages
+(defvar present-configs
+  (mapcar (lambda (filename) (intern (substring filename 0 -3)))
+          (directory-files cl-ide-init-ext-path nil
+                           "^\\([^_[:space:]]+[[:graph:]]*[.]el\\)$" nil)))
+
 (defvar required-packages
   (set-difference
-   (mapcar (lambda (filename) (intern (substring filename 0 -3)))
-           (directory-files cl-ide-init-ext-path nil
-                            "^\\([^_[:space:]]+[[:graph:]]*[.]el\\)$" nil))
+   present-configs
    (with-temp-buffer
-     (insert-file-contents (concat cl-ide-init-ext-path "_ignored.sexp"))
+       (insert-file-contents (concat cl-ide-init-ext-path "_ignored.sexp"))
      (goto-char (point-min))
      (sexp-at-point)))
-  "a list of packages to ensure are installed at launch.")
+  "a list of packages to be loaded at launch.")
+
+(defvar packages-to-download
+  (set-difference
+   required-packages
+   (with-temp-buffer
+       (insert-file-contents (concat cl-ide-init-ext-path "_local_packages.sexp"))
+     (goto-char (point-min))
+     (sexp-at-point)))
+  "a list of packages to be downloaded if not present")
 
 ;;;; Initializing package manager and loading used packages
 (require 'package)
@@ -24,14 +36,15 @@
 (package-initialize)
 
 ;; if not all packages are installed, check and install the missing ones.
-(let ((packages-to-install (remove-if 'package-installed-p required-packages)))
-  (when packages-to-install
+(let ((packages-to-download (remove-if 'package-installed-p
+                                       packages-to-download)))
+  (when packages-to-download
     ;; check for new packages (package versions)
     (message "%s" "Emacs is now refreshing its package database...")
     (package-refresh-contents)
     (message "%s" " done.")
     ;; install the missing packages
-    (dolist (p packages-to-install)
+    (dolist (p packages-to-download)
       (package-install p))))
 
 ;;;; Loading configuration scripts
