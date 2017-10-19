@@ -8,6 +8,8 @@
   (when (probe-file quicklisp-init)
     (load quicklisp-init)))
 
+(setf slynk:*slynk-pprint-bindings* nil)
+
 (setf *print-circle* t) ; enable circular list detection for printing
 (setf *read-default-float-format* 'double-float)
 
