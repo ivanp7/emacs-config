@@ -69,7 +69,15 @@
     (define-key map (kbd "<M-S-up>") 'sly-button-backward)
     (define-key map (kbd "<M-S-down>") 'sly-button-forward)
     (define-key map (kbd "C-M-p") nil)
-    (define-key map (kbd "C-M-n") nil)))
+    (define-key map (kbd "C-M-n") nil)
+    (define-key map (kbd "C-' <return>") 'sly-mrepl-clear-repl)
+    (define-key map (kbd "C-' <delete>") 'sly-mrepl-clear-recent-output)
+    (define-key map (kbd "C-' <backspace>")
+      (lambda () (interactive)
+        (end-of-buffer)
+        (let ((prompt-pos ()))
+          (delete-region (overlay-end sly-mrepl--last-prompt-overlay)
+                         (point-max)))))))
 
 (defun sly-repl-send-initial-command ()
   (end-of-buffer)
@@ -112,9 +120,9 @@
                       search-start
                       (previous-single-property-change search-start 'field))
            while (and (marker-position pos)
-                    ;; FIXME: fragile (1- pos), use narrowing
-                    (not (get-text-property (1- pos) 'sly-mrepl--prompt))
-                    (> pos (point-min)))
+                      ;; FIXME: fragile (1- pos), use narrowing
+                      (not (get-text-property (1- pos) 'sly-mrepl--prompt))
+                      (> pos (point-min)))
            when (eq (field-at-pos pos) 'sly-mrepl--output)
            do (let ((inhibit-read-only t))
                 (delete-region
