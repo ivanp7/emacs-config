@@ -488,10 +488,10 @@ Version 2015-04-09"
         (let ((symbol-name (substring-no-properties symbol-name)))
           (message "Symbol: %s" symbol-name)
           (pos-tip-show
-           (format "%s" (sly-eval `(swank:documentation-symbol
+           (format "%s" (sly-eval `(slynk:documentation-symbol
                                     ,symbol-name))))
           ;; (popup-tip
-          ;;  (format "%s" (sly-eval `(swank:documentation-symbol
+          ;;  (format "%s" (sly-eval `(slynk:documentation-symbol
           ;;                             ,symbol-name)))
           ;;  :nostrip t)
           ))))
@@ -529,17 +529,18 @@ Version 2015-04-09"
   'highlight-stages-global-mode)
 
 ;;; Rainbow identifiers keys
-(define-key my-lisp-mode-keymap (kbd "M-k")
+(define-key my-lisp-mode-keymap (kbd "<f3>")
   'rainbow-identifiers-tune)
-(define-key my-lisp-mode-keymap (kbd "M-K")
+(define-key my-lisp-mode-keymap (kbd "<S-f3>")
   (lambda () (interactive)
     (let ((rainbow-identifiers-tune-delta -1))
       (rainbow-identifiers-tune))))
-(define-key my-lisp-mode-keymap (kbd "M-j r")
+(define-key my-lisp-mode-keymap (kbd "<C-f3>")
   'rainbow-identifiers-cancel-tuning)
-(define-key my-lisp-mode-keymap (kbd "M-j l")
+
+(define-key my-lisp-mode-keymap (kbd "M-k l")
   'rainbow-identifiers-load-tune)
-(define-key my-lisp-mode-keymap (kbd "M-j s")
+(define-key my-lisp-mode-keymap (kbd "M-k s")
   'rainbow-identifiers-save-tune)
 
 ;;;; Installing minor mode for keys

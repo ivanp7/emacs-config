@@ -1,27 +1,6 @@
 ;;;; Rainbow identifiers
 (require 'rainbow-identifiers)
 
-;; (eval-when-compile
-;;   (defmacro rainbow-identifiers--define-faces-custom ()
-;;     (let* ((faces '())
-;;            (colors ["red" "firebrick" "saddle brown" ; red, pink, brown
-;;                           "orange red" "yellow" "dark goldenrod" ; orange, yellow
-;;                           "olive drab" "forest green" "lime green" "spring green" ; green
-;;                           "cyan" "dodger blue" "slate blue" ; blue
-;;                           "dark orchid" "violet red" "magenta" ; purple, magenta
-;;                           ])
-;;            (light-colors colors)
-;;            (dark-colors colors))
-;;       (dotimes (i (length colors))
-;;         (push `(defface ,(intern (format "rainbow-identifiers-custom-%d" (1+ i)))
-;;                    '((((class color) (background dark)) :foreground ,(aref dark-colors i))
-;;                      (((class color) (background light)) :foreground ,(aref light-colors i)))
-;;                  ,(format "Identifier face #%d" (1+ i))
-;;                  :group 'rainbow-identifiers-faces)
-;;               faces))
-;;       `(progn ,@faces))))
-;; (rainbow-identifiers--define-faces-custom)
-
 (setq rainbow-identifiers-cie-l*a*b*-lightness 65)
 (setq rainbow-identifiers-cie-l*a*b*-saturation 100)
 (setq rainbow-identifiers-cie-l*a*b*-color-count 32)
@@ -32,29 +11,29 @@
 (setq rainbow-identifiers-face-count
       rainbow-identifiers-cie-l*a*b*-color-count)
 
-(defun rainbow-identifiers-face-chooser (hash)
-  (if (numberp hash)
-      (rainbow-identifiers-cie-l*a*b*-choose-face
-       ;; hack to get rid of the excess of blue colors
-       (* (+ use-colors-shift (mod hash rainbow-identifiers-face-count))
-          (/ use-colors-count 1.0
-             rainbow-identifiers-cie-l*a*b*-color-count)))
-      ;; (intern-soft
-      ;;  (concat "rainbow-identifiers-custom-"
-      ;;          (number-to-string
-      ;;           (1+ (mod hash rainbow-identifiers-face-count)))))
-      (list (append (list :foreground "white")
-                    (if (eq hash :cl-special) (list :slant 'italic))))))
-
-;; Demonstration of the colors:
-'(x00 x01 x02 x03 x04 x05 x06 x07 x08 x09 x10 x11 x12 x13 x14 x15
-  x16 x17 x18 x19 x20 x21 x22 x23 x24 x25 x26 x27 x28 x29 x30 x31)
+(defvar rainbow-identifiers-default-color "burlywood")
 
 (setq rainbow-identifiers-choose-face-function
-      'rainbow-identifiers-face-chooser)
+      (lambda (hash)
+        (if (numberp hash)
+            (rainbow-identifiers-cie-l*a*b*-choose-face
+             ;; hack to get rid of the excess of blue colors
+             (* (+ use-colors-shift (mod hash rainbow-identifiers-face-count))
+                (/ use-colors-count 1.0
+                   rainbow-identifiers-cie-l*a*b*-color-count)))
+            (cond
+              ((eq hash :cl-special)
+               (list (list :foreground "white" :slant 'italic)))
+              ((eq hash :cl-standard)
+               (list (list :foreground "white")))
+              ((eq hash :default)
+               (list (list :foreground rainbow-identifiers-default-color)))))))
+
+(defvar cl-special-operators-symbols-list nil)
+(defvar cl-symbols-list nil)
 
 (with-temp-buffer
-  (insert-file-contents (concat cl-ide-init-aux-path "cl-symbols-list.sexp"))
+    (insert-file-contents (concat cl-ide-init-aux-path "cl-symbols-list.sexp"))
   (goto-char (point-min))
   (let ((symbols-list (sexp-at-point)))
     (setq cl-special-operators-symbols-list
@@ -62,13 +41,9 @@
     (setq cl-symbols-list
           (mapcar 'symbol-name (getf symbols-list :all)))))
 
-;; (load "init-cl-symbols-list.el") ; for cl-symbols-list
-
-(defcustom rainbow-identifiers-custom-list nil
-  "User-selected custom hash values for specific symbols.")
-(defvar rainbow-identifiers-custom-binary-tree nil)
-
 ;; --- Binary tree implementation ------------------------------------------
+
+(defvar rainbow-identifiers-custom-binary-tree nil)
 
 (defun make-binary-tree (entry left right)
   (list entry left right))
@@ -117,7 +92,7 @@
                                             result-list))
                         (copy-to-list (tree-right-branch tree)
                                       result-list))))))
-    (copy-to-list tree nil)))
+             (copy-to-list tree nil)))
 
 (defun partial-tree (elts n)
   (if (zerop n)
@@ -142,105 +117,105 @@
 
 ;; --- End of binary tree implementation ----------------------------------
 
-;; (defun rainbow-identifiers--incremental-hash-function (func identifier)
-;;   (let ((hash-value (funcall func identifier)))
-;;     (if (not (numberp hash-value))
-;;         (if (consp hash-value) (cdr hash-value) hash-value)
-;;         (let* ((hashes
-;;                 (mapcar (lambda (id)
-;;                           (mod (funcall func id t)
-;;                                (* 10 rainbow-identifiers-face-count)))
-;;                         (loop for i from 1 to (length identifier)
-;;                            collect (substring identifier 0 i))))
-;;                (new-hash 0)
-;;                (n (length hashes))
-;;                (q 0.9)
-;;                (r (/ (- 1 q) (- 1 (expt q n)))))
-;;           (round (dolist (h hashes new-hash)
-;;                    (setf new-hash (+ new-hash (* h r)))
-;;                    (setf r (* r q))))))))
+(defvar random-color-by-default nil)
 
-(defun rainbow-identifiers--hash-function (identifier &optional cl-also)
+(defvar rainbow-identifiers--hash-function-plugin
+  (lambda (identifier)
+    (if (eq major-mode 'lisp-mode)
+        (cond
+          ((member identifier cl-special-operators-symbols-list)
+           :cl-special)
+          ((member identifier cl-symbols-list) :cl-standard)))))
+
+(defun rainbow-identifiers--hash-function (identifier)
   "Redefined version of the standard 'rainbow-identifiers--hash-function'"
   (let* ((identifier (downcase identifier))
          (record (lookup-binary-tree
                   identifier
-                  rainbow-identifiers-custom-binary-tree)))
+                  rainbow-identifiers-custom-binary-tree))
+         (plugin-res (funcall rainbow-identifiers--hash-function-plugin
+                              identifier)))
     (cond
-      ((and (not cl-also) (member identifier cl-special-operators-symbols-list))
-       :cl-special)
-      ((and (not cl-also) (member identifier cl-symbols-list)) :cl-standard)
-      (record (cdr record)) ;; (cons :tuned (cdr record))
-      (t (let* ((hash (secure-hash 'sha1 identifier nil nil t))
-                (len (length hash))
-                (i (- len rainbow-identifiers--hash-bytes-to-use))
-                (result 0))
-           (while (< i len)
-             (setq result (+ (* result 256) (aref hash i)))
-             (setq i (1+ i)))
-           result)))))
+      (record (cdr record))
+      (plugin-res plugin-res)
+      (t (if random-color-by-default
+             (let* ((hash (secure-hash 'sha1 identifier nil nil t))
+                    (len (length hash))
+                    (i (- len rainbow-identifiers--hash-bytes-to-use))
+                    (result 0))
+               (while (< i len)
+                      (setq result (+ (* result 256) (aref hash i)))
+                      (setq i (1+ i)))
+               result)
+             :default)))))
 
-;; (advice-add 'rainbow-identifiers--hash-function :around
-;;             'rainbow-identifiers--incremental-hash-function)
+(defvar rainbow-identifiers-supported-modes '(lisp-mode emacs-lisp-mode))
 
 (defvar rainbow-identifiers-tune-delta 1)
 (defun rainbow-identifiers-tune ()
   (interactive)
-  (if (member major-mode '(lisp-mode))
+  (if (member major-mode rainbow-identifiers-supported-modes)
       (progn
         (let ((sym (thing-at-point 'symbol)))
           (if sym
-              (let ((sym (downcase (substring-no-properties sym))))
-                (if (not (member sym cl-symbols-list))
-                    (let ((record (lookup-binary-tree
-                                   sym
-                                   rainbow-identifiers-custom-binary-tree)))
-                      (if record
-                          (setf (cdr record)
-                                (mod (+ rainbow-identifiers-tune-delta
-                                        (cdr record))
-                                     rainbow-identifiers-face-count))
-                          (setf rainbow-identifiers-custom-binary-tree
-                                (adjoin-binary-tree
-                                 (cons sym
-                                       (mod (+ rainbow-identifiers-tune-delta
-                                               (rainbow-identifiers--hash-function
-                                                sym))
-                                            rainbow-identifiers-face-count))
-                                 rainbow-identifiers-custom-binary-tree))))))))
+              (let* ((sym (downcase (substring-no-properties sym)))
+                     (record (lookup-binary-tree
+                              sym
+                              rainbow-identifiers-custom-binary-tree)))
+                (if record
+                    (setf (cdr record)
+                       (mod (+ rainbow-identifiers-tune-delta
+                               (cdr record))
+                            rainbow-identifiers-face-count))
+                    (setf rainbow-identifiers-custom-binary-tree
+                       (adjoin-binary-tree
+                        (cons sym
+                              (mod (+ rainbow-identifiers-tune-delta
+                                      (let ((hash
+                                              (rainbow-identifiers--hash-function
+                                               sym)))
+                                        (if (numberp hash)
+                                            hash
+                                            (- rainbow-identifiers-tune-delta))))
+                                   rainbow-identifiers-face-count))
+                        rainbow-identifiers-custom-binary-tree))))))
         (font-lock-fontify-buffer))
-      (message "Tune is not allowed in this mode.")))
+      (message "Rainbow identifiers tune is not supported in this mode.")))
 
 (defun rainbow-identifiers-cancel-tuning ()
   (interactive)
-  (if (member major-mode '(lisp-mode))
+  (if (member major-mode rainbow-identifiers-supported-modes)
       (progn
         (let ((sym (thing-at-point 'symbol)))
           (if sym
-              (let ((sym (downcase (substring-no-properties sym))))
-                (if (not (member sym cl-symbols-list))
-                    (let ((record (lookup-binary-tree
-                                   sym
-                                   rainbow-identifiers-custom-binary-tree)))
-                      (if record
-                          (setf rainbow-identifiers-custom-binary-tree
-                                (delete-from-binary-tree
-                                 (car record)
-                                 rainbow-identifiers-custom-binary-tree))))))))
+              (let* ((sym (downcase (substring-no-properties sym)))
+                     (record (lookup-binary-tree
+                              sym
+                              rainbow-identifiers-custom-binary-tree)))
+                (if record
+                    (setf rainbow-identifiers-custom-binary-tree
+                       (delete-from-binary-tree
+                        (car record)
+                        rainbow-identifiers-custom-binary-tree))))))
         (font-lock-fontify-buffer))
-      (message "Tune is not allowed in this mode.")))
+      (message "Rainbow identifiers tune is not supported in this mode.")))
+
+(defvar rainbow-identifiers-custom-list nil
+  "User-selected custom hash values for specific symbols.")
 
 ;; load 'rainbow-identifiers-custom-list' from file
 (defun rainbow-identifiers-load-tune ()
   (interactive)
-  (let ((tuning-file (concat cl-ide-init-ext-path
-                             "rainbow-indentifiers/rainbow-tuning.el")))
-    (if (file-readable-p tuning-file)
-        (load-file tuning-file)
-        (setq rainbow-identifiers-custom-list nil)))
-  (sort rainbow-identifiers-custom-list
-        (lambda (rec1 rec2)
-          (string-lessp (car rec1) (car rec2))))
+  (setq rainbow-identifiers-custom-list
+        (sort (let ((tuning-file (concat cl-ide-init-ext-path
+                                         "rainbow-identifiers/tuning.sexp")))
+                (when (file-readable-p tuning-file)
+                  (with-temp-buffer
+                      (insert-file-contents tuning-file)
+                    (goto-char (point-min))
+                    (sexp-at-point))))
+              (lambda (rec1 rec2)
+                (string-lessp (car rec1) (car rec2)))))
   (setq rainbow-identifiers-custom-binary-tree
         (list->tree rainbow-identifiers-custom-list))
   (font-lock-fontify-buffer))
@@ -251,12 +226,15 @@
   (setq rainbow-identifiers-custom-list
         (tree->list rainbow-identifiers-custom-binary-tree))
   (write-region
-   (format "(setq rainbow-identifiers-custom-list \n  (list\n%s    ))\n"
-           (apply 'concat
-                  (loop for el in rainbow-identifiers-custom-list collect
-                       (format "    (cons %S %S)\n" (car el) (cdr el)))))
+   (format "(%s)"
+           (concat (if rainbow-identifiers-custom-list
+                       (format "%s" (car rainbow-identifiers-custom-list))
+                       "")
+                   (apply 'concat
+                          (mapcar (lambda (c) (format "\n %s" c))
+                                  (cdr rainbow-identifiers-custom-list)))))
    nil (concat cl-ide-init-ext-path
-               "rainbow-indentifiers/rainbow-tuning.el")))
+             "rainbow-identifiers/tuning.sexp")))
 
 ;; Customized filter: don't mark numbers, CL notation '#\name',
 ;; and '@' in ',@', mark '|name|' symbols
@@ -276,19 +254,19 @@
     (cond
       ((and (equal prev-char ?\|) (equal next-char ?\|)) t)
       ((or (and (= len 1) (equal first-char ?\.))
-           ;; (and (equal first-char ?\@) (equal prev-char ?\,))
-           (equal prefix2 "#\\") (equal prev-char ?\#)
-           (and (or (equal (upcase prefix11) "#<FUNCTION ")
-                    (equal (upcase prefix17) "#<STANDARD-CLASS "))
-                (equal last-char ?\>))
-           (and (equal first-char ?\{)
-                (equal prev-last-char ?\})
-                (equal last-char ?\>))
-           (member first-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
-           (and (>= len 2) (member first-char '(?+ ?- ?\.))
-                (member second-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))
-           (and (>= len 3) (member first-char '(?+ ?-)) (equal second-char ?\.)
-                (member third-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))) nil)
+          ;; (and (equal first-char ?\@) (equal prev-char ?\,))
+          (equal prefix2 "#\\") (equal prev-char ?\#)
+          (and (or (equal (upcase prefix11) "#<FUNCTION ")
+                (equal (upcase prefix17) "#<STANDARD-CLASS "))
+             (equal last-char ?\>))
+          (and (equal first-char ?\{)
+             (equal prev-last-char ?\})
+             (equal last-char ?\>))
+          (member first-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
+          (and (>= len 2) (member first-char '(?+ ?- ?\.))
+             (member second-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))
+          (and (>= len 3) (member first-char '(?+ ?-)) (equal second-char ?\.)
+             (member third-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))) nil)
       (t t))))
 
 (add-hook 'rainbow-identifiers-filter-functions 'rainbow-identifiers-filter)
