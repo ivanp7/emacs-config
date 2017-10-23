@@ -14,7 +14,7 @@
  '(org-replace-disputed-keys t))
 (custom-set-faces
  '(default ((t (:family "FreeMono" :foundry "outline" :slant normal
-                        :weight normal :height 80 :width normal)))))
+                :weight normal :height 90 :width normal)))))
 ;;(set-default-font "DejaVu Sans Mono") ; :height 75
 ;;(set-default-font "Consolas-8")
 
@@ -96,20 +96,20 @@
 (defun current-line-empty-p ()
   (interactive)
   (save-excursion
-    (beginning-of-line)
-    (looking-at "[[:space:]]*$")))
+   (beginning-of-line)
+   (looking-at "[[:space:]]*$")))
 
 (defun add-space-in-empty-lines ()
   (interactive)
   (if (member major-mode '(lisp-mode emacs-lisp-mode))
       (let ((on-empty-line (and (eql (char-before (point)) ?\n)
-                              (eql (char-after (point)) ?\n))))
+                                (eql (char-after (point)) ?\n))))
         (save-excursion
-          (beginning-of-buffer)
-          (while (re-search-forward "\n\n" nil t)
-            (if (not (member (plist-get (text-properties-at (point)) 'face)
-                      '(font-lock-string-face font-lock-comment-face)))
-                (replace-match "\n \n"))))
+         (beginning-of-buffer)
+         (while (re-search-forward "\n\n" nil t)
+                (if (not (member (plist-get (text-properties-at (point)) 'face)
+                                 '(font-lock-string-face font-lock-comment-face)))
+                    (replace-match "\n \n"))))
         (if on-empty-line
             (right-char)))))
 
@@ -117,11 +117,11 @@
   (interactive)
   (if (member major-mode '(lisp-mode emacs-lisp-mode))
       (save-excursion
-        (beginning-of-buffer)
-        (while (re-search-forward ",@[ \t]+" nil t)
-          (if (not (member (plist-get (text-properties-at (point)) 'face)
-                    '(font-lock-string-face font-lock-comment-face)))
-              (replace-match ",@"))))))
+       (beginning-of-buffer)
+       (while (re-search-forward ",@[ \t]+" nil t)
+              (if (not (member (plist-get (text-properties-at (point)) 'face)
+                               '(font-lock-string-face font-lock-comment-face)))
+                  (replace-match ",@"))))))
 
 (defun prepare-buffer-for-saving ()
   (interactive)
@@ -144,13 +144,13 @@
   (interactive)
   (if (member major-mode '(lisp-mode emacs-lisp-mode))
       (save-excursion
-        (comma-at-sign-remove-spaces)
-        (beginning-of-buffer)
-        (while (re-search-forward ",@" nil t)
-          (if (and (not (member (plist-get (text-properties-at (point)) 'face)
-                       '(font-lock-string-face font-lock-comment-face)))
-                 (not (member (char-after (point)) '(?\( ?\, ?\` ?\'))))
-              (replace-match ",@"))))))
+       (comma-at-sign-remove-spaces)
+       (beginning-of-buffer)
+       (while (re-search-forward ",@" nil t)
+              (if (and (not (member (plist-get (text-properties-at (point)) 'face)
+                                    '(font-lock-string-face font-lock-comment-face)))
+                       (not (member (char-after (point)) '(?\( ?\, ?\` ?\'))))
+                  (replace-match ",@"))))))
 
 ;; End of file newlines
 (setq require-final-newline t) ; add newline to the end of file when saving
