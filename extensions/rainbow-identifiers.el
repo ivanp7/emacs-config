@@ -117,6 +117,16 @@
 
 ;; --- End of binary tree implementation ----------------------------------
 
+(defun rainbow-identifiers--identifier-hash (identifier)
+  (let* ((hash (secure-hash 'sha1 identifier nil nil t))
+         (len (length hash))
+         (i (- len rainbow-identifiers--hash-bytes-to-use))
+         (result 0))
+    (while (< i len)
+           (setq result (+ (* result 256) (aref hash i)))
+           (setq i (1+ i)))
+    result))
+
 (defvar random-color-by-default nil)
 
 (defvar rainbow-identifiers--hash-function-plugin
@@ -139,14 +149,7 @@
       (record (cdr record))
       (plugin-res plugin-res)
       (t (if random-color-by-default
-             (let* ((hash (secure-hash 'sha1 identifier nil nil t))
-                    (len (length hash))
-                    (i (- len rainbow-identifiers--hash-bytes-to-use))
-                    (result 0))
-               (while (< i len)
-                      (setq result (+ (* result 256) (aref hash i)))
-                      (setq i (1+ i)))
-               result)
+             (rainbow-identifiers--identifier-hash identifier)
              :default)))))
 
 (defvar rainbow-identifiers-supported-modes '(lisp-mode emacs-lisp-mode))
@@ -170,13 +173,7 @@
                     (setf rainbow-identifiers-custom-binary-tree
                        (adjoin-binary-tree
                         (cons sym
-                              (mod (+ rainbow-identifiers-tune-delta
-                                      (let ((hash
-                                              (rainbow-identifiers--hash-function
-                                               sym)))
-                                        (if (numberp hash)
-                                            hash
-                                            (- rainbow-identifiers-tune-delta))))
+                              (mod (rainbow-identifiers--identifier-hash sym)
                                    rainbow-identifiers-face-count))
                         rainbow-identifiers-custom-binary-tree))))))
         (font-lock-fontify-buffer))
@@ -234,7 +231,7 @@
                           (mapcar (lambda (c) (format "\n %s" c))
                                   (cdr rainbow-identifiers-custom-list)))))
    nil (concat cl-ide-init-ext-path
-             "rainbow-identifiers/tuning.sexp")))
+               "rainbow-identifiers/tuning.sexp")))
 
 ;; Customized filter: don't mark numbers, CL notation '#\name',
 ;; and '@' in ',@', mark '|name|' symbols
@@ -254,19 +251,19 @@
     (cond
       ((and (equal prev-char ?\|) (equal next-char ?\|)) t)
       ((or (and (= len 1) (equal first-char ?\.))
-          ;; (and (equal first-char ?\@) (equal prev-char ?\,))
-          (equal prefix2 "#\\") (equal prev-char ?\#)
-          (and (or (equal (upcase prefix11) "#<FUNCTION ")
-                (equal (upcase prefix17) "#<STANDARD-CLASS "))
-             (equal last-char ?\>))
-          (and (equal first-char ?\{)
-             (equal prev-last-char ?\})
-             (equal last-char ?\>))
-          (member first-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
-          (and (>= len 2) (member first-char '(?+ ?- ?\.))
-             (member second-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))
-          (and (>= len 3) (member first-char '(?+ ?-)) (equal second-char ?\.)
-             (member third-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))) nil)
+           ;; (and (equal first-char ?\@) (equal prev-char ?\,))
+           (equal prefix2 "#\\") (equal prev-char ?\#)
+           (and (or (equal (upcase prefix11) "#<FUNCTION ")
+                    (equal (upcase prefix17) "#<STANDARD-CLASS "))
+                (equal last-char ?\>))
+           (and (equal first-char ?\{)
+                (equal prev-last-char ?\})
+                (equal last-char ?\>))
+           (member first-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
+           (and (>= len 2) (member first-char '(?+ ?- ?\.))
+                (member second-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))
+           (and (>= len 3) (member first-char '(?+ ?-)) (equal second-char ?\.)
+                (member third-char '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9)))) nil)
       (t t))))
 
 (add-hook 'rainbow-identifiers-filter-functions 'rainbow-identifiers-filter)
