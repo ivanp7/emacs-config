@@ -17,15 +17,11 @@
   'common-lisp-hyperspec-format)
 (define-key my-lisp-mode-keymap (kbd "<f1> <f2> #")
   'common-lisp-hyperspec-lookup-reader-macro)
+
 (define-key my-lisp-mode-keymap (kbd "<f1> <f2> d")
   'sly-describe-symbol)
 (define-key my-lisp-mode-keymap (kbd "<f1> <f2> f")
   'sly-describe-function)
-
-(define-key my-lisp-mode-keymap (kbd "M-e")
-  'sly-interactive-eval)
-(define-key my-lisp-mode-keymap (kbd "M-d")
-  'sly-edit-value)
 (define-key my-lisp-mode-keymap (kbd "M-f")
   'sly-inspect)
 (define-key my-lisp-mode-keymap (kbd "C-M-f")
@@ -36,6 +32,9 @@
 
 (define-key my-extra-lisp-mode-keymap (kbd "<C-return>")
   'sly-eval-print-last-expression)
+
+(define-key my-lisp-mode-keymap (kbd "C-<f1>")
+  'sly-autodoc-manually)
 
 (define-key my-lisp-mode-keymap (kbd "<C-f2>")
   'sly-mrepl-indent-and-complete-symbol)
@@ -63,8 +62,10 @@
 (define-key my-lisp-mode-keymap (kbd "S-<f8>")
   'sly-macroexpand-all)
 
+(define-key my-lisp-mode-keymap (kbd "<f9>")
+  'sly-interactive-eval)
 (define-key my-lisp-mode-keymap (kbd "C-<f9>")
-  'sly-autodoc-manually)
+  'sly-edit-value)
 
 ;;; Quick editing
 (defun delete-selection ()
