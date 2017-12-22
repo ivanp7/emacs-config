@@ -103,12 +103,12 @@
   (interactive)
   (if (member major-mode '(lisp-mode emacs-lisp-mode))
       (let ((on-empty-line (and (eql (char-before (point)) ?\n)
-                                (eql (char-after (point)) ?\n))))
+                              (eql (char-after (point)) ?\n))))
         (save-excursion
          (beginning-of-buffer)
          (while (re-search-forward "\n\n" nil t)
                 (if (not (member (plist-get (text-properties-at (point)) 'face)
-                                 '(font-lock-string-face font-lock-comment-face)))
+                          '(font-lock-string-face font-lock-comment-face)))
                     (replace-match "\n \n"))))
         (if on-empty-line
             (right-char)))))
@@ -120,7 +120,7 @@
        (beginning-of-buffer)
        (while (re-search-forward ",@[ \t]+" nil t)
               (if (not (member (plist-get (text-properties-at (point)) 'face)
-                               '(font-lock-string-face font-lock-comment-face)))
+                        '(font-lock-string-face font-lock-comment-face)))
                   (replace-match ",@"))))))
 
 (defun prepare-buffer-for-saving ()
@@ -134,8 +134,6 @@
 
 (add-to-list 'write-file-functions 'prepare-buffer-for-saving)
 
-(global-auto-revert-mode 1)
-
 ;; A ",@symbol" highlight bug workaround:
 ;; insert one space between ",@" and a symbol in code
 ;; (except for strings and comments)
@@ -148,8 +146,8 @@
        (beginning-of-buffer)
        (while (re-search-forward ",@" nil t)
               (if (and (not (member (plist-get (text-properties-at (point)) 'face)
-                                    '(font-lock-string-face font-lock-comment-face)))
-                       (not (member (char-after (point)) '(?\( ?\, ?\` ?\'))))
+                           '(font-lock-string-face font-lock-comment-face)))
+                     (not (member (char-after (point)) '(?\( ?\, ?\` ?\'))))
                   (replace-match ",@"))))))
 
 ;; End of file newlines
