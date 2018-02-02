@@ -1,1 +1,1 @@
-(slime ac-slime paren-face)
+(slime ac-slime paren-face evil)

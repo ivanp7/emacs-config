@@ -1,0 +1,3 @@
+;;;; Dired+
+(require 'dired+)
+
