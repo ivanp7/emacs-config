@@ -13,7 +13,7 @@
     ((system-is-windows) "d:/common-lisp/")
     ((system-is-linux) "~/common-lisp/")))
 (defvar cl-ide-code-path (concat cl-ide-path "code/"))
-(defvar cl-ide-init-path (concat cl-ide-path "init/"))
+(defvar cl-ide-init-path (concat cl-ide-path "emacs-init/"))
 
 (defvar cl-ide-init-aux-path (concat cl-ide-init-path "aux/"))
 (defvar cl-ide-init-ext-path (concat cl-ide-init-path "extensions/"))
